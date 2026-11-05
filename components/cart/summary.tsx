@@ -1,6 +1,7 @@
 "use client";
 
 import type { CartData } from "@shopify/hydrogen";
+import { useTranslations } from "gt-next";
 import { Loader2 } from "lucide-react";
 
 import { Price } from "@/components/product/price";
@@ -14,13 +15,14 @@ interface CartSummaryProps {
 }
 
 export function CartSummary({ cart }: CartSummaryProps) {
+  const t = useTranslations("cart");
   return (
     <div className="grid gap-5">
       <div className="grid gap-2.5">
         <DiscountForm cart={cart} />
         <CartTotal cart={cart} />
       </div>
-      <CartCheckout label="Go to Checkout" />
+      <CartCheckout label={t("checkout")} />
     </div>
   );
 }
@@ -33,23 +35,24 @@ export function CartTotal({ cart }: CartTotalProps) {
   const isCostPending = useCart((state) =>
     Boolean(state.loading || state.pending.cost || state.revalidating),
   );
+  const t = useTranslations("cart");
   const { amount, currencyCode } = cart.cost.totalAmount;
   return (
     <div
       aria-busy={isCostPending || undefined}
-      aria-label="Estimated total"
+      aria-label={t("estimatedTotal")}
       className="grid gap-1"
       role="group"
     >
       <div className="flex items-baseline justify-between text-base text-foreground">
-        <span>Estimated total</span>
+        <span>{t("estimatedTotal")}</span>
         {isCostPending || !currencyCode ? (
-          <span className="font-medium text-muted-foreground text-xl">Updating…</span>
+          <span className="font-medium text-muted-foreground text-xl">{t("updating")}</span>
         ) : (
           <Price amount={amount} className="font-medium text-xl" currencyCode={currencyCode} />
         )}
       </div>
-      <p className="text-muted-foreground text-xs">Taxes and shipping calculated at checkout.</p>
+      <p className="text-muted-foreground text-xs">{t("taxesNote")}</p>
     </div>
   );
 }

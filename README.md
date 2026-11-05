@@ -1,3 +1,23 @@
+# GT Supply — Vercel Shop + gt-next
+
+This repository is the [Vercel Shop](https://github.com/vercel/shop) Next.js template localized with [`gt-next`](https://generaltranslation.com/docs/next). It is the Next.js companion to the Hydrogen React Router storefront in [kevinwu98/gt-shopify](https://github.com/kevinwu98/gt-shopify) and uses the same Shopify store. Upstream changes merge in from `vercel/shop`.
+
+- **Locales:** `en` (default, unprefixed), `fr` at `/fr/...`, and `ja` at `/ja/...`, configured in `gt.config.json`. Every storefront page lives under `app/[locale]/` and is partially prerendered once per locale.
+- **Routing:** `proxy.ts` rewrites unprefixed requests to the default locale after Hydrogen's route handlers run. `/en/...` returns 404, so each page has one canonical URL. This matches the routing proposed in Hydrogen's `defineShopifyI18n` ([Shopify/hydrogen#4009](https://github.com/Shopify/hydrogen/pull/4009)).
+- **Copy:** UI strings live in `dictionary.json`, and the French and Japanese translations in `dictionaries/` were generated with GT. Components read them with `getTranslations()` on the server and `useTranslations()` on the client. `getLocale.ts` reads the `[locale]` root param, so translations stay cache-friendly under Cache Components.
+- **Links:** `components/ui/link.tsx` localizes internal hrefs with `useLocalizeHref()`, so navigation stays in the selected language.
+- **Commerce:** Shopify catalog data, prices, and currency stay on the store's configured market (US/EN). Changing the copy language does not change the cart country.
+
+```sh
+cp .env.example .env.local   # Shopify domain, Storefront token, shop ID
+pnpm install                 # pnpm 12; installs Node 26 per devEngines
+pnpm build && pnpm start
+```
+
+Only the main shopping path is translated: home, nav, search, product buy buttons, and the cart. Other template copy (account pages, filters, gift cards, the shop agent), hreflang alternates, sitemap locales, and localized Shopify catalog content are not yet localized.
+
+---
+
 # Vercel Shop
 
 Agent-ready commerce, powered by Shopify, Next, and Eve.

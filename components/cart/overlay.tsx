@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "gt-next";
+import { useLocalizeHref } from "gt-next/link";
 import { Loader2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -35,6 +37,7 @@ interface CartOverlayProps {
 
 export function CartOverlay({ description, title }: CartOverlayProps) {
   const { isOverlayOpen, setOverlayOpen } = useCartDrawer();
+  const t = useTranslations("cart");
 
   return (
     <Sheet open={isOverlayOpen} onOpenChange={setOverlayOpen}>
@@ -45,7 +48,7 @@ export function CartOverlay({ description, title }: CartOverlayProps) {
             <CartCountBadge />
           </div>
           <SheetClose
-            aria-label="Close cart"
+            aria-label={t("close")}
             className="flex cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           >
             <XIcon className="size-5" />
@@ -60,6 +63,8 @@ export function CartOverlay({ description, title }: CartOverlayProps) {
 
 function OverlayContent() {
   const router = useRouter();
+  const localizeHref = useLocalizeHref();
+  const t = useTranslations("cart");
   const cart = useCart((state) => state.data);
   const isLoading = useCart((state) => state.loading);
   const { setOverlayOpen } = useCartDrawer();
@@ -67,7 +72,7 @@ function OverlayContent() {
     return (
       <div className="flex h-full items-center justify-center gap-2.5" role="status">
         <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-        Loading cart…
+        {t("loading")}
       </div>
     );
   }
@@ -76,15 +81,15 @@ function OverlayContent() {
       <div className="flex h-full flex-col gap-5 px-2.5">
         <CartWarnings />
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <h3 className="mb-6 text-2xl">Your cart is empty</h3>
+          <h3 className="mb-6 text-2xl">{t("empty")}</h3>
           <Button
             onClick={() => {
               setOverlayOpen(false);
-              router.push("/");
+              router.push(localizeHref("/"));
             }}
             className="h-12 px-8"
           >
-            Continue Shopping
+            {t("continueShopping")}
           </Button>
         </div>
       </div>

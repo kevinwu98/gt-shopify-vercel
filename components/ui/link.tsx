@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocalizeHref } from "gt-next/link";
 import NextLink from "next/link";
 import { type ComponentProps, type Ref, useEffect, useRef, useState } from "react";
 
@@ -136,7 +137,10 @@ export function Link({
   ref,
   ...props
 }: LinkProps) {
-  const destinationKey = JSON.stringify([href, as]);
+  // Keep navigation in the active locale; the default locale stays unprefixed.
+  const localizeHref = useLocalizeHref();
+  const localizedHref = typeof href === "string" ? localizeHref(href) : href;
+  const destinationKey = JSON.stringify([localizedHref, as]);
   const [intentDestination, setIntentDestination] = useState<string | null>(null);
   const anchorRef = useRef<HTMLAnchorElement | null>(null);
   const focused = useRef(false);
@@ -179,7 +183,7 @@ export function Link({
     <NextLink
       {...props}
       as={as}
-      href={href}
+      href={localizedHref}
       onBlur={(event) => {
         onBlur?.(event);
         focused.current = false;

@@ -1,0 +1,41 @@
+{
+  "home": {
+    "metaTitle": "Accueil",
+    "metaDescription": "Découvrez nos produits phares, nos collections soigneusement sélectionnées et nos campagnes saisonnières.",
+    "heading": "Une boutique en ligne localisée avec General Translation",
+    "subheading": "Le commerce Shopify sur Hydrogen et Next.js, avec les textes de l’interface traduits par gt-next.",
+    "products": "Produits",
+    "viewAll": "Tout voir"
+  },
+  "nav": {
+    "shop": "Boutique",
+    "cart": "Panier",
+    "language": "Langue",
+    "searchPlaceholder": "Rechercher des produits",
+    "searchProducts": "Produits",
+    "recentlyViewed": "Consultés récemment"
+  },
+  "cart": {
+    "title": "Panier",
+    "description": "Vérifiez les articles de votre panier et procédez au passage en caisse",
+    "close": "Fermer le panier",
+    "loading": "Chargement du panier…",
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer les achats",
+    "estimatedTotal": "Total estimé",
+    "checkout": "Procéder au passage en caisse",
+    "updating": "Mise à jour…",
+    "taxesNote": "Taxes et frais de livraison calculés lors du passage en caisse."
+  },
+  "product": {
+    "addToCart": "Ajouter au panier",
+    "chooseBundle": "Choisir les articles du lot",
+    "subscriptionUnavailable": "Abonnement indisponible",
+    "outOfStock": "En rupture de stock",
+    "choose": "Choisir",
+    "quantity": "Quantité d’articles",
+    "decrease": "Diminuer la quantité",
+    "increase": "Augmenter la quantité",
+    "adding": "Ajout au panier..."
+  }
+}

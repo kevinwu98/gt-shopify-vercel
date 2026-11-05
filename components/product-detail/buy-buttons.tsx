@@ -2,6 +2,7 @@
 
 import { getShopPayButtonUrl } from "@shopify/hydrogen";
 import { cn } from "cn";
+import { useTranslations } from "gt-next";
 import { Loader2, MinusIcon, PlusIcon } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 
@@ -39,6 +40,7 @@ export function BuyButtons({
   const { plans, selectedPlan } = getProductPurchaseOptions(selectedVariant, purchaseOption);
   const missingRequiredPlan = Boolean(selectedVariant?.requiresSellingPlan && !selectedPlan);
   const { openOverlay } = useCartDrawer();
+  const t = useTranslations("product");
 
   useEffect(() => {
     const handlePageShow = (e: PageTransitionEvent) => {
@@ -58,12 +60,12 @@ export function BuyButtons({
     variants: [{ id: selectedVariant.id, quantity }],
   });
   const getButtonText = () => {
-    if (pending) return "Adding to Cart...";
-    if (isSelectionUnresolved) return "Add to Cart";
-    if (requiresBundleConfiguration) return "Choose bundle items";
-    if (missingRequiredPlan) return "Subscription unavailable";
-    if (isOutOfStock) return "Out of Stock";
-    return "Add to Cart";
+    if (pending) return t("adding");
+    if (isSelectionUnresolved) return t("addToCart");
+    if (requiresBundleConfiguration) return t("chooseBundle");
+    if (missingRequiredPlan) return t("subscriptionUnavailable");
+    if (isOutOfStock) return t("outOfStock");
+    return t("addToCart");
   };
   return (
     <form
@@ -99,13 +101,13 @@ export function BuyButtons({
       <div className="flex flex-wrap gap-2.5">
         {quantityPicker ? (
           <div
-            aria-label="Item quantity"
+            aria-label={t("quantity")}
             className="grid h-12 w-32 shrink-0 grid-cols-[3rem_2rem_3rem] rounded-lg bg-background ring-1 ring-border ring-inset"
             role="group"
           >
             <button
               type="button"
-              aria-label="Decrease quantity"
+              aria-label={t("decrease")}
               className="flex size-12 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={quantity === 1}
               onClick={() => setQuantity((currentQuantity) => Math.max(1, currentQuantity - 1))}
@@ -121,7 +123,7 @@ export function BuyButtons({
             </span>
             <button
               type="button"
-              aria-label="Increase quantity"
+              aria-label={t("increase")}
               className="flex size-12 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={quantity === 99}
               onClick={() => setQuantity((currentQuantity) => Math.min(99, currentQuantity + 1))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocalizeHref } from "gt-next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -22,15 +23,19 @@ export function ProductForm({
   product: ProductFormInput;
 }) {
   const router = useRouter();
+  const localizeHref = useLocalizeHref();
   const searchParams = useSearchParams();
   return (
     <ProductProvider
       product={product}
       onSelect={(result) => {
         const handle = result.selectedVariant?.product.handle ?? product.handle;
-        router.replace(buildProductUrl(handle, result.selectedOptions, searchParams), {
-          scroll: false,
-        });
+        router.replace(
+          localizeHref(buildProductUrl(handle, result.selectedOptions, searchParams)),
+          {
+            scroll: false,
+          },
+        );
       }}
     >
       {children}

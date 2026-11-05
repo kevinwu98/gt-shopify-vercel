@@ -18,6 +18,7 @@ import {
 import { cartHandlers, createCustomerCartHandlers } from "@/lib/cart/request";
 import { getRefinedCollectionPath, isRefinedCollectionPath } from "@/lib/collections";
 import { shopConfig } from "@/lib/config";
+import { splitLocalePath } from "@/lib/i18n";
 import { getMarkdownRewritePath } from "@/lib/markdown/representation";
 import { predictiveSearchHandlers } from "@/lib/search/request";
 import { SHOPIFY_ROUTE_TEMPLATES } from "@/lib/shopify/routing";
@@ -53,11 +54,19 @@ export async function proxy(request: NextRequest): Promise<Response> {
       })
     : handleShopifyRoutes({ ...routeOptions, handlers: [cartHandlers, predictiveSearchHandlers] });
   if (shopifyRoute) return shopifyRoute;
-  if (isRefinedCollectionPath(pathname)) return new Response("Not Found", { status: 404 });
+
+  const { locale, pathname: unprefixedPathname } = splitLocalePath(pathname);
+  if (isRefinedCollectionPath(unprefixedPathname))
+    return new Response("Not Found", { status: 404 });
 
   const headers = requestContext.getForwardedRequestHeaders();
+  const refinedPath = getRefinedCollectionPath(unprefixedPathname, request.nextUrl.search);
+  const localizedPath = isUnlocalizedPath(pathname)
+    ? null
+    : `/${locale}${refinedPath ?? (unprefixedPathname === "/" ? "" : unprefixedPathname)}`;
+  // Pages live under app/[locale]; the default locale is served unprefixed and rewritten internally.
   const rewritePath =
-    getMarkdownRewritePath(request) ?? getRefinedCollectionPath(pathname, request.nextUrl.search);
+    getMarkdownRewritePath(request) ?? (localizedPath === pathname ? null : localizedPath);
   const response = rewritePath
     ? NextResponse.rewrite(new URL(`${rewritePath}${request.nextUrl.search}`, request.url), {
         request: { headers },
@@ -67,6 +76,12 @@ export async function proxy(request: NextRequest): Promise<Response> {
       });
   requestContext.applyResponseHeaders(response.headers);
   return response;
+}
+
+const UNLOCALIZED_PATH = /^\/(?:api|md|agent|eve|_eve_internal|\.well-known|__shopify)(?:\/|$)/;
+
+function isUnlocalizedPath(pathname: string): boolean {
+  return UNLOCALIZED_PATH.test(pathname);
 }
 
 function customerHandlers(

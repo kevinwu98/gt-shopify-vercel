@@ -1,3 +1,4 @@
+import { getTranslations } from "gt-next/server";
 import { HandbagIcon } from "lucide-react";
 
 import { getCart } from "@/lib/cart/server";
@@ -6,8 +7,8 @@ import { withFallback } from "@/lib/shopify/errors/server";
 import { CartIconClient } from "./cart-client";
 
 export async function CartIcon() {
-  const cart = await withFallback(getCart(), undefined);
-  return <CartIconClient cartLabel="Cart" initialCart={cart ?? null} />;
+  const [cart, t] = await Promise.all([withFallback(getCart(), undefined), getTranslations("nav")]);
+  return <CartIconClient cartLabel={t("cart")} initialCart={cart ?? null} />;
 }
 
 export function CartIconFallback() {

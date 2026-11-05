@@ -1,5 +1,6 @@
 import { withBotId } from "botid/next/config";
 import { withEve } from "eve/next";
+import { withGTConfig } from "gt-next/config";
 import type { NextConfig } from "next";
 
 import { shopConfig } from "./lib/config";
@@ -22,6 +23,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   reactCompiler: true,
   turbopack: {
+    // This app lives inside the Hydrogen repo, which has its own lockfile.
+    root: import.meta.dirname,
     rules: {
       "*.css": {
         as: "*.css",
@@ -32,6 +35,7 @@ const nextConfig: NextConfig = {
 };
 
 export default withShopConfig(nextConfig, [
+  (config: NextConfig) => withGTConfig(config),
   shopConfig.botid.isEnabled && withBotId,
   shopConfig.agent.isEnabled && withEve,
 ]);

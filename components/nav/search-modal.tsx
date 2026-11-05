@@ -3,6 +3,8 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { getSearchResultUrl } from "@shopify/hydrogen";
 import { cn } from "cn";
+import { useTranslations } from "gt-next";
+import { useLocalizeHref } from "gt-next/link";
 import { Search, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -63,6 +65,8 @@ function SearchTrigger() {
 function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boolean }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const localizeHref = useLocalizeHref();
+  const t = useTranslations("nav");
   const { query, setQuery, results, isLoading, activeIndex, setActiveIndex, reset } =
     usePredictiveSearch();
   const recentlyViewed = useRecentlyViewedProducts(open);
@@ -75,10 +79,10 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
   }, []);
   const navigate = useCallback(
     (href: string) => {
-      router.push(href);
+      router.push(localizeHref(href));
       requestAnimationFrame(() => onClose());
     },
-    [router, onClose],
+    [router, localizeHref, onClose],
   );
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -141,7 +145,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                 type="text"
                 name="q"
                 role="combobox"
-                placeholder="Search products"
+                placeholder={t("searchPlaceholder")}
                 maxLength={SEARCH_TERM_MAX_LENGTH}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -203,7 +207,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                     {products.length > 0 && (
                       <div>
                         <div className="px-4 pt-3 pb-1.5 text-xs font-medium text-foreground/50 uppercase tracking-wider">
-                          {hasQuery ? "Products" : "Recently viewed"}
+                          {hasQuery ? t("searchProducts") : t("recentlyViewed")}
                         </div>
                         {products.map((product, i) => (
                           <ProductResult

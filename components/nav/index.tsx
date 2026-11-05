@@ -1,4 +1,5 @@
 import { PredictiveSearchProvider } from "@shopify/hydrogen/react";
+import { getTranslations } from "gt-next/server";
 import { Suspense } from "react";
 
 import { Container } from "@/components/ui/container";
@@ -8,13 +9,15 @@ import type { MenuItem } from "@/lib/menu/types";
 
 import { NavAccount, NavAccountFallback } from "./account";
 import { CartIcon, CartIconFallback } from "./cart";
+import { LanguageSwitcher } from "./language-switcher";
 import { MobileMenu } from "./mobile-menu";
 import { QuickLinks } from "./quick-links";
 import { SearchModal } from "./search-modal";
 
-export function Nav() {
+export async function Nav() {
+  const t = await getTranslations("nav");
   const items: MenuItem[] = [
-    { id: "default-nav-shop", items: [], title: "Shop", url: "/collections/all" },
+    { id: "default-nav-shop", items: [], title: t("shop"), url: "/collections/all" },
   ];
   return (
     <nav
@@ -31,6 +34,7 @@ export function Nav() {
         <QuickLinks items={items} />
 
         <div className="flex items-center gap-5 ml-auto">
+          <LanguageSwitcher />
           {shopConfig.search.isEnabled && (
             <PredictiveSearchProvider
               debounceInMs={300}

@@ -1,4 +1,5 @@
 import { cn } from "cn";
+import { getTranslations } from "gt-next/server";
 import { Suspense } from "react";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card/product-card";
@@ -27,7 +28,13 @@ interface ProductsGridProps {
   title: string;
 }
 
-export function ProductsGrid({ collectionUrl, eagerCount = 0, limit, title }: ProductsGridProps) {
+export async function ProductsGrid({
+  collectionUrl,
+  eagerCount = 0,
+  limit,
+  title,
+}: ProductsGridProps) {
+  const t = await getTranslations();
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
@@ -37,12 +44,17 @@ export function ProductsGrid({ collectionUrl, eagerCount = 0, limit, title }: Pr
             href={collectionUrl}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            View All
+            {t("home.viewAll")}
           </Link>
         )}
       </div>
       <Suspense fallback={<ProductsGridSkeleton count={limit} />}>
-        <ProductsGridContent eagerCount={eagerCount} limit={limit} outOfStockText="Out of Stock" />
+        <ProductsGridContent
+          eagerCount={eagerCount}
+          limit={limit}
+          outOfStockText={t("product.outOfStock")}
+          quickShopText={t("product.choose")}
+        />
       </Suspense>
     </div>
   );
@@ -52,10 +64,12 @@ async function ProductsGridContent({
   eagerCount,
   limit,
   outOfStockText,
+  quickShopText,
 }: {
   eagerCount: number;
   limit: number;
   outOfStockText: string;
+  quickShopText: string;
 }) {
   // Use the search index (not the products connection) so these match the first items on /collections/all.
   const { products } = await getSearchIndexProducts({
@@ -70,7 +84,7 @@ async function ProductsGridContent({
           loading={index < eagerCount ? "eager" : "lazy"}
           product={product}
           outOfStockText={outOfStockText}
-          quickShopText="Choose"
+          quickShopText={quickShopText}
         />
       ))}
     </div>

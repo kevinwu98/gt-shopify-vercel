@@ -1,11 +1,14 @@
+import { getTranslations } from "gt-next/server";
+
 import { CartNotifications } from "./notifications";
 import { CartOverlay } from "./overlay";
 
-export function CartUI() {
+export async function CartUI() {
+  const t = await getTranslations("cart");
   return (
     <>
       <CartNotifications />
-      <CartOverlay description="Review your cart items and proceed to checkout" title="Cart" />
+      <CartOverlay description={t("description")} title={t("title")} />
     </>
   );
 }
