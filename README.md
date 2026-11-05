@@ -1,6 +1,6 @@
 # Great Things — Vercel Shop + General Translation
 
-A multilingual Shopify storefront: the [Vercel Shop](https://github.com/vercel/shop) Next.js template (`@shopify/hydrogen` 2026.10, Next.js 16 Cache Components) localized end to end with [General Translation](https://generaltranslation.com). It is the Next.js companion to the Hydrogen React Router storefront in [kevinwu98/gt-shopify](https://github.com/kevinwu98/gt-shopify) and sells from the same Shopify store. Upstream template changes merge in from `vercel/shop`.
+A multilingual Shopify storefront: the [Vercel Shop](https://github.com/vercel/shop) Next.js template (`@shopify/hydrogen` 2026.10, Next.js 16 Cache Components) localized end to end with [General Translation](https://generaltranslation.com). Upstream template changes merge in from `vercel/shop`.
 
 ## What's translated
 
