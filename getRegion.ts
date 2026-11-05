@@ -1,6 +1,8 @@
-import { shopConfig } from "@/lib/config";
+import { locale } from "next/root-params";
 
-// Copy language never selects the commerce country; Shopify context stays on the configured market.
+import { defaultLocale, getCommerceLocale } from "@/lib/i18n";
+
+// Each language sells in one Shopify market, so the region is that market's country.
 export default async function getRegion(): Promise<string> {
-  return shopConfig.localization.country;
+  return getCommerceLocale((await locale()) ?? defaultLocale).country;
 }

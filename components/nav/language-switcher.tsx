@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
         className="cursor-pointer bg-transparent text-sm text-muted-foreground hover:text-foreground"
         value={locale}
         onChange={(event) => {
-          // Copy language only changes the URL prefix; cart and Shopify market stay as they are.
+          // A full navigation lets the proxy move the cart to the new language's Shopify market.
           const { pathname } = splitLocalePath(window.location.pathname);
           window.location.assign(
             `${localizePath(pathname, event.target.value)}${window.location.search}`,
