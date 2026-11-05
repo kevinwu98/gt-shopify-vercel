@@ -7,6 +7,7 @@ import {
   SearchParamsProbe,
 } from "@/components/collections/collection-page";
 import { getCollectionMetadata, getCollectionResults } from "@/lib/collections/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 
 export async function generateMetadata({
@@ -35,7 +36,11 @@ async function DefaultCollectionResults({
   const { handle } = await params;
   return (
     <>
-      <CollectionResults results={getCollectionResults({ handle })} />
+      <CollectionResults
+        results={getRequestCommerceLocale().then((locale) =>
+          getCollectionResults({ handle, locale }),
+        )}
+      />
       <SearchParamsProbe searchParams={searchParams} />
     </>
   );

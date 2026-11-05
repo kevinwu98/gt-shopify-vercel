@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { ArticlePage, ArticlePageSkeleton } from "@/components/blog/article-page";
 import { getBlog, getBlogArticle } from "@/lib/blog/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { getShopifySitemapPage } from "@/lib/seo/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
@@ -36,6 +37,7 @@ export async function generateMetadata({
   const article = await getBlogArticle({
     articleHandle,
     blogHandle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!article) notFound();
   const pathname = `/blogs/${article.blogHandle}/${article.handle}`;
@@ -87,6 +89,7 @@ async function BlogArticlePageContent({
   const article = await getBlogArticle({
     articleHandle,
     blogHandle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!article) notFound();
   return <ArticlePage article={article} />;

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card/product-card";
 import { Link } from "@/components/ui/link";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getSearchIndexProducts } from "@/lib/product/server";
 
 interface ProductsGridSkeletonProps {
@@ -75,6 +76,7 @@ async function ProductsGridContent({
   // Use the search index (not the products connection) so these match the first items on /collections/all.
   const { products } = await getSearchIndexProducts({
     limit,
+    locale: await getRequestCommerceLocale(),
   });
   if (products.length === 0) return null;
   return (

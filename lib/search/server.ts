@@ -1,14 +1,17 @@
 import { PRODUCTS_PER_PAGE } from "@/lib/collections";
 import type { BrowseResults, BrowseState } from "@/lib/collections/types";
+import type { CommerceLocale } from "@/lib/config/types";
 import {
   fetchSearchFacets,
   fetchSearchIndexProducts,
 } from "@/lib/shopify/operations/products/server";
 
 export async function fetchSearchResults({
+  locale,
   query,
   statePromise,
 }: {
+  locale: CommerceLocale;
   query?: string;
   statePromise: Promise<BrowseState>;
 }): Promise<BrowseResults> {
@@ -17,11 +20,13 @@ export async function fetchSearchResults({
     fetchSearchIndexProducts({
       filters,
       limit: PRODUCTS_PER_PAGE,
+      locale,
       query,
       sortKey: sort,
     }),
     fetchSearchFacets({
       filters,
+      locale,
       query,
     }),
   ]);

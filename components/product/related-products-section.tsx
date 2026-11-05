@@ -3,6 +3,7 @@ import { getGT } from "gt-next/server";
 import { Suspense } from "react";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card/product-card";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getProductRecommendations } from "@/lib/product/server";
 
 function RelatedProductsSectionSkeleton({ limit }: { limit: number }) {
@@ -21,7 +22,11 @@ function RelatedProductsSectionSkeleton({ limit }: { limit: number }) {
 }
 
 async function Render({ handle, limit }: { handle: string; limit: number }) {
-  const related = await getProductRecommendations({ handle, intent: "RELATED" });
+  const related = await getProductRecommendations({
+    handle,
+    intent: "RELATED",
+    locale: await getRequestCommerceLocale(),
+  });
   if (related.length === 0) return null;
   const gt = await getGT();
   return (

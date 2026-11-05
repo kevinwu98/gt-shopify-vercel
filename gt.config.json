@@ -1,6 +1,6 @@
 {
   "defaultLocale": "en",
-  "locales": ["fr", "ja"],
+  "locales": ["fr", "ja", "ko", "id"],
   "src": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "lib/**/*.{ts,tsx}"],
   "files": {
     "gt": {

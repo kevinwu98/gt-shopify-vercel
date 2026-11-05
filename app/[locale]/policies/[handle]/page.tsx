@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-text-page";
 import { getCatalogText } from "@/lib/catalog/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getShopPolicies, getShopPolicy } from "@/lib/policies/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
@@ -26,6 +27,7 @@ export async function generateMetadata({
   if (handle === PLACEHOLDER_HANDLE) return {};
   const policy = await getShopPolicy({
     handle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!policy) notFound();
   const pathname = `/policies/${policy.handle}`;
@@ -53,6 +55,7 @@ async function PolicyPageContent({
   if (handle === PLACEHOLDER_HANDLE) notFound();
   const policy = await getShopPolicy({
     handle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!policy) notFound();
   // Policy bodies are legal text, so they stay in the merchant's language; only the title is translated.

@@ -7,14 +7,24 @@
       "versionId": "53e1978095fc2ddd2cb2019de2f305f8ed3f76cb8abff946f1dbc72e50d188b8",
       "translations": {
         "fr": {
-          "updatedAt": "2026-11-05T20:16:10.791Z",
+          "updatedAt": "2026-11-05T20:31:38.205Z",
           "fileName": "public/_gt/fr.json",
-          "postProcessHash": "eb5679e3c9f0e8be2d1c34c3b9b76fe38f7fb0a0c3fa41843c196d193bde1876"
+          "postProcessHash": "1b24c4350b15d1db68a03e1cd98587c3c67c802330ef4dcad0ec3a943f180967"
         },
         "ja": {
-          "updatedAt": "2026-11-05T20:16:10.792Z",
+          "updatedAt": "2026-11-05T20:31:38.207Z",
           "fileName": "public/_gt/ja.json",
-          "postProcessHash": "a0e70cee08ad4ecaa3110e3ee5f66e1328f132a2fca7ab7dfebb9d8fc2b04a61"
+          "postProcessHash": "f38f5562c9fc21f487d885378a44ec619497f3dce269205b264b85893ca1fc7b"
+        },
+        "id": {
+          "updatedAt": "2026-11-05T20:31:38.204Z",
+          "fileName": "public/_gt/id.json",
+          "postProcessHash": "a1c1deff3ce96f2e988374547a992452af8bfc507e87182abd1db02be6fb7465"
+        },
+        "ko": {
+          "updatedAt": "2026-11-05T20:31:38.206Z",
+          "fileName": "public/_gt/ko.json",
+          "postProcessHash": "88b32ab94088033beebba89e62644abc703cfdad707f84e402775d3c8017798e"
         }
       },
       "fileName": "__INTERNAL_GT_TEMPLATE_NAME__"
@@ -24,14 +34,24 @@
       "versionId": "098f6edc5c98dddb5b33619b8f28e83ea74bb78b0ad2885e993960e275789757",
       "translations": {
         "fr": {
-          "updatedAt": "2026-11-05T20:14:51.912Z",
+          "updatedAt": "2026-11-05T20:31:38.199Z",
           "fileName": "catalog/fr.json",
-          "postProcessHash": "d8d8582448591c90f7346d57f35e7cb61051c59f02879b49bb07aabcf0f1d8fd"
+          "postProcessHash": "23eb25f7af61025d0fd4a92a632e966c253e08ed8ebe2f021521143306773ce8"
         },
         "ja": {
-          "updatedAt": "2026-11-05T20:14:51.913Z",
+          "updatedAt": "2026-11-05T20:31:38.199Z",
           "fileName": "catalog/ja.json",
-          "postProcessHash": "1827d51c339d107714c84938259853b39b9a3907d193061218a97176eef47176"
+          "postProcessHash": "261d6dabe2dceccca3fe6778be35580b6e0a1fa1b8aa25a16d6f6ff9d29c3571"
+        },
+        "id": {
+          "updatedAt": "2026-11-05T20:31:38.201Z",
+          "fileName": "catalog/id.json",
+          "postProcessHash": "ffcb8d542bfb779251b904337a08b7784884eb0d17fa5fda824299b0b6eb78d5"
+        },
+        "ko": {
+          "updatedAt": "2026-11-05T20:31:38.200Z",
+          "fileName": "catalog/ko.json",
+          "postProcessHash": "c0de680933e0e89f36872ae5e57fdafe89a25738b7166453bbd85767bd60a85a"
         }
       },
       "fileName": "catalog/en.json"

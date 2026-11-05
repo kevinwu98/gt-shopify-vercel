@@ -6,6 +6,7 @@ import { Link } from "@/components/ui/link";
 import { Sections } from "@/components/ui/sections";
 import { getCatalogText } from "@/lib/catalog/server";
 import { shopConfig } from "@/lib/config";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import type { MenuItem } from "@/lib/menu/types";
 import { getShopPolicies } from "@/lib/policies/server";
 
@@ -15,7 +16,10 @@ import type { SocialLink } from "./social-links";
 export async function Footer() {
   const socialLinks: SocialLink[] = [];
   const items: MenuItem[] = [];
-  const [policies, ct] = await Promise.all([getShopPolicies({}).catch(() => []), getCatalogText()]);
+  const [policies, ct] = await Promise.all([
+    getShopPolicies({ locale: await getRequestCommerceLocale() }).catch(() => []),
+    getCatalogText(),
+  ]);
   return (
     <footer>
       {/* pb-22 clears the fixed agent ActionBar pill when it renders */}

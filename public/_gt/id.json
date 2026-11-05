@@ -1,0 +1,383 @@
+{
+  "0040e2e7bdb6ff59": "Jeda video",
+  "01b2289c36286f24": "ZIP / Kode pos",
+  "04cc4990860cc461": "Hapus diskon: {code}",
+  "06588313c80d1109": "Etalase yang dilokalkan dengan General Translation",
+  "07285275d80f10b7": "Apartemen, unit, dll.",
+  "0a01a99686d65185": "Alamat ini akan dihapus secara permanen dari akun Anda.",
+  "0adc0b7116c014ed": [
+    "Pembelian berkala. ",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    }
+  ],
+  "0c4a40642a1b7e27": "Pilih {option}: {value}",
+  "0d97f9c66db79593": "Nama depan",
+  "103bd920cfa5ab31": "Jadwalkan untuk nanti",
+  "154703096b980771": "Kota wajib diisi",
+  "15b55bfa79ee4318": "Terlaris",
+  "1701e0df0b33116a": "Opsi ini tidak tersedia. Pilih opsi lain atau buka halaman produk.",
+  "1885e9b83c352abe": "Isi Paket",
+  "1c161c630d28d225": "Alamat",
+  "1cc599c5f5874014": "Nomor telepon",
+  "1e7c7825aaae6c45": "Tambah alamat",
+  "20b5ef8cf3fc14ac": "Hasil pencarian untuk \"{query}\"",
+  "22b3f5ae171ca7b2": "Mengalihkan...",
+  "23cfcb5d624bcf8c": "Jumlah: {item}",
+  "2538c2d97c9b5e23": "Sedang Diproses",
+  "2676bddf7f18a859": "Hapus detail penerima",
+  "2780a17154688eef": "Hapus barang: {item}",
+  "288e34506ac05bf9": "Barang di keranjang",
+  "2a7216b1e497c21d": "Menu",
+  "2c1d1b1a9847c6b4": "Harga: Tertinggi ke Terendah",
+  "2d8c0219a2bad80b": "Dana Dikembalikan",
+  "2ea95ade2ae9e528": "Pajak",
+  "2ecf88ef9e8e4259": "Beranda",
+  "2f9a228d3f572114": "Lanjut ke Pembayaran",
+  "309039fdc1333c1b": "Nama: A-Z",
+  "317a22a85ee71dd5": "Pajak dan biaya pengiriman dihitung saat pembayaran.",
+  "32663001d9208374": "Utama",
+  "32bf87ea292fdcb3": "Gagal menghapus alamat",
+  "34280bf5de579bea": "Gagal memperbarui alamat",
+  "34b440f7dd401997": "Lebih lama",
+  "353b08f4363dbb2c": "Menunggu",
+  "3584241c20eb2b63": "Pilih barang untuk paket",
+  "366689c231ebbde7": "Negara wajib diisi",
+  "36bb4df54b878787": "Biaya pengiriman",
+  "3860ac0ef9e31a89": "Halaman Tidak Ditemukan",
+  "3a54d5853431bbf7": "Beli dengan",
+  "3a6fcf75aeb90ead": "Belum Dipenuhi",
+  "3b28878accf137fb": "Perusahaan",
+  "3b6ced6faf8e3918": "Dikembalikan ke Stok",
+  "3c7c37939d799592": "Alamat",
+  "3e820a2c1e7d3fa3": "Gambar {number} untuk {title}",
+  "3f79c258354ef384": "Produk",
+  "41ef1b68f9fc924e": "Belanja cepat tidak tersedia untuk produk ini.",
+  "424fc620cbc9d92e": {
+    "c": "Alamat pengiriman",
+    "i": 1,
+    "t": "h2"
+  },
+  "430ae6c940f3addb": "Lunas",
+  "43821aa7ab710301": "Kedaluwarsa",
+  "43af18c4a9e11a01": "Tidak berlaku",
+  "44bbcfd33b751bd6": "Alamat",
+  "47906e474cf404bb": "Tautan mungkin salah atau halaman sudah dihapus.",
+  "480646ceb98c7163": "Tutup",
+  "4a208bfa4a365487": "Perkiraan total",
+  "4a261a06f80495c0": "Tulis pesan pribadi (opsional)",
+  "4b71561e661a9664": "Kurangi jumlah",
+  "4c2fb139351a9db3": "Gulir ke kiri",
+  "4f113bb0bc732b3d": "Bersihkan",
+  "4f94e7beb32bcd47": {
+    "c": "Total",
+    "i": 1,
+    "t": "dt"
+  },
+  "50d7c85f0bf14280": "Langganan tidak tersedia",
+  "51732f7b75ce7a42": "Pilih {option}: {value} (habis)",
+  "52d0aad8b2121b6d": "Profil",
+  "544b5660bbe73707": "Kota",
+  "546c8a8d654a676e": "Kami tidak dapat memperbarui keranjang Anda",
+  "56c367e1653ced8d": "Lihat riwayat pesanan Anda",
+  "585c7f9fef80e384": "Langsung ke konten",
+  "595027176ad6da7e": "Harga",
+  "5958b9394b6e8fb6": "Paling Sesuai",
+  "5bbf199afe39d5e1": "Tutup",
+  "5cdf03652d35d964": "Gulir ke kanan",
+  "5d2f210236aba787": "Tanggal pengiriman",
+  "610251eef711c3e1": "Terapkan harga",
+  "619a8db474acd4fd": "Lanjutkan belanja",
+  "64e9647d8379767b": "Pesanan",
+  "6514de25173300cc": "Pembelian berkala. Detail langganan ditampilkan saat pembayaran.",
+  "65a5e738596ee48f": "Profil berhasil diperbarui",
+  "65bfad738825b43d": {
+    "c": "Tidak ada artikel yang ditemukan.",
+    "i": 1,
+    "t": "p"
+  },
+  "6604ea6cf201f051": "Tutup keranjang",
+  "67508b5a9a7db096": "Profil",
+  "6b3e8bc1f3ded083": "Pesan",
+  "6b571e8616a566c8": "Hingga",
+  "6bd2e5dc23598c80": "Isi keranjang Anda berubah. Tunggu hingga selesai diperbarui, lalu coba lanjutkan ke pembayaran lagi.",
+  "6c973b8c581c6314": "Gagal menambahkan alamat",
+  "6ce98e721d029a92": "Tidak ada produk yang tersedia",
+  "6df57099a35b36bb": "Cari produk",
+  "6eb807cd1232e8a8": "Keranjang",
+  "6f69c0102f16d2f9": "Kode negara",
+  "6f9647f746db650d": "Tambah jumlah",
+  "70d24ec5dd0200b5": "Hingga {price}",
+  "72e22b3fb68df01d": "Tersedia dalam Paket",
+  "7399c882feff6e5f": "ID alamat tidak valid",
+  "74158bc2b7d8e387": {
+    "d": {
+      "b": {
+        "one": {
+          "c": [
+            {
+              "i": 3,
+              "k": "_gt_n_3",
+              "v": "n"
+            },
+            " Barang"
+          ],
+          "i": 2,
+          "t": "C2"
+        },
+        "other": {
+          "c": [
+            {
+              "i": 3,
+              "k": "_gt_n_3",
+              "v": "n"
+            },
+            " Barang"
+          ],
+          "i": 2,
+          "t": "C2"
+        }
+      },
+      "t": "p"
+    },
+    "i": 1,
+    "t": "Plural"
+  },
+  "748e4ac9ec357623": "Tanggal: Terlama ke Terbaru",
+  "75330a36a3782eb8": "Jelajahi semua produk di {siteName}: bandingkan harga dan periksa ketersediaannya.",
+  "75353ce09ec3bfb8": "Menu",
+  "75afd1d28146a5ef": {
+    "c": "Filter",
+    "i": 1,
+    "t": "span"
+  },
+  "762fcce45b65eea9": "Simpan",
+  "764dfb165791b02e": "Memperbarui…",
+  "76b886ea45a7ce48": "Kode negara bagian / provinsi",
+  "77d03cd39c5a33f0": "Terakhir dilihat",
+  "77e0f0dfe1770b7a": "Ubah alamat",
+  "782299e6f438c144": "Diskon",
+  "78a1a02732fc74e8": "Keluar",
+  "78f6b81e3bb195a3": {
+    "c": "Hapus alamat?",
+    "i": 1,
+    "t": "DialogTitle"
+  },
+  "7955f23091c292c0": "Menunggu Pemenuhan",
+  "7ddd1bd41182e292": "Tutup belanja cepat",
+  "7f7df9cad4264512": "Lihat koleksi ini",
+  "800c4dcf86606b3e": "Lihat Semua",
+  "801ea4b81b38d021": "Pilihan pembelian",
+  "80ca95dfa882744e": "Memuat opsi yang dipilih…",
+  "818f874d6398e37d": "Koleksi",
+  "844d0b58acce190d": "Menambahkan…",
+  "8543ee341b108061": "Harga maksimum",
+  "864a7a8499d13c5a": "Alamat tidak valid",
+  "88668ba3172d05ed": "Tambah jumlah: {item}",
+  "89cf35d6f13c6f45": "Lihat detail lengkap",
+  "8a604f0426c44e14": "Kurangi jumlah: {item}",
+  "8a85b0db83264582": "Tanggal: Terbaru ke Terlama",
+  "8af6956a35d1e110": "Buka gambar {number}",
+  "8c62f6026b5f56c9": "Memuat keranjang…",
+  "8d2942c50bf0dbdf": "Belanja {title} di {siteName}: jelajahi produk, bandingkan harga, dan periksa ketersediaannya.",
+  "8d77526b2975312f": "Kami tidak dapat memuat pilihan pembelian. Coba lagi atau buka halaman produk.",
+  "8ea31dd4350b42f6": "Gagal masuk",
+  "9163a584054bc40a": "Pembayaran tidak tersedia. Muat ulang keranjang Anda dan coba lagi.",
+  "91a2a48f9487bfd0": {
+    "c": "Tidak ada produk yang ditemukan",
+    "i": 1,
+    "t": "h2"
+  },
+  "92f61118e10ae0da": "Harga minimum",
+  "9646849f1219594f": "Jelajahi produk berdasarkan koleksi.",
+  "99bafce234ba8976": [
+    {
+      "c": "Gagal masuk",
+      "i": 1,
+      "t": "h1"
+    },
+    {
+      "c": "Proses masuk Anda tidak berhasil diselesaikan. Coba lagi atau lanjutkan belanja tanpa akun.",
+      "i": 2,
+      "t": "p"
+    }
+  ],
+  "9a9f682bc48dfe8f": "Dibatalkan",
+  "9abada43c0da0e6f": "Pembelian satu kali",
+  "9afc136a6566c560": "Dari",
+  "9b5261b7e5f90dbc": {
+    "c": "Akun",
+    "i": 1,
+    "t": "p"
+  },
+  "9c615220ed8a2ed8": "Mulai dari {price}",
+  "9dad6db998848e83": "Terjadwal",
+  "9dba0ea0a1942f4a": "Ditangguhkan",
+  "9eafb46cb4c97c77": "Pilih",
+  "9eb2dbf6073def42": "Simpan",
+  "9eeb5ee589d08542": "Keranjang",
+  "9fa2a817f1e9b55b": "Nama belakang",
+  "a08e07b36e7b9e98": "Jadikan alamat utama",
+  "a2acf8270d351160": "Terjadi kesalahan",
+  "a3bab21f3b16d724": "Kami tidak dapat memulai proses pembayaran. Silakan coba lagi.",
+  "a573ee5d6a55f488": [
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    ":",
+    " ",
+    {
+      "c": {
+        "i": 3,
+        "k": "_gt_value_3",
+        "v": "v"
+      },
+      "i": 2,
+      "t": "span"
+    }
+  ],
+  "a6059339cdffebd5": "Kelola alamat yang Anda simpan",
+  "a64ba14bccd3412b": "Kembali ke beranda",
+  "a653f2cf99a49360": "Keranjang Anda kosong",
+  "a74538a7917c1c96": "Putar video",
+  "aafc6638dce9bf20": "Nama teman (opsional)",
+  "aba29e77e52bca46": "Hapus",
+  "ac0d7ee8a9206a80": "Dana Dikembalikan Sebagian",
+  "af56040278401094": "Email penerima",
+  "af7eb4f9c7f0f575": "Filter",
+  "afed0941d06361a4": "Jelajahi produk unggulan, koleksi pilihan, dan promosi musiman.",
+  "b02c4aa716524e41": "Harga: Terendah ke Tertinggi",
+  "b1081d87d2a8abad": "Langganan",
+  "b1f8df94116746d5": "Kami tidak dapat memuat opsi ini. Coba lagi atau pilih opsi lain.",
+  "b2be70822d55f16a": "Terbuka",
+  "b35a609d07e5a1ee": "Masukkan kode diskon yang valid",
+  "b50c41465e5408b3": "Email",
+  "b84165d70370ef55": "Pembayaran",
+  "ba43678e111b3cfe": {
+    "c": "Urutkan",
+    "i": 1,
+    "t": "span"
+  },
+  "bde61a49d0afdb92": "Hapus filter: {label}",
+  "be080c75e1018c16": "Dipenuhi Sebagian",
+  "be124f37ee408e24": "Kami tidak dapat memperbarui keranjang Anda. Silakan coba lagi.",
+  "be1da3273ffdb5bd": "Coba lagi",
+  "be4f1315235c6581": "Perkiraan total",
+  "be83cbaf06e7d3d9": "Toko Shopify berbasis Hydrogen dan Next.js, dengan teks antarmuka yang diterjemahkan oleh gt-next.",
+  "be8426affd94485b": "Dipenuhi",
+  "c0dc347278df9357": "Kode diskon",
+  "c2c4f29921b12f8e": "Anda Mungkin Juga Suka",
+  "c42b923cdbef30f4": "Memperbarui keranjang...",
+  "c56c085549eeebd6": {
+    "c": "Anda belum menyimpan alamat.",
+    "i": 1,
+    "t": "p"
+  },
+  "c59411eb78a37c38": [
+    "DISKON ",
+    {
+      "i": 1,
+      "k": "_gt_n_1",
+      "v": "n"
+    }
+  ],
+  "c70fa3b90b5e99ab": "mis. {example}",
+  "c742db531551ed5b": [
+    "×",
+    {
+      "i": 1,
+      "k": "_gt_n_1",
+      "v": "n"
+    }
+  ],
+  "c7f43954b20822d8": {
+    "c": "Tidak ada koleksi yang ditemukan.",
+    "i": 1,
+    "t": "p"
+  },
+  "ca13edcb2af07b35": "Tambah ke Keranjang",
+  "cb60456d096f5c36": "{option}: {value} (tidak tersedia)",
+  "cb819a6e071c1080": "Memuat pilihan pembelian",
+  "cc24f149528ab35c": "Periksa barang di keranjang Anda dan lanjutkan ke pembayaran",
+  "cc439a1b220536c2": "Terjadi kesalahan tak terduga. Silakan coba lagi.",
+  "cc5895d1a8ea89f8": "Informasi akun Anda",
+  "cd6d04926767a15b": "Barang dalam paket",
+  "ce08220505b48d11": [
+    "Kami tidak menemukan produk yang sesuai dengan \"",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    "\""
+  ],
+  "ce419b8d68e75f7a": "Produk",
+  "ced3462caa46f792": "{option}: {value} (habis)",
+  "cf3bc072a3b554bf": "Barang di keranjang",
+  "d05f56d2129e990b": "Cari",
+  "d09121888850ce06": {
+    "c": "Koleksi",
+    "i": 1,
+    "t": "h1"
+  },
+  "d0c5bb6c42928b19": "Diotorisasi",
+  "d13b5bd4279a5cc3": "Cocok Dipadukan dengan",
+  "d15d4ce9981708e9": "Batal",
+  "d34b2d265b1cfa63": "{title} diperbesar",
+  "d66a6d1775ee4184": "Isi keranjang Anda berubah. Silakan coba lanjutkan ke pembayaran lagi.",
+  "d79509ce1b7f1823": "Jumlah barang",
+  "d7e7ccd13d775370": "Lihat status pesanan",
+  "d80f33194fb833a1": "Lebih baru",
+  "d92c9a6c5a2f0c68": "Tampilkan semua {title}",
+  "daf8daec701f0863": "Akun",
+  "dcfca470826e0546": "Keranjang, {count, plural, one {# barang} other {# barang}}",
+  "ddb3355a8b5d810f": "Subtotal",
+  "dfd6c11276e37f00": "Temukan produk premium, koleksi pilihan, dan penawaran terbaru dari {name}.",
+  "e321d312eb7386a8": "Terapkan",
+  "e4d2a41d27c49ad0": "Belanja",
+  "e564f8f4823c30bf": "Filter berdasarkan {filter}: {value}",
+  "e68175f5552c588b": "Jelajahi produk dalam koleksi.",
+  "e77d5a1dbd3856e2": "Nama penerima",
+  "e7f298e8a056e09a": "Tidak ada hasil untuk \"{query}\"",
+  "eb1428cf6a3b0326": "Pesanan",
+  "eb7d00c205c733dd": "Dibayar Sebagian",
+  "ec21b232e0eacd4a": "Masuk",
+  "edaebeea1915f9c1": "Akun",
+  "ee3e8bd8b7918aec": "Cari",
+  "eee76955c565040a": "Nama: Z-A",
+  "eeeebc6b87a0c8b2": "Isi Paket",
+  "efabe3e18be04271": "Bahasa",
+  "efb36ef9ae7379b9": "Gagal memperbarui profil",
+  "f38c2e9533661201": "Keranjang Anda telah diperbarui",
+  "f55caade193b4094": [
+    "\"",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    "\""
+  ],
+  "f5683e647a65e15c": "{count, plural, one {# barang} other {# barang}}",
+  "f5b66c481aa3e4df": "Ubah",
+  "f5f6fa5c1a9e8907": "Koleksi",
+  "f68aaa606691804d": "Stok Habis",
+  "f809ee35e802325b": {
+    "c": "Anda belum memiliki pesanan.",
+    "i": 1,
+    "t": "p"
+  },
+  "f82f62ffaf44ffd5": "Beli dengan Shop Pay",
+  "f8daa277452dff3e": "Temukan produk yang sesuai dengan \"{query}\"",
+  "f956c17bf981aec8": "Cari produk di toko kami",
+  "f967c7afde53066b": "Lanjutkan Belanja",
+  "fa3e4289f346a850": "{label}: {title}",
+  "fc5ba4649f67329c": "Alamat wajib diisi",
+  "fc79fc46bae1dd1e": "Profil tidak valid",
+  "fe36ad749fc3e2c8": "Menambahkan ke Keranjang...",
+  "ff6c7c70eabf9e8f": "Stok Habis"
+}

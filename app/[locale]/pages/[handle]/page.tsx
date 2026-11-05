@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-text-page";
 import { getCatalogHtml, getCatalogText } from "@/lib/catalog/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getPage } from "@/lib/pages/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { getShopifySitemapPage } from "@/lib/seo/server";
@@ -24,7 +25,10 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/pages/[handle]">): Promise<Metadata> {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) return {};
-  const [page, ct] = await Promise.all([getPage({ handle }), getCatalogText()]);
+  const [page, ct] = await Promise.all([
+    getPage({ handle, locale: await getRequestCommerceLocale() }),
+    getCatalogText(),
+  ]);
   if (!page) notFound();
   const pathname = `/pages/${page.handle}`;
   const title = ct(page.seo.title);
@@ -56,7 +60,7 @@ async function ShopifyPageContent({
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) notFound();
   const [page, ct, ch] = await Promise.all([
-    getPage({ handle }),
+    getPage({ handle, locale: await getRequestCommerceLocale() }),
     getCatalogText(),
     getCatalogHtml(),
   ]);

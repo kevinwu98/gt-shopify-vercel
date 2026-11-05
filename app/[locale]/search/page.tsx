@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SEARCH_SORT_EXCLUDE } from "@/lib/collections";
 import { readBrowseState } from "@/lib/collections/server";
 import type { BrowseResults, BrowseState } from "@/lib/collections/types";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { fetchSearchResults } from "@/lib/search/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
@@ -64,8 +65,9 @@ export async function generateMetadata({
 export default function SearchPage({ searchParams }: PageProps<"/[locale]/search">) {
   // Don't await searchParams here — it would force the route fully dynamic.
   const statePromise = readBrowseState(searchParams);
-  const resultsPromise = searchParams.then((resolved) =>
-    fetchSearchResults({ query: getParam(resolved, "q"), statePromise }),
+  const resultsPromise = Promise.all([searchParams, getRequestCommerceLocale()]).then(
+    ([resolved, locale]) =>
+      fetchSearchResults({ locale, query: getParam(resolved, "q"), statePromise }),
   );
   return (
     <Page className="pt-2.5 md:pt-10">

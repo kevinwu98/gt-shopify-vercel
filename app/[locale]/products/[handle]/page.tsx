@@ -14,6 +14,7 @@ import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
 import { getCatalogText } from "@/lib/catalog/server";
 import { shopConfig } from "@/lib/config";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { defaultSelectedOptions, parseSelectedOptions, toSelectedOptionList } from "@/lib/product";
 import { getProduct, getProductCopy, getSearchIndexProducts } from "@/lib/product/server";
 import { type SelectedOptions } from "@/lib/product/types";
@@ -25,6 +26,7 @@ import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 async function buildProductMetadata(handle: string, canonicalPath: string): Promise<Metadata> {
   const product = await getProduct({
     handle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!product) notFound();
   const [{ seo }, ct] = await Promise.all([getProductCopy(product), getCatalogText()]);
@@ -102,6 +104,7 @@ async function ProductPageContent({
   if (handle === PLACEHOLDER_HANDLE) notFound();
   const product = await getProduct({
     handle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!product) notFound();
 

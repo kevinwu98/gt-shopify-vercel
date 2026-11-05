@@ -13,6 +13,7 @@ import { getReadonlyCustomerSessionManager } from "@/lib/auth/server";
 import { cartHandlers, createCustomerCartHandlers } from "@/lib/cart/request";
 import type { Cart, CartSeedData } from "@/lib/cart/types";
 import { shopConfig } from "@/lib/config";
+import { getForwardedCommerceLocale } from "@/lib/i18n/server";
 import { createRequestStorefrontClient } from "@/lib/shopify/storefront/server";
 
 export async function getCartIdFromCookie(): Promise<string | undefined> {
@@ -20,11 +21,8 @@ export async function getCartIdFromCookie(): Promise<string | undefined> {
   return getCartId({ cookie }) ?? undefined;
 }
 
-const getRequestContext = cache(() => {
-  const i18n = {
-    country: shopConfig.localization.country,
-    language: shopConfig.localization.language,
-  };
+const getRequestContext = cache(async () => {
+  const i18n = await getForwardedCommerceLocale();
   // An empty request ID suppresses Hydrogen's synchronous UUID fallback.
   return createShopifyRequestContext({
     i18n,
@@ -33,7 +31,7 @@ const getRequestContext = cache(() => {
 });
 
 async function getHandlerContext() {
-  const requestContext = getRequestContext();
+  const requestContext = await getRequestContext();
   const storefrontClient = createRequestStorefrontClient(requestContext);
   if (!shopConfig.auth.isEnabled) return { handlers: cartHandlers, storefrontClient };
 
@@ -88,7 +86,7 @@ export async function createEmptyCart(
     variables: {
       input: {
         buyerIdentity: {
-          countryCode: shopConfig.localization.country,
+          countryCode: requestContext.i18n.country,
           ...(customerAccessToken ? { customerAccessToken } : {}),
         },
       },

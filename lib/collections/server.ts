@@ -12,6 +12,7 @@ import type {
 } from "@/lib/collections/types";
 import { shopConfig } from "@/lib/config";
 import type { CommerceLocale } from "@/lib/config/types";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { tagProducts } from "@/lib/product/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { getNumericShopifyId } from "@/lib/shopify/id/server";
@@ -143,9 +144,11 @@ export async function getAllProductsResults(
 // Filtered and sorted views stay live; a cache entry per combination would rarely be reused.
 export async function fetchCollectionResults({
   handle,
+  locale,
   statePromise,
 }: {
   handle: string;
+  locale: CommerceLocale;
   statePromise: Promise<BrowseState>;
 }): Promise<BrowseResults> {
   const { dataSearch, filters, sort } = await statePromise;
@@ -153,6 +156,7 @@ export async function fetchCollectionResults({
     collection: handle,
     filters,
     limit: PRODUCTS_PER_PAGE,
+    locale,
     sortKey: sort,
   });
   return {
@@ -221,7 +225,10 @@ async function browseMetadata(
 
 export async function getCollectionMetadata(handle: string): Promise<Metadata> {
   const gt = await getGT();
-  const [ct, collection] = await Promise.all([getCatalogText(), getCollection({ handle })]);
+  const [ct, collection] = await Promise.all([
+    getCatalogText(),
+    getCollection({ handle, locale: await getRequestCommerceLocale() }),
+  ]);
   if (!collection) {
     return browseMetadata(handle, gt("Collection"), gt("Browse collection products."));
   }

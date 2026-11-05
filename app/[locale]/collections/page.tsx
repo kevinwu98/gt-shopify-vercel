@@ -8,6 +8,7 @@ import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
 import { getCatalogText } from "@/lib/catalog/server";
 import { getCollectionsListing } from "@/lib/collections/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,7 +38,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CollectionsPage() {
   const gt = await getGT();
-  const [collections, ct] = await Promise.all([getCollectionsListing({}), getCatalogText()]);
+  const [collections, ct] = await Promise.all([
+    getCollectionsListing({ locale: await getRequestCommerceLocale() }),
+    getCatalogText(),
+  ]);
   const viewCollectionLabel = gt("View this collection");
   return (
     <Page className="pt-2.5 md:pt-10">

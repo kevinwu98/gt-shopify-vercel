@@ -6,18 +6,18 @@ A multilingual Shopify storefront: the [Vercel Shop](https://github.com/vercel/s
 
 - **Interface copy** with [`gt-next`](https://generaltranslation.com/docs/react/nextjs): copy stays inline in each component. JSX uses `<T>` with `<Var>`, `<Num>`, `<Currency>`, `<DateTime>` and `<Plural>`; attributes, metadata and props use `getGT()` on the server and `useGT()` on the client; module-level labels use `msg()`.
 - **Shopify catalog copy**: product titles, descriptions, options, image alt text, collection titles, page titles and bodies, filter labels and policy titles. `pnpm catalog:export` writes the store's English text to `catalog/en.json`; `pnpm translate` translates it with the interface copy. `lib/catalog` looks translations up by their English text, so anything edited in Shopify after the last export shows its live English until the next export.
-- **Prices** keep Shopify's amount and currency and format for the shopper's language (`$40.00`, `40,00 $US`).
+- **Prices and currency** come from Shopify Markets: each language sells in its market (English → US/USD, French → France/EUR, Japanese → Japan/JPY, Korean → Korea/KRW, Indonesian → Indonesia/IDR), so Shopify returns that market's prices and checkout currency, formatted for the language (`$40.00`, `36,95 €`, `￥6,500`, `₩56,000`, `Rp 1.652.000`).
 - **SEO**: localized `<html lang>`, canonical URLs, `hreflang` alternates on every page and in the sitemap, and localized Open Graph and Schema.org data.
 
 Policy bodies (legal text) and the Markdown/`llms.txt` agent surface stay in English. Checkout is hosted by Shopify and follows the store's published languages.
 
 ## How it works
 
-- **Locales**: `en` (default, unprefixed), `fr` at `/fr`, `ja` at `/ja`, set in `gt.config.json`. Every storefront route lives under `app/[locale]/` and is prerendered per locale.
+- **Locales**: `en` (default, unprefixed), plus `fr`, `ja`, `ko` and `id` at `/fr`, `/ja`, `/ko` and `/id`, set in `gt.config.json`. Every storefront route lives under `app/[locale]/` and is prerendered per locale.
 - **Routing**: `proxy.ts` rewrites unprefixed requests to the default locale after Hydrogen's Shopify route handlers run; `/en/...` is not a URL, so each page has one canonical address. This matches the routing proposed for Hydrogen's `defineShopifyI18n` ([Shopify/hydrogen#4009](https://github.com/Shopify/hydrogen/pull/4009)).
 - **Cache Components**: `getLocale.ts` reads the `[locale]` root param and `loadTranslations.ts` imports the generated files in `public/_gt/`, so translated pages stay static. See [Using Cache Components](https://generaltranslation.com/docs/react/nextjs/cache-components).
 - **Links**: `components/ui/link.tsx` localizes internal hrefs with `useLocalizeHref()`; the language switcher in the nav keeps the current page.
-- **Commerce** stays on the store's market (US, USD). Changing the language never changes the cart's country.
+- **Markets**: `lib/i18n` maps each locale to a Shopify country and language. Pages pass it to every Storefront API read (`@inContext`), the proxy runs Hydrogen's cart and search handlers in it (remembering the page locale in a cookie for `/api/cart`), and switching language moves the existing cart to the new market with `cartBuyerIdentityUpdate`, since Hydrogen's cart handlers have no intent for the buyer country. The currency always comes from Shopify's response.
 
 ## Run it
 

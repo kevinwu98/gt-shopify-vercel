@@ -15,10 +15,17 @@ import {
   getCustomerRequestOrigin,
   getHydrogenCustomerSession,
 } from "@/lib/auth/request";
-import { cartHandlers, createCustomerCartHandlers } from "@/lib/cart/request";
+import { cartHandlers, createCustomerCartHandlers, moveCartToMarket } from "@/lib/cart/request";
 import { getRefinedCollectionPath, isRefinedCollectionPath } from "@/lib/collections";
 import { shopConfig } from "@/lib/config";
-import { splitLocalePath } from "@/lib/i18n";
+import {
+  defaultLocale,
+  getCommerceLocale,
+  isSupportedLocale,
+  LOCALE_COOKIE_NAME,
+  LOCALE_HEADER_NAME,
+  splitLocalePath,
+} from "@/lib/i18n";
 import { getMarkdownRewritePath } from "@/lib/markdown/representation";
 import { predictiveSearchHandlers } from "@/lib/search/request";
 import { SHOPIFY_ROUTE_TEMPLATES } from "@/lib/shopify/routing";
@@ -33,7 +40,9 @@ const AUTH_PATHS = new Set<string>([
 
 export async function proxy(request: NextRequest): Promise<Response> {
   const pathname = request.nextUrl.pathname;
-  const requestContext = createCustomerRequestContext(request);
+  const requestLocale = resolveRequestLocale(request);
+  // Hydrogen's cart and search handlers run in the market of the shopper's language.
+  const requestContext = createCustomerRequestContext(request, getCommerceLocale(requestLocale));
   const isAuthPath = shopConfig.auth.isEnabled && AUTH_PATHS.has(pathname);
   const customerSession =
     isAuthPath || (shopConfig.auth.isEnabled && pathname === "/api/cart")
@@ -56,10 +65,16 @@ export async function proxy(request: NextRequest): Promise<Response> {
   if (shopifyRoute) return shopifyRoute;
 
   const { locale, pathname: unprefixedPathname } = splitLocalePath(pathname);
+  const rememberedLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
+  if (isPagePath(pathname) && rememberedLocale && rememberedLocale !== locale) {
+    // A language switch changes the market; move the cart before the page reads it.
+    await moveCartToMarket(request, requestContext).catch(() => undefined);
+  }
   if (isRefinedCollectionPath(unprefixedPathname))
     return new Response("Not Found", { status: 404 });
 
   const headers = requestContext.getForwardedRequestHeaders();
+  headers.set(LOCALE_HEADER_NAME, requestLocale);
   const refinedPath = getRefinedCollectionPath(unprefixedPathname, request.nextUrl.search);
   const localizedPath = isUnlocalizedPath(pathname)
     ? null
@@ -75,7 +90,24 @@ export async function proxy(request: NextRequest): Promise<Response> {
         request: { headers: forwardCustomerRefreshAttempt(request.nextUrl, headers) },
       });
   requestContext.applyResponseHeaders(response.headers);
+  if (isPagePath(pathname) && rememberedLocale !== locale) {
+    response.cookies.set(LOCALE_COOKIE_NAME, locale, { path: "/", sameSite: "lax" });
+  }
   return response;
+}
+
+/** The URL's locale for pages; the remembered page locale for unprefixed Shopify endpoints such as `/api/cart`. */
+function resolveRequestLocale(request: NextRequest): string {
+  const { pathname } = request.nextUrl;
+  const { locale } = splitLocalePath(pathname);
+  if (locale !== defaultLocale || isPagePath(pathname)) return locale;
+  const remembered = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
+  return isSupportedLocale(remembered) ? remembered : defaultLocale;
+}
+
+// Storefront pages, as opposed to API routes and Shopify's dotted endpoints such as `/cart.js`.
+function isPagePath(pathname: string): boolean {
+  return !isUnlocalizedPath(pathname) && !/\.[a-z]+$/i.test(pathname);
 }
 
 const UNLOCALIZED_PATH = /^\/(?:api|md|agent|eve|_eve_internal|\.well-known|__shopify)(?:\/|$)/;

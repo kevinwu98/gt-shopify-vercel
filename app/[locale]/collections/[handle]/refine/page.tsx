@@ -7,6 +7,7 @@ import {
   getCollectionMetadata,
   readBrowseState,
 } from "@/lib/collections/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 
 export async function generateMetadata({
   params,
@@ -32,5 +33,13 @@ async function RefinedCollectionResults({
 }: PageProps<"/[locale]/collections/[handle]/refine">) {
   const { handle } = await params;
   const statePromise = readBrowseState(searchParams);
-  return <CollectionResults results={fetchCollectionResults({ handle, statePromise })} />;
+  return (
+    <CollectionResults
+      results={fetchCollectionResults({
+        handle,
+        statePromise,
+        locale: await getRequestCommerceLocale(),
+      })}
+    />
+  );
 }

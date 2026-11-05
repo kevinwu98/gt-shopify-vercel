@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { BlogIndex, BlogIndexSkeleton } from "@/components/blog/blog-index";
 import { getBlog } from "@/lib/blog/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { getShopifySitemapPage } from "@/lib/seo/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
@@ -25,6 +26,7 @@ export async function generateMetadata({
   if (blogHandle === PLACEHOLDER_HANDLE) return {};
   const blog = await getBlog({
     handle: blogHandle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!blog) notFound();
   const pathname = `/blogs/${blog.handle}`;
@@ -56,6 +58,7 @@ async function BlogPageContent({
   if (blogHandle === PLACEHOLDER_HANDLE) notFound();
   const blog = await getBlog({
     handle: blogHandle,
+    locale: await getRequestCommerceLocale(),
   });
   if (!blog) notFound();
   return <BlogIndex blog={blog} />;

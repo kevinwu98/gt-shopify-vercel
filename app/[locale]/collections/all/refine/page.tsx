@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { CollectionResults } from "@/components/collections/browse";
 import { CollectionBrowseBoundary } from "@/components/collections/collection-page";
 import { getAllProductsMetadata, readBrowseState } from "@/lib/collections/server";
+import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { fetchSearchResults } from "@/lib/search/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,5 +24,9 @@ async function RefinedAllProductsResults({
   searchParams,
 }: Pick<PageProps<"/[locale]/collections/all/refine">, "searchParams">) {
   const statePromise = readBrowseState(searchParams);
-  return <CollectionResults results={fetchSearchResults({ statePromise })} />;
+  return (
+    <CollectionResults
+      results={fetchSearchResults({ statePromise, locale: await getRequestCommerceLocale() })}
+    />
+  );
 }
