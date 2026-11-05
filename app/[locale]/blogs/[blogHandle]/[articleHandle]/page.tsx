@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { ArticlePage, ArticlePageSkeleton } from "@/components/blog/article-page";
 import { getBlog, getBlogArticle } from "@/lib/blog/server";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 import { getShopifySitemapPage } from "@/lib/seo/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 

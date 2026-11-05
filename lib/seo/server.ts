@@ -1,5 +1,11 @@
+import { getLocale } from "gt-next/server";
+import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 
+import { shopConfig } from "@/lib/config";
+import { localizePath, locales } from "@/lib/i18n";
+import { buildCanonicalPath } from "@/lib/seo";
+import type { SearchParamsInput } from "@/lib/seo/types";
 import {
   fetchArticleSitemapPage,
   fetchSitemapPage,
@@ -69,4 +75,58 @@ export async function getShopifySitemapPage(
       : await fetchSitemapPage(type, page);
   tagSitemapResources(type, result.items);
   return result;
+}
+
+/** Canonical URL for the request's locale, plus hreflang alternates for every locale. */
+export async function buildAlternates({
+  pathname,
+  searchParams,
+}: {
+  pathname: string;
+  searchParams?: SearchParamsInput;
+}): Promise<Metadata["alternates"]> {
+  const canonicalPath = buildCanonicalPath(pathname, searchParams);
+  const locale = await getLocale();
+  return {
+    canonical: localizePath(canonicalPath, locale),
+    languages: {
+      ...Object.fromEntries(locales.map((code) => [code, localizePath(canonicalPath, code)])),
+      "x-default": canonicalPath,
+    },
+  };
+}
+
+export async function buildOpenGraph({
+  title,
+  description,
+  url,
+  type,
+  images = ["/og-default.png"],
+}: {
+  title: string;
+  description?: string;
+  url: string;
+  type?: "website" | "article";
+  images?: Array<
+    | string
+    | {
+        url: string;
+        width?: number;
+        height?: number;
+        alt?: string;
+      }
+  >;
+}): Promise<Metadata["openGraph"]> {
+  const locale = await getLocale();
+  // Omit type so product pages can emit og:type=product through raw meta tags.
+  return {
+    ...(type ? { type } : {}),
+    title,
+    description,
+    url: localizePath(url, locale),
+    locale,
+    alternateLocale: locales.filter((code) => code !== locale),
+    siteName: shopConfig.site.name,
+    images,
+  };
 }

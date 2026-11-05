@@ -16,12 +16,13 @@ import type { Money } from "@/lib/money/types";
 import { fetchCustomerOrder } from "@/lib/shopify/operations/customer/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 
-// gt-next's client provider reads usePathname(), so this route needs a known param to prerender its shell.
+// gt-next 11.4's GTProvider reads usePathname(), so a route without static params fails to prerender
+// (fix: generaltranslation/gt#2641). A placeholder param keeps its shell static until that ships.
 export function generateStaticParams() {
   return [{ id: PLACEHOLDER_HANDLE }];
 }
 
-export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function OrderDetailPage({ params }: PageProps<"/[locale]/account/orders/[id]">) {
   return (
     <Suspense fallback={<OrderDetailSkeleton />}>
       <OrderDetailContent params={params} />
@@ -29,7 +30,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   );
 }
 
-async function OrderDetailContent({ params }: { params: Promise<{ id: string }> }) {
+async function OrderDetailContent({
+  params,
+}: Pick<PageProps<"/[locale]/account/orders/[id]">, "params">) {
   const { id } = await params;
   if (!id) notFound();
   const [order, locale, ct] = await Promise.all([
@@ -70,18 +73,18 @@ async function OrderDetailContent({ params }: { params: Promise<{ id: string }> 
         <SummaryRow label={<T>Shipping</T>} locale={locale} money={order.totalShipping} />
         <SummaryRow label={<T>Tax</T>} locale={locale} money={order.totalTax} />
         <div className="flex items-center justify-between border-t pt-2 font-medium">
-          <T>
-            <dt>Total</dt>
-          </T>
+          <dt>
+            <T>Total</T>
+          </dt>
           <dd className="tabular-nums">{formatPrice(order.totalPrice, locale)}</dd>
         </div>
       </dl>
 
       {order.shippingAddress && order.shippingAddress.formatted.length > 0 ? (
         <div className="grid gap-2 rounded-lg border p-4">
-          <T>
-            <h2 className="text-sm font-medium">Shipping address</h2>
-          </T>
+          <h2 className="text-sm font-medium">
+            <T>Shipping address</T>
+          </h2>
           <address className="text-sm text-muted-foreground not-italic">
             {order.shippingAddress.formatted.map((line, index) => (
               <span key={index} className="block">

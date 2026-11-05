@@ -89,8 +89,11 @@ function MediaVideo({
   className?: string;
 }) {
   const ct = useCatalogText();
+  const gt = useGT();
   return (
     <AutoPlayVideo
+      pauseLabel={gt("Pause video")}
+      playLabel={gt("Play video")}
       src={item.video.url}
       previewImage={
         item.video.previewImage

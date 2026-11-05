@@ -60,30 +60,14 @@ export async function getProductRecommendations(params: {
   return products;
 }
 
-// Shopify's plain-text description is derived from its HTML, so derive the translated one the same way.
-function toPlainText(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 /** Merchant copy for the product page in the request's locale: display, metadata, and structured data. */
 export async function getProductCopy(
   product: Pick<ProductDetails, "description" | "descriptionHtml" | "seo" | "title">,
 ) {
-  const [ct, ch] = await Promise.all([getCatalogText(), getCatalogHtml()]);
+  const ct = await getCatalogText();
+  const ch = await getCatalogHtml();
+  const description = ct(product.description);
   const descriptionHtml = ch(product.descriptionHtml);
-  const description =
-    descriptionHtml === product.descriptionHtml
-      ? product.description
-      : toPlainText(descriptionHtml);
   return {
     description,
     descriptionHtml,

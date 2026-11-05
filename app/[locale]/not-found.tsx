@@ -8,6 +8,14 @@ import { Container } from "@/components/ui/container";
 import { Link } from "@/components/ui/link";
 import { Page } from "@/components/ui/page";
 import { shopConfig } from "@/lib/config";
+import {
+  defaultLocale,
+  getCommerceLocale,
+  isSupportedLocale,
+  LOCALE_HEADER_NAME,
+  localizePath,
+  splitLocalePath,
+} from "@/lib/i18n";
 import { SHOPIFY_ROUTE_TEMPLATES } from "@/lib/shopify/routing";
 import { createRequestStorefrontClient } from "@/lib/shopify/storefront/server";
 
@@ -41,12 +49,17 @@ export default function NotFoundError() {
 
 async function ShopifyNotFoundRedirect() {
   const requestHeaders = await headers();
-  const url = requestHeaders.get("x-storefront-url");
-  if (!url) return null;
+  const storefrontUrl = requestHeaders.get("x-storefront-url");
+  if (!storefrontUrl) return null;
+  const forwardedLocale = requestHeaders.get(LOCALE_HEADER_NAME) ?? undefined;
+  const locale = isSupportedLocale(forwardedLocale) ? forwardedLocale : defaultLocale;
 
+  // Shopify stores URL redirects for unprefixed paths, so look up the path without its locale.
+  const url = new URL(storefrontUrl);
+  url.pathname = splitLocalePath(url.pathname).pathname;
   const request = new Request(url, { headers: requestHeaders });
   const requestContext = createShopifyRequestContext({
-    i18n: shopConfig.localization,
+    i18n: getCommerceLocale(locale),
     request,
   });
   const response = await handleShopifyRedirects({
@@ -55,8 +68,9 @@ async function ShopifyNotFoundRedirect() {
     storefrontClient: createRequestStorefrontClient(requestContext),
   });
   if (!response) return null;
-  const location = response.headers.get("location");
-  if (!location) return null;
+  const target = response.headers.get("location");
+  if (!target) return null;
+  const location = target.startsWith("/") ? localizePath(target, locale) : target;
 
   if (response.status === 301 || response.status === 308) permanentRedirect(location);
   redirect(location);

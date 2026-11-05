@@ -6,7 +6,7 @@ import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-te
 import { getCatalogHtml, getCatalogText } from "@/lib/catalog/server";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getPage } from "@/lib/pages/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 import { getShopifySitemapPage } from "@/lib/seo/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 
@@ -25,10 +25,8 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/pages/[handle]">): Promise<Metadata> {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) return {};
-  const [page, ct] = await Promise.all([
-    getPage({ handle, locale: await getRequestCommerceLocale() }),
-    getCatalogText(),
-  ]);
+  const ct = await getCatalogText();
+  const page = await getPage({ handle, locale: await getRequestCommerceLocale() });
   if (!page) notFound();
   const pathname = `/pages/${page.handle}`;
   const title = ct(page.seo.title);
@@ -59,11 +57,9 @@ async function ShopifyPageContent({
 }: Pick<PageProps<"/[locale]/pages/[handle]">, "params">) {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) notFound();
-  const [page, ct, ch] = await Promise.all([
-    getPage({ handle, locale: await getRequestCommerceLocale() }),
-    getCatalogText(),
-    getCatalogHtml(),
-  ]);
+  const ct = await getCatalogText();
+  const ch = await getCatalogHtml();
+  const page = await getPage({ handle, locale: await getRequestCommerceLocale() });
   if (!page) notFound();
   return <RichTextPage body={ch(page.body)} title={ct(page.title)} />;
 }

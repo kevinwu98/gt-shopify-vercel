@@ -28,9 +28,9 @@ export function BrowseToolbar({ filters, resultCount, sortExclude }: BrowseToolb
               className="flex cursor-pointer items-center gap-2 text-sm font-medium"
             >
               <SlidersHorizontalIcon className="size-4" />
-              <T>
-                <span>Filters</span>
-              </T>
+              <span>
+                <T>Filters</T>
+              </span>
               <CollectionActiveFilterCountBadge />
             </button>
           }
@@ -58,17 +58,17 @@ export function BrowseFallback({ resultCount }: BrowseFallbackProps) {
             className="flex cursor-pointer items-center gap-2 text-sm font-medium"
           >
             <SlidersHorizontalIcon className="size-4" />
-            <T>
-              <span>Filters</span>
-            </T>
+            <span>
+              <T>Filters</T>
+            </span>
           </button>
         }
         resultCount={resultCount}
         sortSelect={
           <div className="flex h-9 w-fit items-center justify-between gap-2 rounded-md bg-transparent px-0 py-2 text-sm whitespace-nowrap">
-            <T>
-              <span>Sort</span>
-            </T>
+            <span>
+              <T>Sort</T>
+            </span>
             <ChevronDownIcon className="size-4 text-muted-foreground opacity-50" />
           </div>
         }

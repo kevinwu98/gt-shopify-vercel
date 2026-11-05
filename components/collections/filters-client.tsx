@@ -37,13 +37,18 @@ interface FilterSheetProps {
 }
 
 export function FilterSheet({ children, label, trigger }: FilterSheetProps) {
+  const gt = useGT();
   const facets = usePublishedFacets();
   // Shopify returns no usable filters for some markets (Search & Discovery's price filter covers only the store currency).
   if (facets && facets.filters.length === 0 && !facets.priceRange) return null;
   return (
     <Sheet>
       <SheetTrigger render={trigger} />
-      <SheetContent side="left" className="gap-0 overflow-y-auto px-5 pb-5">
+      <SheetContent
+        closeLabel={gt("Close")}
+        side="left"
+        className="gap-0 overflow-y-auto px-5 pb-5"
+      >
         <div className="flex h-16 shrink-0 items-center gap-2">
           <SheetTitle className="text-lg font-semibold">{label}</SheetTitle>
         </div>

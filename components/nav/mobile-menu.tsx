@@ -28,7 +28,7 @@ export function MobileMenu({ items }: { items: MenuItem[] }) {
           </button>
         }
       />
-      <SheetContent side="left" className="gap-0">
+      <SheetContent closeLabel={gt("Close")} side="left" className="gap-0">
         <div className="flex h-16 items-center px-5">
           <SheetTitle className="text-lg font-semibold">
             <T>Menu</T>

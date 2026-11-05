@@ -38,9 +38,9 @@ async function OrdersContent({
   if (orders.length === 0) {
     return (
       <div className="rounded-lg border p-6 text-center">
-        <T>
-          <p className="text-sm text-muted-foreground">You have no orders yet.</p>
-        </T>
+        <p className="text-sm text-muted-foreground">
+          <T>You have no orders yet.</T>
+        </p>
       </div>
     );
   }

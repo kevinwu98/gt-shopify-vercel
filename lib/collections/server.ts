@@ -14,7 +14,7 @@ import { shopConfig } from "@/lib/config";
 import type { CommerceLocale } from "@/lib/config/types";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { tagProducts } from "@/lib/product/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 import { getNumericShopifyId } from "@/lib/shopify/id/server";
 import {
   fetchCollection,
@@ -225,10 +225,8 @@ async function browseMetadata(
 
 export async function getCollectionMetadata(handle: string): Promise<Metadata> {
   const gt = await getGT();
-  const [ct, collection] = await Promise.all([
-    getCatalogText(),
-    getCollection({ handle, locale: await getRequestCommerceLocale() }),
-  ]);
+  const ct = await getCatalogText();
+  const collection = await getCollection({ handle, locale: await getRequestCommerceLocale() });
   if (!collection) {
     return browseMetadata(handle, gt("Collection"), gt("Browse collection products."));
   }

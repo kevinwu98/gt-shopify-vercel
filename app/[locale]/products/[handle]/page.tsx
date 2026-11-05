@@ -19,7 +19,7 @@ import { defaultSelectedOptions, parseSelectedOptions, toSelectedOptionList } fr
 import { getProduct, getProductCopy, getSearchIndexProducts } from "@/lib/product/server";
 import { type SelectedOptions } from "@/lib/product/types";
 import type { ProductVariant } from "@/lib/product/types";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 import { fetchProductVariant } from "@/lib/shopify/operations/products/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 
@@ -102,10 +102,8 @@ async function ProductPageContent({
 }: Pick<PageProps<"/[locale]/products/[handle]">, "params" | "searchParams">) {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) notFound();
-  const product = await getProduct({
-    handle,
-    locale: await getRequestCommerceLocale(),
-  });
+  const locale = await getRequestCommerceLocale();
+  const product = await getProduct({ handle, locale });
   if (!product) notFound();
 
   // Keep selection separate from the variant query so the static shell stays coherent and the picker never waits on Shopify.
@@ -125,6 +123,7 @@ async function ProductPageContent({
       // Uncached: the selected variant's price and stock are read live per request, and caching per option combination multiplies entries by variant count.
       return fetchProductVariant({
         handle,
+        locale,
         selectedOptions: toSelectedOptionList({
           ...defaultSelectedOptions(product),
           ...parseSelectedOptions(product.options, resolvedSearchParams ?? {}),

@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/container";
 import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
 import { shopConfig } from "@/lib/config";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const gt = await getGT();

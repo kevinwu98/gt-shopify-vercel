@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, use, type ReactNode } from "react";
+import { createContext, type ReactNode, use } from "react";
 
-import { type Catalog, translateCatalogText } from "@/lib/catalog/text";
+import { translateCatalogText } from "@/lib/catalog";
+import type { Catalog } from "@/lib/catalog/types";
 
 const CatalogContext = createContext<Catalog>({});
 
@@ -13,6 +14,10 @@ export function CatalogProvider({ labels, children }: { labels: Catalog; childre
 /** Translates Shopify merchant labels (product titles, option names and values) on the client. */
 export function useCatalogText() {
   const catalog = use(CatalogContext);
-  return <Text extends string | undefined>(text: Text) =>
-    translateCatalogText(catalog, text) as Text;
+  function ct(text: string): string;
+  function ct(text: string | undefined): string | undefined;
+  function ct(text: string | undefined) {
+    return translateCatalogText(catalog, text);
+  }
+  return ct;
 }

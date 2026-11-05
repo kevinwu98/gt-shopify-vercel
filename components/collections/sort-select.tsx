@@ -31,9 +31,9 @@ export function CollectionsSortSelect({ exclude = [] }: { exclude?: SortValue[] 
       disabled={status === "loading"}
     >
       <SelectTrigger className="border-0 shadow-none bg-transparent px-0">
-        <T>
-          <span>Sort</span>
-        </T>
+        <span>
+          <T>Sort</T>
+        </span>
       </SelectTrigger>
       <SelectContent>
         {options.map((value) => (

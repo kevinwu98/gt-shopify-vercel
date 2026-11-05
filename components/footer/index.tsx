@@ -16,10 +16,10 @@ import type { SocialLink } from "./social-links";
 export async function Footer() {
   const socialLinks: SocialLink[] = [];
   const items: MenuItem[] = [];
-  const [policies, ct] = await Promise.all([
-    getShopPolicies({ locale: await getRequestCommerceLocale() }).catch(() => []),
-    getCatalogText(),
-  ]);
+  const ct = await getCatalogText();
+  const policies = await getShopPolicies({ locale: await getRequestCommerceLocale() }).catch(
+    () => [],
+  );
   return (
     <footer>
       {/* pb-22 clears the fixed agent ActionBar pill when it renders */}

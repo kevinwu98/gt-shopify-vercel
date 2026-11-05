@@ -20,7 +20,7 @@ import { Nav } from "@/components/nav";
 import { SiteSchema } from "@/components/schema/site-schema";
 import { botIdProtectedRoutes } from "@/lib/botid";
 import { seedCartData } from "@/lib/cart/server";
-import { getCatalogLabels } from "@/lib/catalog";
+import { getCatalogLabels } from "@/lib/catalog/server";
 import { shopConfig } from "@/lib/config";
 import { isSupportedLocale, locales } from "@/lib/i18n";
 

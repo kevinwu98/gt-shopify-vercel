@@ -7,6 +7,7 @@ import {
 
 import type { getHydrogenCustomerSession } from "@/lib/auth/request";
 import { CART_FRAGMENT } from "@/lib/shopify/fragments/cart";
+import { shopifyLogger } from "@/lib/shopify/logging/server";
 import { createRequestStorefrontClient } from "@/lib/shopify/storefront/server";
 
 export const cartHandlers = createCartServerHandlers({ fragment: CART_FRAGMENT });
@@ -40,7 +41,17 @@ export async function moveCartToMarket(
 ): Promise<void> {
   const cartId = getCartId({ cookie: request.headers.get("cookie") ?? undefined });
   if (!cartId) return;
-  await createRequestStorefrontClient(requestContext).graphql(CART_COUNTRY_UPDATE_MUTATION, {
-    variables: { cartId, countryCode: requestContext.i18n.country },
-  });
+  const countryCode = requestContext.i18n.country;
+  try {
+    const { data, errors } = await createRequestStorefrontClient(requestContext).graphql(
+      CART_COUNTRY_UPDATE_MUTATION,
+      { variables: { cartId, countryCode } },
+    );
+    const message = errors?.[0]?.message ?? data?.cartBuyerIdentityUpdate?.userErrors[0]?.message;
+    if (message)
+      shopifyLogger.warn("Cart market move failed", { countryCode, error: message, scope: "cart" });
+  } catch (error) {
+    // The page still renders; the cart keeps its previous market until the next language switch.
+    shopifyLogger.warn("Cart market move failed", { countryCode, error, scope: "cart" });
+  }
 }

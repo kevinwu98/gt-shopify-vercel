@@ -23,8 +23,6 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   reactCompiler: true,
   turbopack: {
-    // This app lives inside the Hydrogen repo, which has its own lockfile.
-    root: import.meta.dirname,
     rules: {
       "*.css": {
         as: "*.css",

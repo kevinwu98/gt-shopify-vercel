@@ -137,7 +137,7 @@ export function Link({
   ref,
   ...props
 }: LinkProps) {
-  // Keep navigation in the active locale; the default locale stays unprefixed.
+  // Locale prefixes are routing, not copy, so this primitive owns them: links keep the active locale, and the default locale stays unprefixed.
   const localizeHref = useLocalizeHref();
   const localizedHref = typeof href === "string" ? localizeHref(href) : href;
   const destinationKey = JSON.stringify([localizedHref, as]);

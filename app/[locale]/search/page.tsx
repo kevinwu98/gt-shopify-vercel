@@ -16,7 +16,7 @@ import { readBrowseState } from "@/lib/collections/server";
 import type { BrowseResults, BrowseState } from "@/lib/collections/types";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { fetchSearchResults } from "@/lib/search/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

@@ -17,9 +17,10 @@
     },
     "json": {
       "include": [
-        "catalog/[locale].json"
+        "catalog/[locale]/labels.json",
+        "catalog/[locale]/content.json"
       ]
     }
   },
-  "_versionId": "51f09c47dc1dea67b6a37462188b8a0039ca65989fedfdbaceefce35fba0b9bc"
+  "_versionId": "d62f8a6cf7ec3889a4af2a5bca4e35f87afa8167fc6225624508ab02266ba870"
 }

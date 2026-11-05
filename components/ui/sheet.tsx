@@ -2,7 +2,6 @@
 
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import { cn } from "cn";
-import { T } from "gt-next";
 import { XIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -39,12 +38,14 @@ function SheetContent({
   className,
   children,
   closeButton = true,
+  closeLabel = "Close",
   keepMounted = false,
   overlay = true,
   side = "right",
   ...props
 }: SheetPrimitive.Popup.Props & {
   closeButton?: boolean;
+  closeLabel?: string;
   keepMounted?: boolean;
   overlay?: boolean;
   side?: "top" | "right" | "bottom" | "left";
@@ -74,9 +75,7 @@ function SheetContent({
         {closeButton && (
           <SheetPrimitive.Close className="ring-offset-background focus-visible:ring-ring absolute top-3 right-2.5 flex size-10 items-center justify-center rounded-full opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none">
             <XIcon className="size-5" />
-            <span className="sr-only">
-              <T>Close</T>
-            </span>
+            <span className="sr-only">{closeLabel}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

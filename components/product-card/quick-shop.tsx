@@ -167,6 +167,7 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
       {/* Hidden overflow is programmatically scrollable, which can displace the close button. */}
       <DialogContent
         aria-describedby={undefined}
+        closeLabel={gt("Close")}
         className="flex max-h-[calc(100dvh-2.5rem)] w-[calc(100%-2.5rem)] max-w-3xl flex-col gap-0 overflow-clip p-0 sm:max-w-[min(48rem,calc(200dvh-5rem-2px))]"
         finalFocus={cartHandoff ? false : undefined}
         initialFocus={closeButtonRef}

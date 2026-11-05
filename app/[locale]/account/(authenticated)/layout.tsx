@@ -72,9 +72,9 @@ async function AccountLabel() {
   const accessToken = await getCustomerAccessToken();
   if (!accessToken) {
     return (
-      <T>
-        <p className="text-sm font-medium">Account</p>
-      </T>
+      <p className="text-sm font-medium">
+        <T>Account</T>
+      </p>
     );
   }
   const profile = await getCustomerProfile();

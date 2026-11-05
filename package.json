@@ -5,14 +5,14 @@
   "scripts": {
     "build": "next build",
     "build:agent": "eve build",
+    "catalog:export": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-catalog.ts",
     "dev": "next dev",
     "dev:portless": "portless shop next dev",
     "format": "oxfmt",
     "lint": "oxlint . && oxfmt --check",
     "start": "next start",
-    "typecheck": "next typegen && tsc --noEmit",
-    "catalog:export": "node scripts/export-catalog.ts",
-    "translate": "node --env-file-if-exists=.env.gt node_modules/gt/bin/main.js translate"
+    "translate": "node --env-file-if-exists=.env.gt node_modules/gt/bin/main.js translate",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",

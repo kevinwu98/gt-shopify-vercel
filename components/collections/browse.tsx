@@ -74,9 +74,9 @@ async function BrowseResultsGrid({ results }: BrowseResultsGridProps) {
     const query = source.type === "search" ? source.query : undefined;
     return (
       <div className="py-10 text-center">
-        <T>
-          <h2 className="mb-2 text-2xl">No products found</h2>
-        </T>
+        <h2 className="mb-2 text-2xl">
+          <T>No products found</T>
+        </h2>
         <p className="text-muted-foreground">
           {query ? (
             <T>

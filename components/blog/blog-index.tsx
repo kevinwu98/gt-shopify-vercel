@@ -24,9 +24,9 @@ export function BlogIndex({ blog }: BlogIndexProps) {
               ))}
             </div>
           ) : (
-            <T>
-              <p className="text-muted-foreground">No articles found.</p>
-            </T>
+            <p className="text-muted-foreground">
+              <T>No articles found.</T>
+            </p>
           )}
         </Sections>
       </Container>

@@ -57,6 +57,7 @@ const TEXT_FIELDS = [
 const REQUIRED_FIELDS = new Set<keyof CustomerAddressInput>(["address1", "city", "countryCode"]);
 
 export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
+  const gt = useGT();
   const [formState, setFormState] = useState<FormState>(null);
   const [deleteTarget, setDeleteTarget] = useState<CustomerAddress | null>(null);
   return (
@@ -70,9 +71,9 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
 
       {addresses.length === 0 ? (
         <div className="rounded-lg border p-6 text-center">
-          <T>
-            <p className="text-sm text-muted-foreground">You have no saved addresses yet.</p>
-          </T>
+          <p className="text-sm text-muted-foreground">
+            <T>You have no saved addresses yet.</T>
+          </p>
         </div>
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">
@@ -112,7 +113,10 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
       )}
 
       <Dialog open={formState !== null} onOpenChange={(open) => !open && setFormState(null)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+        <DialogContent
+          closeLabel={gt("Close")}
+          className="max-h-[90vh] overflow-y-auto sm:max-w-xl"
+        >
           <DialogHeader>
             <DialogTitle>
               {formState?.mode === "edit" ? <T>Edit address</T> : <T>Add address</T>}
@@ -239,6 +243,7 @@ function DeleteDialog({
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const m = useMessages();
+  const gt = useGT();
   const handleDelete = () => {
     if (!target) return;
     setError(null);
@@ -253,11 +258,11 @@ function DeleteDialog({
   };
   return (
     <Dialog open={target !== null} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent closeLabel={gt("Close")}>
         <DialogHeader>
-          <T>
-            <DialogTitle>Delete address?</DialogTitle>
-          </T>
+          <DialogTitle>
+            <T>Delete address?</T>
+          </DialogTitle>
           <DialogDescription>
             <T>This address will be permanently removed from your account.</T>
           </DialogDescription>

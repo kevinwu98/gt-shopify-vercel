@@ -6,7 +6,11 @@
     "build/**",
     ".agents/**",
     ".claude/**",
-    "app/.well-known/**"
+    "app/.well-known/**",
+    "catalog/**",
+    "gt-lock.json",
+    "gt.config.json",
+    "public/_gt/**"
   ],
   "semi": true,
   "singleQuote": false,

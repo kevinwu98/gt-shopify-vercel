@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "cn";
-import { useGT } from "gt-next";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import Image from "next/image";
 import { type ComponentProps, useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -15,6 +14,8 @@ interface AutoPlayVideoProps extends Omit<
   ComponentProps<"video">,
   "autoPlay" | "loop" | "muted" | "onCanPlay" | "playsInline" | "ref"
 > {
+  pauseLabel?: string;
+  playLabel?: string;
   previewImage?: AutoPlayVideoPreviewImage | null;
   previewImageFetchPriority?: "auto" | "high" | "low";
   previewImageLoading?: "eager" | "lazy";
@@ -33,13 +34,14 @@ function prefersReducedMotion() {
 }
 
 export function AutoPlayVideo({
+  pauseLabel = "Pause video",
+  playLabel = "Play video",
   previewImage,
   previewImageFetchPriority,
   previewImageLoading,
   className,
   ...props
 }: AutoPlayVideoProps) {
-  const gt = useGT();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [playRequested, setPlayRequested] = useState<boolean>();
@@ -101,7 +103,7 @@ export function AutoPlayVideo({
       />
       <button
         type="button"
-        aria-label={playing ? gt("Pause video") : gt("Play video")}
+        aria-label={playing ? pauseLabel : playLabel}
         className="absolute right-2.5 bottom-2.5 flex size-8 cursor-pointer items-center justify-center rounded-full bg-background/80 text-foreground backdrop-blur-sm transition-colors outline-none hover:bg-background focus-visible:ring-3 focus-visible:ring-ring/50"
         onClick={() => setPlayRequested(!playing)}
       >

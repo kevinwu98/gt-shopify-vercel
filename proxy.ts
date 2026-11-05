@@ -68,7 +68,7 @@ export async function proxy(request: NextRequest): Promise<Response> {
   const rememberedLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
   if (isPagePath(pathname) && rememberedLocale && rememberedLocale !== locale) {
     // A language switch changes the market; move the cart before the page reads it.
-    await moveCartToMarket(request, requestContext).catch(() => undefined);
+    await moveCartToMarket(request, requestContext);
   }
   if (isRefinedCollectionPath(unprefixedPathname))
     return new Response("Not Found", { status: 404 });

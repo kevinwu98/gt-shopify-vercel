@@ -6,7 +6,7 @@ import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-te
 import { getCatalogText } from "@/lib/catalog/server";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
 import { getShopPolicies, getShopPolicy } from "@/lib/policies/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
 
 export async function generateStaticParams() {

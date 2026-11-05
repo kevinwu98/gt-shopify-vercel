@@ -9,7 +9,7 @@ import { Sections } from "@/components/ui/sections";
 import { getCatalogText } from "@/lib/catalog/server";
 import { getCollectionsListing } from "@/lib/collections/server";
 import { getRequestCommerceLocale } from "@/lib/i18n/server";
-import { buildAlternates, buildOpenGraph } from "@/lib/seo";
+import { buildAlternates, buildOpenGraph } from "@/lib/seo/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const gt = await getGT();
@@ -38,18 +38,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CollectionsPage() {
   const gt = await getGT();
-  const [collections, ct] = await Promise.all([
-    getCollectionsListing({ locale: await getRequestCommerceLocale() }),
-    getCatalogText(),
-  ]);
+  const ct = await getCatalogText();
+  const collections = await getCollectionsListing({ locale: await getRequestCommerceLocale() });
   const viewCollectionLabel = gt("View this collection");
   return (
     <Page className="pt-2.5 md:pt-10">
       <Container>
         <Sections className="gap-5">
-          <T>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl">Collections</h1>
-          </T>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl">
+            <T>Collections</T>
+          </h1>
 
           {collections.length > 0 ? (
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
@@ -66,9 +64,9 @@ export default async function CollectionsPage() {
               ))}
             </div>
           ) : (
-            <T>
-              <p className="text-muted-foreground">No collections found.</p>
-            </T>
+            <p className="text-muted-foreground">
+              <T>No collections found.</T>
+            </p>
           )}
         </Sections>
       </Container>
