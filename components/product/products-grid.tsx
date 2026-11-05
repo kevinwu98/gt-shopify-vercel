@@ -1,5 +1,6 @@
 import { cn } from "cn";
-import { getTranslations } from "gt-next/server";
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import { Suspense } from "react";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card/product-card";
@@ -34,7 +35,7 @@ export async function ProductsGrid({
   limit,
   title,
 }: ProductsGridProps) {
-  const t = await getTranslations();
+  const gt = await getGT();
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
@@ -44,7 +45,7 @@ export async function ProductsGrid({
             href={collectionUrl}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            {t("home.viewAll")}
+            <T>View All</T>
           </Link>
         )}
       </div>
@@ -52,8 +53,8 @@ export async function ProductsGrid({
         <ProductsGridContent
           eagerCount={eagerCount}
           limit={limit}
-          outOfStockText={t("product.outOfStock")}
-          quickShopText={t("product.choose")}
+          outOfStockText={gt("Out of Stock")}
+          quickShopText={gt("Choose")}
         />
       </Suspense>
     </div>

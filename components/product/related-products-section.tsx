@@ -1,3 +1,5 @@
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import { Suspense } from "react";
 
 import { ProductCard, ProductCardSkeleton } from "@/components/product-card/product-card";
@@ -6,7 +8,9 @@ import { getProductRecommendations } from "@/lib/product/server";
 function RelatedProductsSectionSkeleton({ limit }: { limit: number }) {
   return (
     <div className="grid gap-4">
-      <h2 className="text-2xl sm:text-3xl">You May Also Like</h2>
+      <h2 className="text-2xl sm:text-3xl">
+        <T>You May Also Like</T>
+      </h2>
       <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
         {Array.from({ length: limit }, (_, index) => (
           <ProductCardSkeleton key={index} />
@@ -19,12 +23,15 @@ function RelatedProductsSectionSkeleton({ limit }: { limit: number }) {
 async function Render({ handle, limit }: { handle: string; limit: number }) {
   const related = await getProductRecommendations({ handle, intent: "RELATED" });
   if (related.length === 0) return null;
+  const gt = await getGT();
   return (
     <div className="grid gap-4">
-      <h2 className="text-2xl sm:text-3xl">You May Also Like</h2>
+      <h2 className="text-2xl sm:text-3xl">
+        <T>You May Also Like</T>
+      </h2>
       <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
         {related.slice(0, limit).map((product) => (
-          <ProductCard key={product.id} product={product} outOfStockText="Out of Stock" />
+          <ProductCard key={product.id} product={product} outOfStockText={gt("Out of Stock")} />
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { PredictiveSearchProvider } from "@shopify/hydrogen/react";
-import { getTranslations } from "gt-next/server";
+import { getGT } from "gt-next/server";
 import { Suspense } from "react";
 
 import { Container } from "@/components/ui/container";
@@ -15,9 +15,9 @@ import { QuickLinks } from "./quick-links";
 import { SearchModal } from "./search-modal";
 
 export async function Nav() {
-  const t = await getTranslations("nav");
+  const gt = await getGT();
   const items: MenuItem[] = [
-    { id: "default-nav-shop", items: [], title: t("shop"), url: "/collections/all" },
+    { id: "default-nav-shop", items: [], title: gt("Shop"), url: "/collections/all" },
   ];
   return (
     <nav

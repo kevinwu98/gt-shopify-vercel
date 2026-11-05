@@ -1,6 +1,7 @@
 "use client";
 
 import { createCartComponents } from "@shopify/hydrogen/react";
+import { useGT } from "gt-next";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 import { useAgentCartPending } from "@/lib/agent/cart/client";
@@ -12,6 +13,7 @@ export const { CartProvider, useCart, useCartActions, useCartForm, useSuspenseCa
   createCartComponents<typeof cartHandlers>();
 
 export function useCheckout() {
+  const gt = useGT();
   const agentPending = useAgentCartPending();
   const cartState = useCart((state) => state);
   const { data: cart, loading, pending, revalidating } = cartState;
@@ -38,10 +40,10 @@ export function useCheckout() {
       attempt.current = null;
       setIsCheckingOut(false);
       setCheckoutError(
-        "Your cart changed. Wait for it to finish updating, then try checkout again.",
+        gt("Your cart changed. Wait for it to finish updating, then try checkout again."),
       );
     }
-  }, [cartState, isUpdatingCart]);
+  }, [cartState, gt, isUpdatingCart]);
 
   useEffect(() => {
     const resetCheckout = () => {
@@ -67,16 +69,16 @@ export function useCheckout() {
       const { checkoutUrl } = await prepareCheckoutAction();
       if (attempt.current !== currentAttempt) return;
       if (latestCartState.current.data !== cart) {
-        setCheckoutError("Your cart changed. Please try checkout again.");
+        setCheckoutError(gt("Your cart changed. Please try checkout again."));
       } else if (!checkoutUrl) {
-        setCheckoutError("Checkout is unavailable. Refresh your cart and try again.");
+        setCheckoutError(gt("Checkout is unavailable. Refresh your cart and try again."));
       } else {
         window.location.href = checkoutUrl;
         return;
       }
     } catch {
       if (attempt.current !== currentAttempt) return;
-      setCheckoutError("We couldn't start checkout. Please try again.");
+      setCheckoutError(gt("We couldn't start checkout. Please try again."));
     }
 
     attempt.current = null;

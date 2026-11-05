@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "gt-next";
+import { T, useGT } from "gt-next";
 import { useLocalizeHref } from "gt-next/link";
 import { Loader2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,12 +21,21 @@ import { CartSummary } from "./summary";
 import { CartWarnings } from "./warnings";
 
 function CartCountBadge() {
+  const gt = useGT();
   const count = useCart((state) => state.data.totalQuantity);
   if (count === 0) return null;
   return (
-    <span className="flex size-5 items-center justify-center rounded-full bg-foreground text-xs text-background">
-      {count}
-    </span>
+    <>
+      <span
+        aria-hidden="true"
+        className="flex size-5 items-center justify-center rounded-full bg-foreground text-xs text-background"
+      >
+        {count}
+      </span>
+      <span className="sr-only">
+        {gt("{count, plural, one {# item} other {# items}}", { count })}
+      </span>
+    </>
   );
 }
 
@@ -37,7 +46,7 @@ interface CartOverlayProps {
 
 export function CartOverlay({ description, title }: CartOverlayProps) {
   const { isOverlayOpen, setOverlayOpen } = useCartDrawer();
-  const t = useTranslations("cart");
+  const gt = useGT();
 
   return (
     <Sheet open={isOverlayOpen} onOpenChange={setOverlayOpen}>
@@ -48,7 +57,7 @@ export function CartOverlay({ description, title }: CartOverlayProps) {
             <CartCountBadge />
           </div>
           <SheetClose
-            aria-label={t("close")}
+            aria-label={gt("Close cart")}
             className="flex cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           >
             <XIcon className="size-5" />
@@ -64,7 +73,6 @@ export function CartOverlay({ description, title }: CartOverlayProps) {
 function OverlayContent() {
   const router = useRouter();
   const localizeHref = useLocalizeHref();
-  const t = useTranslations("cart");
   const cart = useCart((state) => state.data);
   const isLoading = useCart((state) => state.loading);
   const { setOverlayOpen } = useCartDrawer();
@@ -72,7 +80,7 @@ function OverlayContent() {
     return (
       <div className="flex h-full items-center justify-center gap-2.5" role="status">
         <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-        {t("loading")}
+        <T>Loading cart…</T>
       </div>
     );
   }
@@ -81,7 +89,9 @@ function OverlayContent() {
       <div className="flex h-full flex-col gap-5 px-2.5">
         <CartWarnings />
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <h3 className="mb-6 text-2xl">{t("empty")}</h3>
+          <h3 className="mb-6 text-2xl">
+            <T>Your cart is empty</T>
+          </h3>
           <Button
             onClick={() => {
               setOverlayOpen(false);
@@ -89,7 +99,7 @@ function OverlayContent() {
             }}
             className="h-12 px-8"
           >
-            {t("continueShopping")}
+            <T>Continue Shopping</T>
           </Button>
         </div>
       </div>

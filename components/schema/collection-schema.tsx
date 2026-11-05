@@ -1,4 +1,7 @@
+import { useLocale } from "gt-next";
+
 import { shopConfig } from "@/lib/config";
+import { localizePath } from "@/lib/i18n";
 
 interface CollectionSchemaData {
   handle: string;
@@ -7,13 +10,16 @@ interface CollectionSchemaData {
   updatedAt?: string;
 }
 
+// Title and description arrive in the page's locale.
 export function CollectionSchema({ collection }: { collection: CollectionSchemaData }) {
+  const locale = useLocale();
   const schema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: collection.title,
     description: collection.description || undefined,
-    url: `${shopConfig.site.url}/collections/${collection.handle}`,
+    inLanguage: locale,
+    url: `${shopConfig.site.url}${localizePath(`/collections/${collection.handle}`, locale)}`,
     dateModified: collection.updatedAt,
   };
 

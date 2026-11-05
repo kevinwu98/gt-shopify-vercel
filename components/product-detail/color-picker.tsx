@@ -1,9 +1,15 @@
+"use client";
+
 import { cn } from "cn";
+import { useGT } from "gt-next";
 import type { ComponentProps } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { Link } from "@/components/ui/link";
 import { Swatch } from "@/components/ui/swatch";
 import type { OptionGroupState } from "@/lib/product/types";
+
+import { OptionLabel } from "./option-picker";
 
 interface ColorPickerProps extends ComponentProps<"div"> {
   hideImages?: boolean;
@@ -18,14 +24,16 @@ export function ColorPicker({
   className,
   ...props
 }: ColorPickerProps) {
+  const gt = useGT();
+  const ct = useCatalogText();
+  const optionName = ct(option.name);
   const selectedValue = option.values.find((value) => value.selected)?.name ?? "";
   return (
     <div className={cn("grid gap-2.5", className)} {...props}>
-      <p className="text-sm font-medium text-foreground/70">
-        {option.name}: <span className="text-foreground">{selectedValue}</span>
-      </p>
+      <OptionLabel name={option.name} value={selectedValue} />
       <div className="flex flex-wrap gap-2.5">
         {option.values.map((value) => {
+          const valueName = ct(value.name);
           const imageUrl = hideImages
             ? undefined
             : value.swatch?.image || (value.swatch?.color ? undefined : value.image);
@@ -33,7 +41,7 @@ export function ColorPicker({
             <Swatch
               color={value.swatch?.color}
               image={imageUrl}
-              label={value.name}
+              label={valueName}
               selected={value.selected}
             />
           );
@@ -41,7 +49,10 @@ export function ColorPicker({
             return (
               <button
                 key={value.name}
-                aria-label={`${option.name}: ${value.name} (unavailable)`}
+                aria-label={gt("{option}: {value} (unavailable)", {
+                  option: optionName,
+                  value: valueName,
+                })}
                 className="block cursor-not-allowed opacity-40"
                 disabled
                 type="button"
@@ -56,7 +67,14 @@ export function ColorPicker({
               href={value.href}
               scroll={false}
               className={cn("block cursor-pointer", !value.available && "opacity-40")}
-              aria-label={`Select ${option.name}: ${value.name}${value.available ? "" : " (sold out)"}`}
+              aria-label={
+                value.available
+                  ? gt("Select {option}: {value}", { option: optionName, value: valueName })
+                  : gt("Select {option}: {value} (sold out)", {
+                      option: optionName,
+                      value: valueName,
+                    })
+              }
               aria-current={value.selected ? "true" : undefined}
               onClick={
                 onSelectValue && !value.crossProduct

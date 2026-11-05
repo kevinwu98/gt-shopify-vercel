@@ -1,3 +1,5 @@
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { type ReactNode, Suspense } from "react";
@@ -14,8 +16,9 @@ import { shopConfig } from "@/lib/config";
 import { getCustomerProfile } from "@/lib/shopify/operations/customer/server";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const gt = await getGT();
   return {
-    title: "Account",
+    title: gt("Account"),
     robots: { index: false, follow: false },
   };
 }
@@ -68,7 +71,11 @@ async function AccountLabel() {
   await requireCustomerSession();
   const accessToken = await getCustomerAccessToken();
   if (!accessToken) {
-    return <p className="text-sm font-medium">Account</p>;
+    return (
+      <T>
+        <p className="text-sm font-medium">Account</p>
+      </T>
+    );
   }
   const profile = await getCustomerProfile();
   if (!profile) return null;

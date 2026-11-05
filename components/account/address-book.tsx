@@ -1,5 +1,6 @@
 "use client";
 
+import { msg, T, useGT, useMessages } from "gt-next";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { type FormEvent, useState, useTransition } from "react";
 
@@ -26,16 +27,26 @@ import type { CustomerAddress, CustomerAddressInput } from "@/lib/customer/types
 type FormState = { address: CustomerAddress; mode: "edit" } | { mode: "create" } | null;
 
 const TEXT_FIELDS = [
-  { autoComplete: "given-name", key: "firstName", label: "First name", span: false },
-  { autoComplete: "family-name", key: "lastName", label: "Last name", span: false },
-  { autoComplete: "organization", key: "company", label: "Company", span: true },
-  { autoComplete: "address-line1", key: "address1", label: "Address", span: true },
-  { autoComplete: "address-line2", key: "address2", label: "Apartment, suite, etc.", span: true },
-  { autoComplete: "address-level2", key: "city", label: "City", span: false },
-  { autoComplete: "address-level1", key: "zoneCode", label: "State / Province code", span: false },
-  { autoComplete: "postal-code", key: "zip", label: "ZIP / Postal code", span: false },
-  { autoComplete: "country", key: "countryCode", label: "Country code", span: false },
-  { autoComplete: "tel", key: "phoneNumber", label: "Phone", span: true },
+  { autoComplete: "given-name", key: "firstName", label: msg("First name"), span: false },
+  { autoComplete: "family-name", key: "lastName", label: msg("Last name"), span: false },
+  { autoComplete: "organization", key: "company", label: msg("Company"), span: true },
+  { autoComplete: "address-line1", key: "address1", label: msg("Address"), span: true },
+  {
+    autoComplete: "address-line2",
+    key: "address2",
+    label: msg("Apartment, suite, etc."),
+    span: true,
+  },
+  { autoComplete: "address-level2", key: "city", label: msg("City"), span: false },
+  {
+    autoComplete: "address-level1",
+    key: "zoneCode",
+    label: msg("State / Province code"),
+    span: false,
+  },
+  { autoComplete: "postal-code", key: "zip", label: msg("ZIP / Postal code"), span: false },
+  { autoComplete: "country", key: "countryCode", label: msg("Country code"), span: false },
+  { autoComplete: "tel", key: "phoneNumber", label: msg("Phone"), span: true },
 ] as const satisfies readonly {
   autoComplete: string;
   key: keyof CustomerAddressInput;
@@ -53,13 +64,15 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
       <div>
         <Button size="sm" onClick={() => setFormState({ mode: "create" })}>
           <Plus aria-hidden="true" />
-          Add address
+          <T>Add address</T>
         </Button>
       </div>
 
       {addresses.length === 0 ? (
         <div className="rounded-lg border p-6 text-center">
-          <p className="text-sm text-muted-foreground">You have no saved addresses yet.</p>
+          <T>
+            <p className="text-sm text-muted-foreground">You have no saved addresses yet.</p>
+          </T>
         </div>
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">
@@ -73,7 +86,11 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
                     </span>
                   ))}
                 </address>
-                {address.isDefault ? <Badge variant="secondary">Default</Badge> : null}
+                {address.isDefault ? (
+                  <Badge variant="secondary">
+                    <T context="Default address">Default</T>
+                  </Badge>
+                ) : null}
               </div>
               <div className="mt-auto flex gap-2">
                 <Button
@@ -82,11 +99,11 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
                   onClick={() => setFormState({ address, mode: "edit" })}
                 >
                   <Pencil aria-hidden="true" />
-                  Edit
+                  <T>Edit</T>
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => setDeleteTarget(address)}>
                   <Trash2 aria-hidden="true" />
-                  Delete
+                  <T>Delete</T>
                 </Button>
               </div>
             </li>
@@ -97,7 +114,9 @@ export function AddressBook({ addresses }: { addresses: CustomerAddress[] }) {
       <Dialog open={formState !== null} onOpenChange={(open) => !open && setFormState(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>{formState?.mode === "edit" ? "Edit address" : "Add address"}</DialogTitle>
+            <DialogTitle>
+              {formState?.mode === "edit" ? <T>Edit address</T> : <T>Add address</T>}
+            </DialogTitle>
           </DialogHeader>
           {formState !== null ? (
             <AddressForm
@@ -120,6 +139,8 @@ function AddressForm({ address, onSuccess }: { address?: CustomerAddress; onSucc
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
+  const gt = useGT();
+  const m = useMessages();
   const isCurrentDefault = address?.isDefault ?? false;
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -150,7 +171,7 @@ function AddressForm({ address, onSuccess }: { address?: CustomerAddress; onSucc
               className={field.span ? "grid gap-1.5 sm:col-span-2" : "grid gap-1.5"}
             >
               <Label htmlFor={field.key}>
-                {field.label}
+                {m(field.label)}
                 {REQUIRED_FIELDS.has(field.key) ? <span aria-hidden="true"> *</span> : null}
               </Label>
               <Input
@@ -165,9 +186,9 @@ function AddressForm({ address, onSuccess }: { address?: CustomerAddress; onSucc
                 aria-invalid={fieldError ? true : undefined}
                 placeholder={
                   field.key === "countryCode"
-                    ? "e.g. US"
+                    ? gt("e.g. {example}", { example: "US" })
                     : field.key === "zoneCode"
-                      ? "e.g. CA"
+                      ? gt("e.g. {example}", { example: "CA" })
                       : undefined
                 }
               />
@@ -182,7 +203,9 @@ function AddressForm({ address, onSuccess }: { address?: CustomerAddress; onSucc
       </div>
 
       <div className="flex items-center justify-between rounded-lg border p-3">
-        <Label htmlFor="isDefault">Set as default address</Label>
+        <Label htmlFor="isDefault">
+          <T>Set as default address</T>
+        </Label>
         <Switch
           id="isDefault"
           checked={isDefault}
@@ -193,13 +216,13 @@ function AddressForm({ address, onSuccess }: { address?: CustomerAddress; onSucc
 
       {error ? (
         <p role="alert" className="text-sm text-destructive">
-          {error}
+          {m(error)}
         </p>
       ) : null}
 
       <DialogFooter>
         <Button type="submit" disabled={isPending}>
-          {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : "Save"}
+          {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <T>Save</T>}
         </Button>
       </DialogFooter>
     </form>
@@ -215,6 +238,7 @@ function DeleteDialog({
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const m = useMessages();
   const handleDelete = () => {
     if (!target) return;
     setError(null);
@@ -231,22 +255,28 @@ function DeleteDialog({
     <Dialog open={target !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete address?</DialogTitle>
+          <T>
+            <DialogTitle>Delete address?</DialogTitle>
+          </T>
           <DialogDescription>
-            This address will be permanently removed from your account.
+            <T>This address will be permanently removed from your account.</T>
           </DialogDescription>
         </DialogHeader>
         {error ? (
           <p role="alert" className="text-sm text-destructive">
-            {error}
+            {m(error)}
           </p>
         ) : null}
         <DialogFooter>
           <Button variant="outline" onClick={onClose} disabled={isPending}>
-            Cancel
+            <T>Cancel</T>
           </Button>
           <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
-            {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : "Delete"}
+            {isPending ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            ) : (
+              <T>Delete</T>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

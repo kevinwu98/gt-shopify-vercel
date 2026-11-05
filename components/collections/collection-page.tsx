@@ -1,3 +1,4 @@
+import { getGT } from "gt-next/server";
 import { type ReactNode, Suspense } from "react";
 
 import { CollectionViewedTracker } from "@/components/analytics/trackers";
@@ -13,6 +14,7 @@ import { Link } from "@/components/ui/link";
 import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCatalogText } from "@/lib/catalog/server";
 import type { Collection, SortValue } from "@/lib/collections/types";
 
 interface CollectionLayoutProps {
@@ -37,7 +39,7 @@ export function CollectionLayout({
       <Page className="pt-2.5 md:pt-10">
         <Container>
           <Sections className="gap-5">
-            <CollectionHeader collection={collection} handle={handle} homeLabel="Home" />
+            <CollectionHeader collection={collection} handle={handle} />
             <CollectionBrowseFrame handle={handle} path={`/collections/${handle}`}>
               <BrowseToolbar
                 filters={<PublishedCollectionFilters fallback={<CollectionFiltersSkeleton />} />}
@@ -91,19 +93,21 @@ export function CollectionDetailSkeleton() {
   );
 }
 
-function CollectionHeader({
+async function CollectionHeader({
   collection,
   handle,
-  homeLabel,
 }: {
   collection: Collection;
   handle: string;
-  homeLabel: string;
 }) {
-  const { title, description, updatedAt } = collection;
+  const gt = await getGT();
+  const ct = await getCatalogText();
+  const title = ct(collection.title);
+  const description = ct(collection.description);
+  const { updatedAt } = collection;
 
   const breadcrumbItems = [
-    { name: homeLabel, path: "/" },
+    { name: gt("Home"), path: "/" },
     { name: title, path: `/collections/${handle}` },
   ];
 

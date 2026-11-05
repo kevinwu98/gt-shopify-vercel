@@ -1,3 +1,4 @@
+import { T } from "gt-next";
 import { ChevronDownIcon, SlidersHorizontalIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -20,14 +21,16 @@ export function BrowseToolbar({ filters, resultCount, sortExclude }: BrowseToolb
     <ToolbarLayout
       filterSheet={
         <FilterSheet
-          label="Filters"
+          label={<T>Filters</T>}
           trigger={
             <button
               type="button"
               className="flex cursor-pointer items-center gap-2 text-sm font-medium"
             >
               <SlidersHorizontalIcon className="size-4" />
-              <span>Filters</span>
+              <T>
+                <span>Filters</span>
+              </T>
               <CollectionActiveFilterCountBadge />
             </button>
           }
@@ -55,13 +58,17 @@ export function BrowseFallback({ resultCount }: BrowseFallbackProps) {
             className="flex cursor-pointer items-center gap-2 text-sm font-medium"
           >
             <SlidersHorizontalIcon className="size-4" />
-            <span>Filters</span>
+            <T>
+              <span>Filters</span>
+            </T>
           </button>
         }
         resultCount={resultCount}
         sortSelect={
           <div className="flex h-9 w-fit items-center justify-between gap-2 rounded-md bg-transparent px-0 py-2 text-sm whitespace-nowrap">
-            <span>Sort</span>
+            <T>
+              <span>Sort</span>
+            </T>
             <ChevronDownIcon className="size-4 text-muted-foreground opacity-50" />
           </div>
         }

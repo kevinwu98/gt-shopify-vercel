@@ -5,7 +5,7 @@ import { isColorOption } from "@/lib/product";
 import type { OptionGroupState } from "@/lib/product/types";
 
 import { ColorPicker } from "./color-picker";
-import { OptionPicker } from "./option-picker";
+import { OptionLabel, OptionPicker } from "./option-picker";
 
 interface ProductInfoOptionsProps extends ComponentProps<"div"> {
   compact?: boolean;
@@ -36,9 +36,7 @@ function ProductInfoOptions({
     <div data-slot="product-info-options" className={className} {...props}>
       <div className={cn("grid", compact ? "gap-2.5" : "gap-5")}>
         {singleValueOptions.map((option) => (
-          <p key={option.name} className="text-sm font-medium text-foreground/70">
-            {option.name}: <span className="text-foreground">{option.values[0]?.name}</span>
-          </p>
+          <OptionLabel key={option.name} name={option.name} value={option.values[0]?.name ?? ""} />
         ))}
 
         {colorOptions.map((option) => (

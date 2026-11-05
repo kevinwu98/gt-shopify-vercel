@@ -8,6 +8,7 @@ import {
   serializeCollectionParams,
 } from "@shopify/hydrogen";
 import { useCollection, useCollectionActions } from "@shopify/hydrogen/react";
+import { T, useGT, useLocale } from "gt-next";
 import { CheckIcon, LoaderCircleIcon, XIcon } from "lucide-react";
 import {
   type KeyboardEvent,
@@ -17,12 +18,12 @@ import {
   useState,
 } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Swatch } from "@/components/ui/swatch";
 import { parseFilterInput } from "@/lib/collections";
-import { shopConfig } from "@/lib/config";
 import { getActiveFilterBadges } from "@/lib/filters";
 import type { Filter, PriceRange } from "@/lib/filters/types";
 import { formatCurrencySymbol, formatPrice } from "@/lib/money";
@@ -31,7 +32,7 @@ import { usePublishedFacets } from "./collection-browse-provider";
 
 interface FilterSheetProps {
   children: ReactNode;
-  label: string;
+  label: ReactNode;
   trigger: ReactElement;
 }
 
@@ -68,6 +69,9 @@ interface CollectionFilterSidebarProps {
 export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilterSidebarProps) {
   const state = useCollection();
   const actions = useCollectionActions();
+  const gt = useGT();
+  const ct = useCatalogText();
+  const formatPriceRange = usePriceRangeFormatter();
   const priceFilter = state.filters.find((filter) => filter.price)?.price;
   const priceMin = priceFilter?.min ?? null;
   const priceMax = priceFilter?.max ?? null;
@@ -114,7 +118,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
               <FilterBadge
                 key={`${badge.paramKey}-${badge.value}`}
                 href={filter ? getFilterRemovalUrl(currentParams, filter) : undefined}
-                label={badge.label}
+                label={ct(badge.label)}
                 onRemove={() => filter && actions.toggleFilter(filter)}
               />
             );
@@ -122,7 +126,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
           {priceFilter ? (
             <FilterBadge
               href={getFilterRemovalUrl(currentParams, { price: priceFilter })}
-              label={formatPriceRangeLabel(priceMin, priceMax, priceRange?.currencyCode)}
+              label={formatPriceRange(priceMin, priceMax, priceRange?.currencyCode)}
               onRemove={() => applyPrice(null, null)}
             />
           ) : null}
@@ -130,25 +134,25 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
       ) : null}
 
       {priceRange ? (
-        <FilterSection title="Price">
+        <FilterSection title={<T>Price</T>}>
           <div className="flex items-center gap-2">
             <PriceInput
               currencyCode={priceRange.currencyCode}
-              label="Minimum price"
+              label={gt("Minimum price")}
               onChange={(min) => setPriceInputs((prev) => ({ ...prev, min }))}
-              placeholder="From"
+              placeholder={gt("From")}
               value={minInput}
             />
             <span className="text-muted-foreground">–</span>
             <PriceInput
               currencyCode={priceRange.currencyCode}
-              label="Maximum price"
+              label={gt("Maximum price")}
               onChange={(max) => setPriceInputs((prev) => ({ ...prev, max }))}
-              placeholder="To"
+              placeholder={gt("To")}
               value={maxInput}
             />
             <button
-              aria-label="Apply price"
+              aria-label={gt("Apply price")}
               className="flex size-8 cursor-pointer items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
               onClick={() => applyPrice(parsePriceValue(minInput), parsePriceValue(maxInput))}
               type="button"
@@ -161,7 +165,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
 
       {filters.map((filter) =>
         filter.values.length === 0 ? null : (
-          <FilterSection key={filter.id} title={filter.label}>
+          <FilterSection key={filter.id} title={ct(filter.label)}>
             {filter.presentation === "swatch" ? (
               <div className="flex flex-wrap gap-2.5">
                 {filter.values.map((value) => {
@@ -169,7 +173,10 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
                   return (
                     <Link
                       key={value.id}
-                      aria-label={`Filter by ${filter.label}: ${value.label}`}
+                      aria-label={gt("Filter by {filter}: {value}", {
+                        filter: ct(filter.label),
+                        value: ct(value.label),
+                      })}
                       aria-pressed={isSelected}
                       className="block cursor-pointer"
                       href={buildToggleHref(state, value.input)}
@@ -184,7 +191,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
                       <Swatch
                         color={value.swatch?.color}
                         image={value.swatch?.image}
-                        label={value.label}
+                        label={ct(value.label)}
                         selected={isSelected}
                       />
                     </Link>
@@ -200,7 +207,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
                       key={value.id}
                       count={value.count}
                       href={buildToggleHref(state, value.input)}
-                      label={value.label}
+                      label={ct(value.label)}
                       pending={isPending && isSelected}
                       selected={isSelected}
                       onClick={(event) => {
@@ -221,7 +228,7 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
 
 interface FilterSectionProps {
   children: ReactNode;
-  title: string;
+  title: ReactNode;
 }
 
 function FilterSection({ children, title }: FilterSectionProps) {
@@ -240,6 +247,7 @@ interface FilterBadgeProps {
 }
 
 function FilterBadge({ href, label, onRemove }: FilterBadgeProps) {
+  const gt = useGT();
   const className =
     "inline-flex cursor-pointer items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/25";
   const content = (
@@ -248,7 +256,7 @@ function FilterBadge({ href, label, onRemove }: FilterBadgeProps) {
       <XIcon className="size-3" />
     </>
   );
-  const removeLabel = `Remove filter: ${label}`;
+  const removeLabel = gt("Remove filter: {label}", { label });
   if (!href) {
     return (
       <button aria-label={removeLabel} className={className} onClick={onRemove} type="button">
@@ -318,10 +326,11 @@ interface PriceInputProps {
 }
 
 function PriceInput({ currencyCode, label, onChange, placeholder, value }: PriceInputProps) {
+  const locale = useLocale();
   return (
     <div className="flex h-8 flex-1 items-center rounded-lg bg-input px-2.5">
       <span className="text-base text-muted-foreground md:text-sm">
-        {currencyCode ? formatCurrencySymbol(currencyCode) : null}
+        {currencyCode ? formatCurrencySymbol(currencyCode, locale) : null}
       </span>
       <Input
         aria-label={label}
@@ -365,18 +374,18 @@ function findFilterInput(filters: Filter[], key: string, value: string): string 
     ?.values.find((item) => item.value === value)?.input;
 }
 
-function formatPriceRangeLabel(
-  min: number | null,
-  max: number | null,
-  currencyCode: string | undefined,
-): string {
-  const format = (value: number) =>
-    currencyCode
-      ? formatPrice({ amount: String(value), currencyCode })
-      : new Intl.NumberFormat(shopConfig.localization.locale).format(value);
-  if (min !== null && max !== null) return `${format(min)} - ${format(max)}`;
-  if (min !== null) return `From ${format(min)}`;
-  return `Up to ${format(max ?? 0)}`;
+function usePriceRangeFormatter() {
+  const gt = useGT();
+  const locale = useLocale();
+  return (min: number | null, max: number | null, currencyCode: string | undefined): string => {
+    const format = (value: number) =>
+      currencyCode
+        ? formatPrice({ amount: String(value), currencyCode }, locale)
+        : new Intl.NumberFormat(locale).format(value);
+    if (min !== null && max !== null) return `${format(min)} - ${format(max)}`;
+    if (min !== null) return gt("From {price}", { price: format(min) });
+    return gt("Up to {price}", { price: format(max ?? 0) });
+  };
 }
 
 function parsePriceValue(value: string): number | null {

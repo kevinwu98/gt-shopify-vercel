@@ -1,3 +1,5 @@
+import { T } from "gt-next";
+
 import { ArticleCard } from "@/components/blog/article-card";
 import { Container } from "@/components/ui/container";
 import { Page } from "@/components/ui/page";
@@ -22,7 +24,9 @@ export function BlogIndex({ blog }: BlogIndexProps) {
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground">No articles found.</p>
+            <T>
+              <p className="text-muted-foreground">No articles found.</p>
+            </T>
           )}
         </Sections>
       </Container>

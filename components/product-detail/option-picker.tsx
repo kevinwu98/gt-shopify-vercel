@@ -1,6 +1,10 @@
+"use client";
+
 import { cn } from "cn";
+import { T, useGT, Var } from "gt-next";
 import type { ComponentProps } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { Link } from "@/components/ui/link";
 import type { OptionGroupState } from "@/lib/product/types";
 
@@ -10,6 +14,21 @@ interface OptionPickerProps extends ComponentProps<"div"> {
   option: OptionGroupState;
 }
 
+// Option names and values stay English for selection and URLs; only the displayed labels are translated.
+export function OptionLabel({ name, value }: { name: string; value: string }) {
+  const ct = useCatalogText();
+  return (
+    <p className="text-sm font-medium text-foreground/70">
+      <T>
+        <Var>{ct(name)}</Var>:{" "}
+        <span className="text-foreground">
+          <Var>{ct(value)}</Var>
+        </span>
+      </T>
+    </p>
+  );
+}
+
 export function OptionPicker({
   compact = false,
   onSelectValue,
@@ -17,9 +36,12 @@ export function OptionPicker({
   className,
   ...props
 }: OptionPickerProps) {
+  const gt = useGT();
+  const ct = useCatalogText();
+  const optionName = ct(option.name);
   return (
     <div className={cn("grid gap-2.5", className)} {...props}>
-      <p className="text-sm font-medium text-foreground/70">{option.name}</p>
+      <p className="text-sm font-medium text-foreground/70">{optionName}</p>
       <div className="flex flex-wrap gap-2">
         {option.values.map((value) => {
           const classes = cn(
@@ -34,11 +56,12 @@ export function OptionPicker({
           );
 
           // Invisible medium-weight twin reserves the bold width so pills don't shift on selection.
+          const valueName = ct(value.name);
           const label = (
             <>
-              <span className="col-start-1 row-start-1">{value.name}</span>
+              <span className="col-start-1 row-start-1">{valueName}</span>
               <span aria-hidden="true" className="invisible col-start-1 row-start-1 font-medium">
-                {value.name}
+                {valueName}
               </span>
             </>
           );
@@ -47,7 +70,10 @@ export function OptionPicker({
             return (
               <button
                 key={value.name}
-                aria-label={`${option.name}: ${value.name} (unavailable)`}
+                aria-label={gt("{option}: {value} (unavailable)", {
+                  option: optionName,
+                  value: valueName,
+                })}
                 className={classes}
                 disabled
                 type="button"
@@ -64,7 +90,11 @@ export function OptionPicker({
               scroll={false}
               className={classes}
               aria-current={value.selected ? "true" : undefined}
-              aria-label={value.available ? undefined : `${option.name}: ${value.name} (sold out)`}
+              aria-label={
+                value.available
+                  ? undefined
+                  : gt("{option}: {value} (sold out)", { option: optionName, value: valueName })
+              }
               onClick={
                 onSelectValue && !value.crossProduct
                   ? (event) => {

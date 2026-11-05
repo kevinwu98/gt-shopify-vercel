@@ -1,4 +1,5 @@
 import { cn } from "cn";
+import { T, useGT } from "gt-next";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { type ReactNode, Suspense } from "react";
 
@@ -38,10 +39,11 @@ import {
   toProductFormInput,
   toStaticOptionGroups,
 } from "@/lib/product";
+import { getProductCopy } from "@/lib/product/server";
 import { type SelectedOptions } from "@/lib/product/types";
 import type { ProductDetails, ProductVariant } from "@/lib/product/types";
 
-export function ProductDetailSection({
+export async function ProductDetailSection({
   product,
   selectedOptionsPromise,
   variantPromise,
@@ -50,13 +52,14 @@ export function ProductDetailSection({
   selectedOptionsPromise: Promise<SelectedOptions>;
   variantPromise: Promise<ProductVariant | undefined>;
 }) {
+  const copy = await getProductCopy(product);
   return (
     <>
       <ProductSchema
         product={{
           handle: product.handle,
-          title: product.title,
-          description: product.description,
+          title: copy.title,
+          description: copy.description,
           images: product.images,
           vendor: product.vendor,
           currencyCode: product.currencyCode,
@@ -73,12 +76,21 @@ export function ProductDetailSection({
       <BreadcrumbSchema
         items={[
           { name: shopConfig.site.name, path: "/" },
-          { name: product.title, path: `/products/${product.handle}` },
+          { name: copy.title, path: `/products/${product.handle}` },
         ]}
       />
       <div className="grid gap-10 lg:grid-cols-10 lg:items-start lg:gap-5">
-        <ProductMediaArea product={product} selectedOptionsPromise={selectedOptionsPromise} />
-        <ProductInfoArea product={product} variantPromise={variantPromise} />
+        <ProductMediaArea
+          product={product}
+          selectedOptionsPromise={selectedOptionsPromise}
+          title={copy.title}
+        />
+        <ProductInfoArea
+          descriptionHtml={copy.descriptionHtml}
+          product={product}
+          title={copy.title}
+          variantPromise={variantPromise}
+        />
       </div>
     </>
   );
@@ -87,16 +99,18 @@ export function ProductDetailSection({
 function ProductMediaArea({
   product,
   selectedOptionsPromise,
+  title,
 }: {
   product: ProductDetails;
   selectedOptionsPromise: Promise<SelectedOptions>;
+  title: string;
 }) {
   if (!hasColorImagePartitioning(product.options)) {
     return (
       <ProductMedia
         otherImages={product.images}
         videos={product.videos}
-        title={product.title}
+        title={title}
         className="lg:col-span-6"
       />
     );
@@ -106,7 +120,7 @@ function ProductMediaArea({
     <ProductMedia
       otherImages={getSharedImages(product.images, product.options)}
       videos={product.videos}
-      title={product.title}
+      title={title}
       className="lg:col-span-6"
       desktopSlot={
         // Color image is the LCP slot; a pulsing skeleton flashes harder than an empty image canvas.
@@ -114,6 +128,7 @@ function ProductMediaArea({
           <ResolvedColorImageGrid
             product={product}
             selectedOptionsPromise={selectedOptionsPromise}
+            title={title}
           />
         </Suspense>
       }
@@ -126,6 +141,7 @@ function ProductMediaArea({
           <ResolvedColorImageCarousel
             product={product}
             selectedOptionsPromise={selectedOptionsPromise}
+            title={title}
           />
         </Suspense>
       }
@@ -136,35 +152,44 @@ function ProductMediaArea({
 async function ResolvedColorImageGrid({
   product,
   selectedOptionsPromise,
+  title,
 }: {
   product: ProductDetails;
   selectedOptionsPromise: Promise<SelectedOptions>;
+  title: string;
 }) {
   const image = getSelectedColorImage(product, await selectedOptionsPromise);
   if (!image) return null;
-  return <ColorImageGrid images={[image]} title={product.title} />;
+  return <ColorImageGrid images={[image]} title={title} />;
 }
 
 async function ResolvedColorImageCarousel({
   product,
   selectedOptionsPromise,
+  title,
 }: {
   product: ProductDetails;
   selectedOptionsPromise: Promise<SelectedOptions>;
+  title: string;
 }) {
   const image = getSelectedColorImage(product, await selectedOptionsPromise);
   if (!image) return null;
-  return <ColorImageCarouselItems images={[image]} title={product.title} />;
+  return <ColorImageCarouselItems images={[image]} title={title} />;
 }
 
 function ProductInfoArea({
+  descriptionHtml,
   product,
+  title,
   variantPromise,
 }: {
+  descriptionHtml: string;
   product: ProductDetails;
+  title: string;
   variantPromise: Promise<ProductVariant | undefined>;
 }) {
-  const { options, handle, descriptionHtml } = product;
+  const gt = useGT();
+  const { options, handle } = product;
   const uniformStock = product.allVariantsInStock;
   const singleVariant = product.variantsCount === 1;
   const showBuyLabel = uniformStock && !singleVariant;
@@ -177,7 +202,7 @@ function ProductInfoArea({
         data-uniform-price={product.hasUniformPricing}
       >
         <div data-slot="product-info-header">
-          <h1 className="text-foreground text-3xl">{product.title}</h1>
+          <h1 className="text-foreground text-3xl">{title}</h1>
           {product.hasUniformPricing ? (
             <ProductPrice
               amount={product.priceRange.minVariantPrice.amount}
@@ -220,7 +245,7 @@ function ProductInfoArea({
       ) : null}
 
       {!product.isGiftCard && shopConfig.pdp.complementaryProducts.isEnabled ? (
-        <ComplementaryProducts handle={handle} limit={4} title="Pairs Well With" />
+        <ComplementaryProducts handle={handle} limit={4} title={gt("Pairs Well With")} />
       ) : null}
 
       <ProductInfoDescription descriptionHtml={descriptionHtml} />
@@ -323,42 +348,52 @@ function ProductInfoFallback({
 
 // Bundle relationships are product-level, so keep them in the static shell.
 function BundleRelationships({ variant }: { variant: ProductVariant | undefined }) {
+  const gt = useGT();
   if (!variant) return null;
   if (variant.components.length === 0 && variant.bundleParents.length === 0) return null;
   return (
     <div className="grid gap-5">
-      <BundleComponents components={variant.components} title="Bundle Includes" />
-      <BundleParents variants={variant.bundleParents} title="Available in Bundles" />
+      <BundleComponents components={variant.components} title={gt("Bundle Includes")} />
+      <BundleParents variants={variant.bundleParents} title={gt("Available in Bundles")} />
     </div>
   );
 }
 
 function GiftCardPurchaseFormFallback() {
+  const gt = useGT();
   // Match the resolved form's geometry to avoid layout shift.
   return (
     <div className="grid gap-5">
       <div className="grid gap-2.5">
         <div className="grid gap-2.5">
-          <Label>Recipient email</Label>
+          <Label>
+            <T>Recipient email</T>
+          </Label>
           <Input type="email" disabled placeholder="friend@example.com" />
         </div>
         <div className="grid gap-2.5">
-          <Label>Recipient name</Label>
-          <Input type="text" disabled placeholder="Friend's name (optional)" />
+          <Label>
+            <T>Recipient name</T>
+          </Label>
+          <Input type="text" disabled placeholder={gt("Friend's name (optional)")} />
         </div>
         <div className="grid gap-2.5">
-          <Label>Message</Label>
-          <Textarea rows={3} disabled placeholder="Write a personal note (optional)" />
+          <Label>
+            <T>Message</T>
+          </Label>
+          <Textarea rows={3} disabled placeholder={gt("Write a personal note (optional)")} />
         </div>
         <div className="grid gap-3 rounded-lg border p-3">
           <div className="flex items-center justify-between gap-2.5">
-            <Label>Schedule for later</Label>
+            <Label>
+              <T>Schedule for later</T>
+            </Label>
             <span className="inline-flex h-[1.15rem] w-8 items-center rounded-full bg-input opacity-50" />
           </div>
         </div>
       </div>
       <div className="flex h-12 w-full cursor-not-allowed items-center justify-center rounded-lg bg-primary text-sm font-medium text-primary-foreground opacity-50">
-        Add to Cart
+        <T>Add to Cart</T>
       </div>
     </div>
   );
@@ -407,7 +442,7 @@ function BuyButtonsFallback({
       <div className="flex flex-wrap gap-2.5">
         {shopConfig.pdp.quantityPicker.isEnabled ? <QuantityPickerFallback /> : null}
         <div className="flex h-12 min-w-40 flex-1 items-center justify-center rounded-lg bg-primary text-sm font-medium text-primary-foreground">
-          {showLabel ? (allInStock ? "Add to Cart" : "Out of Stock") : null}
+          {showLabel ? allInStock ? <T>Add to Cart</T> : <T>Out of Stock</T> : null}
         </div>
       </div>
       {shopConfig.pdp.buyWithShop.isEnabled && !selectedPlan && !variant?.requiresSellingPlan ? (

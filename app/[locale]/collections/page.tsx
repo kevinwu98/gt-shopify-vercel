@@ -1,22 +1,26 @@
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import type { Metadata } from "next";
 
 import { CollectionCard } from "@/components/collections/collection-card";
 import { Container } from "@/components/ui/container";
 import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
+import { getCatalogText } from "@/lib/catalog/server";
 import { getCollectionsListing } from "@/lib/collections/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = "Collections";
-  const description = "Browse products by collection.";
+  const gt = await getGT();
+  const title = gt("Collections");
+  const description = gt("Browse products by collection.");
   return {
     title,
     description,
-    alternates: buildAlternates({
+    alternates: await buildAlternates({
       pathname: "/collections",
     }),
-    openGraph: buildOpenGraph({
+    openGraph: await buildOpenGraph({
       title,
       description,
       url: "/collections",
@@ -32,26 +36,35 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CollectionsPage() {
-  const collections = await getCollectionsListing({});
-  const viewCollectionLabel = "View this collection";
+  const gt = await getGT();
+  const [collections, ct] = await Promise.all([getCollectionsListing({}), getCatalogText()]);
+  const viewCollectionLabel = gt("View this collection");
   return (
     <Page className="pt-2.5 md:pt-10">
       <Container>
         <Sections className="gap-5">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl">Collections</h1>
+          <T>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl">Collections</h1>
+          </T>
 
           {collections.length > 0 ? (
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
               {collections.map((collection) => (
                 <CollectionCard
                   key={collection.handle}
-                  collection={collection}
+                  collection={{
+                    ...collection,
+                    description: ct(collection.description),
+                    title: ct(collection.title),
+                  }}
                   viewCollectionLabel={viewCollectionLabel}
                 />
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground">No collections found.</p>
+            <T>
+              <p className="text-muted-foreground">No collections found.</p>
+            </T>
           )}
         </Sections>
       </Container>

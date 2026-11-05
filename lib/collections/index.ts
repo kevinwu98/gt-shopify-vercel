@@ -12,11 +12,12 @@ import { summarizeText } from "@/lib/content";
 
 export const PRODUCTS_PER_PAGE = 40;
 
-export function describeCollection(collection: Collection): string {
+export function describeCollection(
+  collection: Collection,
+  fallback = `Shop ${collection.title} at ${shopConfig.site.name}: browse products, compare prices, and check availability.`,
+): string {
   return (
-    summarizeText(collection.seo.description) ||
-    summarizeText(collection.description) ||
-    `Shop ${collection.title} at ${shopConfig.site.name}: browse products, compare prices, and check availability.`
+    summarizeText(collection.seo.description) || summarizeText(collection.description) || fallback
   );
 }
 

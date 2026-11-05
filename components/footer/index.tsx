@@ -4,6 +4,7 @@ import { MenuLink } from "@/components/nav/menu-link";
 import { Container } from "@/components/ui/container";
 import { Link } from "@/components/ui/link";
 import { Sections } from "@/components/ui/sections";
+import { getCatalogText } from "@/lib/catalog/server";
 import { shopConfig } from "@/lib/config";
 import type { MenuItem } from "@/lib/menu/types";
 import { getShopPolicies } from "@/lib/policies/server";
@@ -14,7 +15,7 @@ import type { SocialLink } from "./social-links";
 export async function Footer() {
   const socialLinks: SocialLink[] = [];
   const items: MenuItem[] = [];
-  const policies = await getShopPolicies({}).catch(() => []);
+  const [policies, ct] = await Promise.all([getShopPolicies({}).catch(() => []), getCatalogText()]);
   return (
     <footer>
       {/* pb-22 clears the fixed agent ActionBar pill when it renders */}
@@ -29,7 +30,7 @@ export async function Footer() {
                   href={`/policies/${policy.handle}`}
                   className="cursor-pointer text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {policy.title}
+                  {ct(policy.title)}
                 </Link>
               ))}
             </div>

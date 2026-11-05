@@ -1,3 +1,6 @@
+"use client";
+
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { Link } from "@/components/ui/link";
 import { buildProductUrl } from "@/lib/product";
 import type { ProductCard as ProductCardType } from "@/lib/product/types";
@@ -21,14 +24,16 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ loading, outOfStockText, product, quickShopText }: ProductCardProps) {
+  const ct = useCatalogText();
   const href = buildProductUrl(product.handle, product.defaultVariantSelectedOptions ?? []);
+  const title = ct(product.title);
   // The link is stretched rather than wrapping the card so Quick Shop isn't a button inside an anchor.
   return (
     <ProductCardRoot>
       <ProductCardImageContainer>
         <ProductCardImage
           src={product.featuredImage?.url}
-          alt={product.featuredImage?.altText || product.title}
+          alt={ct(product.featuredImage?.altText) || title}
           height={product.featuredImage?.height}
           loading={loading}
           outOfStock={!product.availableForSale}
@@ -48,7 +53,7 @@ export function ProductCard({ loading, outOfStockText, product, quickShopText }:
         <ProductCardContent>
           <ProductCardTitle>
             <Link href={href} className="after:absolute after:inset-0">
-              {product.title}
+              {title}
             </Link>
           </ProductCardTitle>
           <ProductCardPrice

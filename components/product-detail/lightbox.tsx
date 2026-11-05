@@ -1,10 +1,12 @@
 "use client";
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+import { T, useGT } from "gt-next";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import type { Image as ImageType } from "@/lib/media/types";
 
 const LightboxContext = createContext<((image: ImageType) => void) | null>(null);
@@ -12,6 +14,9 @@ const LightboxContext = createContext<((image: ImageType) => void) | null>(null)
 export function Lightbox({ label, children }: { label: string; children: ReactNode }) {
   const [activeImage, setActiveImage] = useState<ImageType | null>(null);
   const close = useCallback(() => setActiveImage(null), []);
+  const gt = useGT();
+  const ct = useCatalogText();
+  const enlargedLabel = gt("{title} enlarged", { title: label });
 
   return (
     <LightboxContext.Provider value={setActiveImage}>
@@ -27,11 +32,13 @@ export function Lightbox({ label, children }: { label: string; children: ReactNo
               if (e.target === e.currentTarget) close();
             }}
           >
-            <DialogPrimitive.Title className="sr-only">{`${label} enlarged`}</DialogPrimitive.Title>
+            <DialogPrimitive.Title className="sr-only">{enlargedLabel}</DialogPrimitive.Title>
 
             <DialogPrimitive.Close className="pointer-events-auto absolute top-4 right-4 z-10 rounded-full bg-black/50 p-2 text-white transition-opacity hover:opacity-80 focus:ring-2 focus:ring-white focus:outline-hidden">
               <XIcon className="size-5" />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">
+                <T>Close</T>
+              </span>
             </DialogPrimitive.Close>
 
             {activeImage && (
@@ -41,7 +48,7 @@ export function Lightbox({ label, children }: { label: string; children: ReactNo
               >
                 <Image
                   src={activeImage.url}
-                  alt={activeImage.altText || `${label} enlarged`}
+                  alt={ct(activeImage.altText) || enlargedLabel}
                   fill
                   className="object-contain"
                   sizes="100vw"

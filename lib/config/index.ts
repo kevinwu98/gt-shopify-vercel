@@ -67,8 +67,8 @@ export const shopConfig = {
   },
   site: {
     description:
-      "A Storefront Built on Vercel Shop. Agent-ready commerce, powered by Shopify, Next, and Eve.",
-    name: "Vercel Shop",
+      "A multilingual Shopify storefront built on Vercel Shop and localized with General Translation.",
+    name: "Great Things",
     url: defaultUrl,
   },
 } satisfies ShopConfig;

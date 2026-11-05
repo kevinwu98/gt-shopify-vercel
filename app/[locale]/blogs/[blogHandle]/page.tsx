@@ -29,9 +29,9 @@ export async function generateMetadata({
   if (!blog) notFound();
   const pathname = `/blogs/${blog.handle}`;
   return {
-    alternates: buildAlternates({ pathname }),
+    alternates: await buildAlternates({ pathname }),
     description: blog.seo.description,
-    openGraph: buildOpenGraph({
+    openGraph: await buildOpenGraph({
       description: blog.seo.description,
       title: blog.seo.title,
       type: "website",

@@ -1,10 +1,12 @@
 "use client";
 
 import { cn } from "cn";
+import { useGT } from "gt-next";
 import Image, { getImageProps } from "next/image";
 import { type ReactNode, useEffect, useState } from "react";
 import { preload } from "react-dom";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { AutoPlayVideo } from "@/components/ui/auto-play-video";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import type { Image as ImageType, Video } from "@/lib/media/types";
@@ -61,10 +63,12 @@ function MediaImage({
   priority: boolean;
   className?: string;
 }) {
+  const gt = useGT();
+  const ct = useCatalogText();
   return (
     <Image
       src={item.image.url}
-      alt={item.image.altText || `${title} image ${idx + 1}`}
+      alt={ct(item.image.altText) || gt("{title} image {number}", { title, number: idx + 1 })}
       height={item.image.height}
       width={item.image.width}
       className={cn("absolute inset-0 size-full object-cover", className)}
@@ -84,6 +88,7 @@ function MediaVideo({
   priority: boolean;
   className?: string;
 }) {
+  const ct = useCatalogText();
   return (
     <AutoPlayVideo
       src={item.video.url}
@@ -91,7 +96,7 @@ function MediaVideo({
         item.video.previewImage
           ? {
               src: item.video.previewImage.url,
-              alt: item.video.previewImage.altText || "",
+              alt: ct(item.video.previewImage.altText) || "",
             }
           : null
       }
@@ -113,6 +118,7 @@ function Carousel({
   hasColorSlot: boolean;
   children?: ReactNode;
 }) {
+  const gt = useGT();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [itemCount, setItemCount] = useState(mediaItems.length);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
@@ -192,7 +198,7 @@ function Carousel({
                 ? "bg-foreground w-8"
                 : "bg-muted-foreground/30 w-1.5 hover:bg-muted-foreground/50",
             )}
-            aria-label={`Go to image ${idx + 1}`}
+            aria-label={gt("Go to image {number}", { number: idx + 1 })}
           />
         ))}
       </div>
@@ -279,6 +285,8 @@ export function ColorImageGrid({ images, title }: { images: ImageType[]; title: 
 }
 
 export function ColorImageCarouselItems({ images, title }: { images: ImageType[]; title: string }) {
+  const gt = useGT();
+  const ct = useCatalogText();
   return images.map((image, idx) => (
     <div
       key={image.url}
@@ -286,7 +294,7 @@ export function ColorImageCarouselItems({ images, title }: { images: ImageType[]
     >
       <Image
         src={image.url}
-        alt={image.altText || `${title} image ${idx + 1}`}
+        alt={ct(image.altText) || gt("{title} image {number}", { title, number: idx + 1 })}
         height={image.height}
         width={image.width}
         className="absolute inset-0 size-full object-cover"

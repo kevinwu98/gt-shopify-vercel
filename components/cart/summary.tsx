@@ -1,7 +1,7 @@
 "use client";
 
 import type { CartData } from "@shopify/hydrogen";
-import { useTranslations } from "gt-next";
+import { T, useGT } from "gt-next";
 import { Loader2 } from "lucide-react";
 
 import { Price } from "@/components/product/price";
@@ -15,14 +15,14 @@ interface CartSummaryProps {
 }
 
 export function CartSummary({ cart }: CartSummaryProps) {
-  const t = useTranslations("cart");
+  const gt = useGT();
   return (
     <div className="grid gap-5">
       <div className="grid gap-2.5">
         <DiscountForm cart={cart} />
         <CartTotal cart={cart} />
       </div>
-      <CartCheckout label={t("checkout")} />
+      <CartCheckout label={gt("Go to Checkout")} />
     </div>
   );
 }
@@ -35,24 +35,30 @@ export function CartTotal({ cart }: CartTotalProps) {
   const isCostPending = useCart((state) =>
     Boolean(state.loading || state.pending.cost || state.revalidating),
   );
-  const t = useTranslations("cart");
+  const gt = useGT();
   const { amount, currencyCode } = cart.cost.totalAmount;
   return (
     <div
       aria-busy={isCostPending || undefined}
-      aria-label={t("estimatedTotal")}
+      aria-label={gt("Estimated total")}
       className="grid gap-1"
       role="group"
     >
       <div className="flex items-baseline justify-between text-base text-foreground">
-        <span>{t("estimatedTotal")}</span>
+        <span>
+          <T>Estimated total</T>
+        </span>
         {isCostPending || !currencyCode ? (
-          <span className="font-medium text-muted-foreground text-xl">{t("updating")}</span>
+          <span className="font-medium text-muted-foreground text-xl">
+            <T>Updating…</T>
+          </span>
         ) : (
           <Price amount={amount} className="font-medium text-xl" currencyCode={currencyCode} />
         )}
       </div>
-      <p className="text-muted-foreground text-xs">{t("taxesNote")}</p>
+      <p className="text-muted-foreground text-xs">
+        <T>Taxes and shipping calculated at checkout.</T>
+      </p>
     </div>
   );
 }
@@ -61,7 +67,8 @@ interface CartCheckoutProps {
   label?: string;
 }
 
-export function CartCheckout({ label = "Checkout" }: CartCheckoutProps) {
+export function CartCheckout({ label }: CartCheckoutProps) {
+  const gt = useGT();
   const {
     checkoutError,
     checkoutErrorId,
@@ -83,7 +90,13 @@ export function CartCheckout({ label = "Checkout" }: CartCheckoutProps) {
         {isCheckingOut || isUpdatingCart ? (
           <Loader2 className="size-4 animate-spin" aria-hidden="true" />
         ) : null}
-        {isCheckingOut ? "Redirecting..." : isUpdatingCart ? "Updating cart..." : label}
+        {isCheckingOut ? (
+          <T>Redirecting...</T>
+        ) : isUpdatingCart ? (
+          <T>Updating cart...</T>
+        ) : (
+          (label ?? gt("Checkout"))
+        )}
       </Button>
       {checkoutError ? (
         <p className="text-xs text-destructive" id={checkoutErrorId} role="alert">

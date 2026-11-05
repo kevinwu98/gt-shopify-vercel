@@ -2,10 +2,12 @@
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import type { ValidProductSelectionResult } from "@shopify/hydrogen/react";
+import { T, useGT } from "gt-next";
 import { PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { BuyButtons } from "@/components/product-detail/buy-buttons";
 import { ProductFormOptions, ProductFormPrice } from "@/components/product-detail/product-form";
 import { Button } from "@/components/ui/button";
@@ -45,6 +47,8 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
   const [selectionStatus, setSelectionStatus] = useState<QuickShopStatus>("idle");
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const selectionRequest = useRef<{ selectedOptions: SelectedOption[] } | null>(null);
+  const gt = useGT();
+  const ct = useCatalogText();
 
   useEffect(
     () => () => {
@@ -151,7 +155,7 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
       <DialogTrigger
         render={
           <button
-            aria-label={`${label}: ${title}`}
+            aria-label={gt("{label}: {title}", { label, title: ct(title) })}
             className="absolute right-2.5 bottom-2.5 z-10 hidden size-9 cursor-pointer items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm transition-colors hover:bg-background lg:flex"
             onClick={load}
             type="button"
@@ -169,7 +173,7 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
         showCloseButton={false}
       >
         <div className="min-h-0 overflow-y-auto overscroll-contain sm:overflow-visible">
-          <QuickShopLayout image={imageUrl} title={product?.title ?? title}>
+          <QuickShopLayout image={imageUrl} title={ct(product?.title ?? title)}>
             {product ? (
               <ProductProvider onSelect={selectVariant} product={resolvedForm ?? product.form}>
                 <QuickShopDetails
@@ -189,14 +193,18 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
                     <Skeleton className="h-7 w-24" />
                   )
                 }
-                title={title}
+                title={ct(title)}
               >
                 {status === "failed" || status === "unavailable" ? (
                   <div className="grid gap-4">
                     <p className="text-sm text-muted-foreground" role="status">
-                      {status === "failed"
-                        ? "We couldn’t load the purchase options. Try again or open the product page."
-                        : "Quick shop is unavailable for this product."}
+                      {status === "failed" ? (
+                        <T>
+                          We couldn’t load the purchase options. Try again or open the product page.
+                        </T>
+                      ) : (
+                        <T>Quick shop is unavailable for this product.</T>
+                      )}
                     </p>
                     {status === "failed" ? (
                       <Button
@@ -205,7 +213,7 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
                         type="button"
                         variant="outline"
                       >
-                        Try again
+                        <T>Try again</T>
                       </Button>
                     ) : null}
                   </div>
@@ -218,7 +226,7 @@ export function QuickShop({ handle, href, image, label, title }: QuickShopProps)
           </QuickShopLayout>
         </div>
         <DialogPrimitive.Close
-          aria-label="Close quick shop"
+          aria-label={gt("Close quick shop")}
           className="absolute top-6.5 right-5 z-10 flex size-5 cursor-pointer items-center justify-center text-foreground transition-colors hover:text-foreground/80 focus-visible:outline-2 focus-visible:outline-offset-2"
           ref={closeButtonRef}
         >
@@ -249,6 +257,7 @@ function QuickShopDetails({
   selectionStatus,
 }: QuickShopDetailsProps) {
   const { options, selectedVariant } = useProduct();
+  const ct = useCatalogText();
   const isUnconfirmed =
     !selectedVariant || selectedVariant.id !== confirmedVariant?.id || selectionStatus !== "idle";
   const selectedOptions = options.flatMap((option) =>
@@ -269,21 +278,23 @@ function QuickShopDetails({
           <ProductFormPrice fallbackVariant={confirmedVariant} />
         </div>
       }
-      title={product.title}
+      title={ct(product.title)}
     >
       {product.hasOptions ? <ProductFormOptions handle={handle} /> : null}
       {selectionStatus !== "idle" ? (
         <div className="grid gap-2.5">
           <p className="text-sm text-muted-foreground" role="status">
-            {selectionStatus === "loading"
-              ? "Loading selected options…"
-              : selectionStatus === "failed"
-                ? "We couldn’t load these options. Try again or choose another option."
-                : "These options are unavailable. Choose another option or open the product page."}
+            {selectionStatus === "loading" ? (
+              <T>Loading selected options…</T>
+            ) : selectionStatus === "failed" ? (
+              <T>We couldn’t load these options. Try again or choose another option.</T>
+            ) : (
+              <T>These options are unavailable. Choose another option or open the product page.</T>
+            )}
           </p>
           {selectionStatus === "failed" ? (
             <Button onClick={onRetrySelection} type="button" variant="outline">
-              Try again
+              <T>Try again</T>
             </Button>
           ) : null}
         </div>
@@ -361,7 +372,7 @@ function QuickShopDetailsLink({ href, onNavigate }: QuickShopDetailsLinkProps) {
       href={href}
       onNavigate={onNavigate}
     >
-      View full details
+      <T>View full details</T>
     </Link>
   );
 }
@@ -369,7 +380,9 @@ function QuickShopDetailsLink({ href, onNavigate }: QuickShopDetailsLinkProps) {
 function QuickShopSkeleton() {
   return (
     <div aria-busy="true" className="grid gap-5" role="status">
-      <span className="sr-only">Loading purchase options</span>
+      <span className="sr-only">
+        <T>Loading purchase options</T>
+      </span>
       <div aria-hidden="true" className="grid gap-5">
         <Skeleton className="h-5 w-24" />
         <div className="grid gap-2.5">

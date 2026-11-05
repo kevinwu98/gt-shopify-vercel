@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Price } from "@/components/product/price";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import { Link } from "@/components/ui/link";
+import { getCatalogText } from "@/lib/catalog/server";
 import { getProductRecommendations } from "@/lib/product/server";
 import type { ProductCard } from "@/lib/product/types";
 
@@ -17,6 +18,7 @@ export async function ComplementaryProducts({
 }) {
   const complementary = await getProductRecommendations({ handle, intent: "COMPLEMENTARY" });
   if (complementary.length === 0) return null;
+  const ct = await getCatalogText();
   return (
     <div className="grid gap-2.5" data-slot="complementary-products">
       <h2 className="font-medium text-foreground/70 text-sm">{title}</h2>
@@ -30,7 +32,7 @@ export async function ComplementaryProducts({
               {product.featuredImage ? (
                 <Image
                   src={product.featuredImage.url}
-                  alt={product.featuredImage.altText || product.title}
+                  alt={ct(product.featuredImage.altText) || ct(product.title)}
                   width={48}
                   height={48}
                   sizes="100vw"
@@ -39,7 +41,9 @@ export async function ComplementaryProducts({
               ) : (
                 <ImagePlaceholder className="size-12 shrink-0 rounded-md" />
               )}
-              <span className="min-w-0 flex-1 truncate font-medium text-sm">{product.title}</span>
+              <span className="min-w-0 flex-1 truncate font-medium text-sm">
+                {ct(product.title)}
+              </span>
               <Price
                 amount={product.price.amount}
                 className="shrink-0 text-sm"

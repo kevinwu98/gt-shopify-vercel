@@ -1,3 +1,5 @@
+import { Num, Plural, T, Var } from "gt-next";
+import { getGT } from "gt-next/server";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -12,7 +14,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SEARCH_SORT_EXCLUDE } from "@/lib/collections";
 import { readBrowseState } from "@/lib/collections/server";
 import type { BrowseResults, BrowseState } from "@/lib/collections/types";
-import { formatCount } from "@/lib/content";
 import { fetchSearchResults } from "@/lib/search/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
@@ -26,21 +27,22 @@ function getParam(searchParams: SearchParams, key: string): string | undefined {
 export async function generateMetadata({
   searchParams,
 }: PageProps<"/[locale]/search">): Promise<Metadata> {
+  const gt = await getGT();
   const resolvedSearchParams = await searchParams;
   const query = getParam(resolvedSearchParams, "q") ?? "";
   const hasQuery = query.length > 0;
-  const title = hasQuery ? `Search results for "${query}"` : "Search";
+  const title = hasQuery ? gt('Search results for "{query}"', { query }) : gt("Search");
   const description = hasQuery
-    ? `Find products matching "${query}"`
-    : "Search for products in our store";
+    ? gt('Find products matching "{query}"', { query })
+    : gt("Search for products in our store");
   return {
     title,
     description,
-    alternates: buildAlternates({
+    alternates: await buildAlternates({
       pathname: "/search",
       searchParams: resolvedSearchParams,
     }),
-    openGraph: buildOpenGraph({
+    openGraph: await buildOpenGraph({
       title,
       description,
       url: "/search",
@@ -74,7 +76,9 @@ export default function SearchPage({ searchParams }: PageProps<"/[locale]/search
           </Suspense>
           <div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl">
-              <Link href="/search">Search</Link>
+              <Link href="/search">
+                <T>Search</T>
+              </Link>
               <Suspense fallback={null}>
                 <SearchQueryLabel searchParamsPromise={searchParams} />
               </Suspense>
@@ -138,11 +142,34 @@ async function SearchQueryLabel({
   const resolvedSearchParams = await searchParamsPromise;
   const query = getParam(resolvedSearchParams, "q");
   if (!query) return null;
-  return ` for "${query}"`;
+  return (
+    <>
+      {" "}
+      <T context="Follows the heading “Search”">
+        for &quot;<Var>{query}</Var>&quot;
+      </T>
+    </>
+  );
 }
 
 async function SearchResultCount({ resultsPromise }: { resultsPromise: Promise<BrowseResults> }) {
   const { total } = await resultsPromise;
   if (!total) return null;
-  return formatCount(total, "Item");
+  return (
+    <T>
+      <Plural
+        n={total}
+        one={
+          <>
+            <Num>{total}</Num> Item
+          </>
+        }
+        other={
+          <>
+            <Num>{total}</Num> Items
+          </>
+        }
+      />
+    </T>
+  );
 }

@@ -1,6 +1,8 @@
+import { getGT } from "gt-next/server";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 
+import { getCatalogText } from "@/lib/catalog/server";
 import { describeCollection, PRODUCTS_PER_PAGE, resolveBrowseParams } from "@/lib/collections";
 import type {
   BrowseResults,
@@ -162,6 +164,7 @@ export async function fetchCollectionResults({
   };
 }
 
+// The Markdown surface renders outside the [locale] route, so it reads this source copy.
 export async function getAllProductsCollection(): Promise<Collection> {
   const title = "Products";
   const description = "";
@@ -178,13 +181,35 @@ export async function getAllProductsCollection(): Promise<Collection> {
   };
 }
 
-function browseMetadata(handle: string, title: string, description: string): Metadata {
+/** /collections/all in the request's locale, for the storefront page and its metadata. */
+export async function getLocalizedAllProductsCollection(): Promise<Collection> {
+  const gt = await getGT();
+  const collection = await getAllProductsCollection();
+  const title = gt("Products");
+  return {
+    ...collection,
+    title,
+    seo: {
+      description: gt(
+        "Browse every product at {siteName}: compare prices and check availability.",
+        { siteName: shopConfig.site.name },
+      ),
+      title,
+    },
+  };
+}
+
+async function browseMetadata(
+  handle: string,
+  title: string,
+  description: string,
+): Promise<Metadata> {
   const url = `/collections/${handle}`;
   return {
     title,
     description,
-    alternates: buildAlternates({ pathname: url }),
-    openGraph: buildOpenGraph({ title, description, url, type: "website" }),
+    alternates: await buildAlternates({ pathname: url }),
+    openGraph: await buildOpenGraph({ title, description, url, type: "website" }),
     twitter: {
       card: "summary_large_image",
       title,
@@ -195,15 +220,35 @@ function browseMetadata(handle: string, title: string, description: string): Met
 }
 
 export async function getCollectionMetadata(handle: string): Promise<Metadata> {
-  const collection = await getCollection({ handle });
-  if (!collection) return browseMetadata(handle, "Collection", "Browse collection products.");
-  return browseMetadata(collection.handle, collection.seo.title, describeCollection(collection));
+  const gt = await getGT();
+  const [ct, collection] = await Promise.all([getCatalogText(), getCollection({ handle })]);
+  if (!collection) {
+    return browseMetadata(handle, gt("Collection"), gt("Browse collection products."));
+  }
+  const title = ct(collection.title);
+  const localized = {
+    ...collection,
+    description: ct(collection.description),
+    seo: {
+      description: ct(collection.seo.description),
+      title: ct(collection.seo.title),
+    },
+    title,
+  };
+  return browseMetadata(
+    collection.handle,
+    localized.seo.title,
+    describeCollection(
+      localized,
+      gt("Shop {title} at {siteName}: browse products, compare prices, and check availability.", {
+        siteName: shopConfig.site.name,
+        title,
+      }),
+    ),
+  );
 }
 
 export async function getAllProductsMetadata(): Promise<Metadata> {
-  return browseMetadata(
-    ALL_PRODUCTS_HANDLE,
-    "Products",
-    describeCollection(await getAllProductsCollection()),
-  );
+  const collection = await getLocalizedAllProductsCollection();
+  return browseMetadata(ALL_PRODUCTS_HANDLE, collection.title, describeCollection(collection));
 }

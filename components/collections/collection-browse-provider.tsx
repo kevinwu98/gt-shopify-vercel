@@ -1,6 +1,7 @@
 "use client";
 
 import { CollectionProvider, useCollection } from "@shopify/hydrogen/react";
+import { useLocalizeHref } from "gt-next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   createContext,
@@ -133,12 +134,13 @@ export function usePublishedFacets(): Facets | null {
 
 function BrowseStore({ children, dataSearch, handle, path, urlSearch }: BrowseStoreProps) {
   const router = useRouter();
+  const localizeHref = useLocalizeHref();
 
   return (
     <CollectionProvider
       data={{ dataSearch, handle }}
       urlSearch={urlSearch}
-      onChange={(search) => router.push(`${path}${search}`, { scroll: false })}
+      onChange={(search) => router.push(localizeHref(`${path}${search}`), { scroll: false })}
     >
       {children}
     </CollectionProvider>

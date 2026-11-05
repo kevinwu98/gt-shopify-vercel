@@ -1,3 +1,4 @@
+import { T } from "gt-next";
 import { Suspense } from "react";
 
 import { AddressBook } from "@/components/account/address-book";
@@ -8,7 +9,10 @@ import { fetchCustomerAddresses } from "@/lib/shopify/operations/customer/server
 export default function AddressesPage() {
   return (
     <>
-      <AccountPageHeader title="Addresses" description="Manage your saved addresses" />
+      <AccountPageHeader
+        title={<T>Addresses</T>}
+        description={<T>Manage your saved addresses</T>}
+      />
       <Suspense fallback={<AddressesSkeleton />}>
         <AddressesContent />
       </Suspense>

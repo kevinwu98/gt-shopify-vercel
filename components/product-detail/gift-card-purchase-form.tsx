@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "cn";
+import { T, useGT } from "gt-next";
 import { useState } from "react";
 
 import { useCartDrawer } from "@/components/cart/context";
@@ -14,6 +15,7 @@ import { useProductForm } from "@/lib/product/client";
 export function GiftCardPurchaseForm() {
   const { formProps, pending, register, selectedVariant } = useProductForm();
   const { openOverlay } = useCartDrawer();
+  const gt = useGT();
   const [minimumSendDate, setMinimumSendDate] = useState("");
   const [timezoneOffset, setTimezoneOffset] = useState("");
   const sendOnEnabled = Boolean(minimumSendDate);
@@ -57,9 +59,11 @@ export function GiftCardPurchaseForm() {
       <fieldset disabled={pending} data-slot="gift-card-fields" className="grid gap-2.5">
         <div className="grid gap-2.5">
           <div className="flex items-center justify-between gap-2.5">
-            <Label htmlFor="gift-card-email">Recipient email</Label>
+            <Label htmlFor="gift-card-email">
+              <T>Recipient email</T>
+            </Label>
             <Button className="h-auto p-0 text-xs" disabled={pending} type="reset" variant="link">
-              Clear recipient details
+              <T>Clear recipient details</T>
             </Button>
           </div>
           <Input
@@ -73,29 +77,35 @@ export function GiftCardPurchaseForm() {
         </div>
 
         <div className="grid gap-2.5">
-          <Label htmlFor="gift-card-name">Recipient name</Label>
+          <Label htmlFor="gift-card-name">
+            <T>Recipient name</T>
+          </Label>
           <Input
             id="gift-card-name"
             {...register("attributeValue", { defaultValue: "", key: "Recipient name" })}
             type="text"
             autoComplete="name"
-            placeholder="Friend's name (optional)"
+            placeholder={gt("Friend's name (optional)")}
           />
         </div>
 
         <div className="grid gap-2.5">
-          <Label htmlFor="gift-card-message">Message</Label>
+          <Label htmlFor="gift-card-message">
+            <T>Message</T>
+          </Label>
           <Textarea
             id="gift-card-message"
             {...register("attributeValue", { defaultValue: "", key: "Message" })}
             rows={3}
-            placeholder="Write a personal note (optional)"
+            placeholder={gt("Write a personal note (optional)")}
           />
         </div>
 
         <div className="grid gap-3 rounded-lg border p-3">
           <div className="flex items-center justify-between gap-2.5">
-            <Label htmlFor="gift-card-send-later">Schedule for later</Label>
+            <Label htmlFor="gift-card-send-later">
+              <T>Schedule for later</T>
+            </Label>
             <Switch
               id="gift-card-send-later"
               checked={sendOnEnabled}
@@ -117,7 +127,9 @@ export function GiftCardPurchaseForm() {
           </div>
           {sendOnEnabled ? (
             <div className="grid gap-2.5">
-              <Label htmlFor="gift-card-send-on">Delivery date</Label>
+              <Label htmlFor="gift-card-send-on">
+                <T>Delivery date</T>
+              </Label>
               <Input
                 id="gift-card-send-on"
                 {...register("attributeValue", { defaultValue: "", key: "Send on" })}
@@ -139,7 +151,7 @@ export function GiftCardPurchaseForm() {
           "group-invalid:cursor-not-allowed group-invalid:opacity-50",
         )}
       >
-        <span>{pending ? "Adding…" : "Add to Cart"}</span>
+        <span>{pending ? <T>Adding…</T> : <T>Add to Cart</T>}</span>
       </Button>
     </form>
   );

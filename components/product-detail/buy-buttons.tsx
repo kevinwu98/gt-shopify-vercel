@@ -2,7 +2,7 @@
 
 import { getShopPayButtonUrl } from "@shopify/hydrogen";
 import { cn } from "cn";
-import { useTranslations } from "gt-next";
+import { T, useGT, useLocale, Var } from "gt-next";
 import { Loader2, MinusIcon, PlusIcon } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 
@@ -40,7 +40,7 @@ export function BuyButtons({
   const { plans, selectedPlan } = getProductPurchaseOptions(selectedVariant, purchaseOption);
   const missingRequiredPlan = Boolean(selectedVariant?.requiresSellingPlan && !selectedPlan);
   const { openOverlay } = useCartDrawer();
-  const t = useTranslations("product");
+  const gt = useGT();
 
   useEffect(() => {
     const handlePageShow = (e: PageTransitionEvent) => {
@@ -60,12 +60,12 @@ export function BuyButtons({
     variants: [{ id: selectedVariant.id, quantity }],
   });
   const getButtonText = () => {
-    if (pending) return t("adding");
-    if (isSelectionUnresolved) return t("addToCart");
-    if (requiresBundleConfiguration) return t("chooseBundle");
-    if (missingRequiredPlan) return t("subscriptionUnavailable");
-    if (isOutOfStock) return t("outOfStock");
-    return t("addToCart");
+    if (pending) return <T>Adding to Cart...</T>;
+    if (isSelectionUnresolved) return <T>Add to Cart</T>;
+    if (requiresBundleConfiguration) return <T>Choose bundle items</T>;
+    if (missingRequiredPlan) return <T>Subscription unavailable</T>;
+    if (isOutOfStock) return <T>Out of Stock</T>;
+    return <T>Add to Cart</T>;
   };
   return (
     <form
@@ -101,13 +101,13 @@ export function BuyButtons({
       <div className="flex flex-wrap gap-2.5">
         {quantityPicker ? (
           <div
-            aria-label={t("quantity")}
+            aria-label={gt("Item quantity")}
             className="grid h-12 w-32 shrink-0 grid-cols-[3rem_2rem_3rem] rounded-lg bg-background ring-1 ring-border ring-inset"
             role="group"
           >
             <button
               type="button"
-              aria-label={t("decrease")}
+              aria-label={gt("Decrease quantity")}
               className="flex size-12 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={quantity === 1}
               onClick={() => setQuantity((currentQuantity) => Math.max(1, currentQuantity - 1))}
@@ -123,7 +123,7 @@ export function BuyButtons({
             </span>
             <button
               type="button"
-              aria-label={t("increase")}
+              aria-label={gt("Increase quantity")}
               className="flex size-12 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={quantity === 99}
               onClick={() => setQuantity((currentQuantity) => Math.min(99, currentQuantity + 1))}
@@ -151,7 +151,7 @@ export function BuyButtons({
         <a
           aria-busy={isBuyingNow || undefined}
           aria-disabled={buyNowUrl ? undefined : true}
-          aria-label="Buy with Shop Pay"
+          aria-label={gt("Buy with Shop Pay")}
           className={cn(
             "flex h-12 w-full cursor-pointer items-center justify-center rounded-lg bg-shop px-4 text-white transition-colors hover:bg-shop/85 aria-busy:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-[selection-unresolved=true]:aria-disabled:opacity-100",
             !availableForSale && "invisible",
@@ -171,7 +171,9 @@ export function BuyButtons({
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
-              <span className="sr-only">Buy with</span>
+              <span className="sr-only">
+                <T>Buy with</T>
+              </span>
               <BuyWithShopLogo aria-hidden="true" className="h-auto w-24.5" />
             </>
           )}
@@ -199,13 +201,17 @@ export function PurchaseOptions({
   selectedPlan,
 }: PurchaseOptionsProps) {
   const purchaseOptionId = useId();
+  const gt = useGT();
+  const locale = useLocale();
   if (plans.length === 0) return null;
 
   return (
     <fieldset className="grid gap-2.5" disabled={disabled}>
-      <legend className="pb-2.5 text-sm font-medium">Purchase options</legend>
+      <legend className="pb-2.5 text-sm font-medium">
+        <T>Purchase options</T>
+      </legend>
       {[
-        ...(!requiresSellingPlan ? [{ id: "", name: "One-time purchase", price }] : []),
+        ...(!requiresSellingPlan ? [{ id: "", name: gt("One-time purchase"), price }] : []),
         ...plans.map((allocation) => ({
           id: allocation.sellingPlan.id,
           name: allocation.sellingPlan.name,
@@ -227,14 +233,19 @@ export function PurchaseOptions({
           />
           <span className="flex flex-1 flex-wrap items-center justify-between gap-2.5 text-sm">
             <span>{option.name}</span>
-            <span className="tabular-nums">{formatPrice(option.price)}</span>
+            <span className="tabular-nums">{formatPrice(option.price, locale)}</span>
           </span>
         </label>
       ))}
       {selectedPlan ? (
         <p className="text-sm text-muted-foreground">
-          Recurring purchase.{" "}
-          {selectedPlan.sellingPlan.description || "Subscription details are shown at checkout."}
+          {selectedPlan.sellingPlan.description ? (
+            <T>
+              Recurring purchase. <Var>{selectedPlan.sellingPlan.description}</Var>
+            </T>
+          ) : (
+            <T>Recurring purchase. Subscription details are shown at checkout.</T>
+          )}
         </p>
       ) : null}
     </fieldset>

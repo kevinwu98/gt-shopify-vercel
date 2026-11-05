@@ -1,4 +1,14 @@
 {
   "defaultLocale": "en",
-  "locales": ["fr", "ja"]
+  "locales": ["fr", "ja"],
+  "src": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "lib/**/*.{ts,tsx}"],
+  "files": {
+    "gt": {
+      "output": "public/_gt/[locale].json"
+    },
+    "json": {
+      "include": ["catalog/[locale].json"]
+    }
+  },
+  "_versionId": "53e1978095fc2ddd2cb2019de2f305f8ed3f76cb8abff946f1dbc72e50d188b8"
 }

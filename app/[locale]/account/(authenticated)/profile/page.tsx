@@ -1,3 +1,5 @@
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import { Suspense } from "react";
 
 import { AccountPageHeader } from "@/components/account/page-header";
@@ -8,7 +10,7 @@ import { getCustomerProfile } from "@/lib/shopify/operations/customer/server";
 export default function ProfilePage() {
   return (
     <>
-      <AccountPageHeader title="Profile" description="Your account information" />
+      <AccountPageHeader title={<T>Profile</T>} description={<T>Your account information</T>} />
       <Suspense fallback={<ProfileSkeleton />}>
         <ProfileContent />
       </Suspense>
@@ -17,16 +19,17 @@ export default function ProfilePage() {
 }
 
 async function ProfileContent() {
+  const gt = await getGT();
   const profile = await getCustomerProfile();
   if (!profile) return null;
   return (
     <ProfileForm
       labels={{
-        email: "Email",
-        firstName: "First name",
-        lastName: "Last name",
-        profileUpdated: "Profile updated",
-        save: "Save",
+        email: gt("Email"),
+        firstName: gt("First name"),
+        lastName: gt("Last name"),
+        profileUpdated: gt("Profile updated"),
+        save: gt("Save"),
       }}
       profile={profile}
     />

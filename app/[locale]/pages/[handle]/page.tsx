@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-text-page";
+import { getCatalogHtml, getCatalogText } from "@/lib/catalog/server";
 import { getPage } from "@/lib/pages/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { getShopifySitemapPage } from "@/lib/seo/server";
@@ -23,21 +24,21 @@ export async function generateMetadata({
 }: PageProps<"/[locale]/pages/[handle]">): Promise<Metadata> {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) return {};
-  const page = await getPage({
-    handle,
-  });
+  const [page, ct] = await Promise.all([getPage({ handle }), getCatalogText()]);
   if (!page) notFound();
   const pathname = `/pages/${page.handle}`;
+  const title = ct(page.seo.title);
+  const description = ct(page.seo.description);
   return {
-    alternates: buildAlternates({ pathname }),
-    description: page.seo.description,
-    openGraph: buildOpenGraph({
-      description: page.seo.description,
-      title: page.seo.title,
+    alternates: await buildAlternates({ pathname }),
+    description,
+    openGraph: await buildOpenGraph({
+      description,
+      title,
       type: "website",
       url: pathname,
     }),
-    title: page.seo.title,
+    title,
   };
 }
 
@@ -54,9 +55,11 @@ async function ShopifyPageContent({
 }: Pick<PageProps<"/[locale]/pages/[handle]">, "params">) {
   const { handle } = await params;
   if (handle === PLACEHOLDER_HANDLE) notFound();
-  const page = await getPage({
-    handle,
-  });
+  const [page, ct, ch] = await Promise.all([
+    getPage({ handle }),
+    getCatalogText(),
+    getCatalogHtml(),
+  ]);
   if (!page) notFound();
-  return <RichTextPage body={page.body} title={page.title} />;
+  return <RichTextPage body={ch(page.body)} title={ct(page.title)} />;
 }

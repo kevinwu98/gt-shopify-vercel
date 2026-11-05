@@ -3,7 +3,7 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { getSearchResultUrl } from "@shopify/hydrogen";
 import { cn } from "cn";
-import { useTranslations } from "gt-next";
+import { T, useGT } from "gt-next";
 import { useLocalizeHref } from "gt-next/link";
 import { Search, X } from "lucide-react";
 import Image from "next/image";
@@ -17,6 +17,7 @@ import {
   useState,
 } from "react";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { Price } from "@/components/product/price";
 import { Dialog, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRecentlyViewedProducts } from "@/lib/product/client";
@@ -55,7 +56,9 @@ function SearchTrigger() {
           className="flex items-center justify-center text-foreground hover:text-foreground/80 transition-colors"
         >
           <Search className="size-5" />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">
+            <T>Search</T>
+          </span>
         </button>
       }
     />
@@ -66,7 +69,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const localizeHref = useLocalizeHref();
-  const t = useTranslations("nav");
+  const gt = useGT();
   const { query, setQuery, results, isLoading, activeIndex, setActiveIndex, reset } =
     usePredictiveSearch();
   const recentlyViewed = useRecentlyViewedProducts(open);
@@ -136,7 +139,9 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
         }}
       >
         <div className="w-full max-w-xl h-fit">
-          <DialogTitle className="sr-only">Search</DialogTitle>
+          <DialogTitle className="sr-only">
+            <T>Search</T>
+          </DialogTitle>
           <div className="bg-background rounded-xl shadow-lg overflow-hidden duration-200">
             <form onSubmit={handleSubmit} className="flex items-center gap-3 px-4 py-3">
               <Search className="size-4 shrink-0 text-foreground/40" />
@@ -145,7 +150,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                 type="text"
                 name="q"
                 role="combobox"
-                placeholder={t("searchPlaceholder")}
+                placeholder={gt("Search products")}
                 maxLength={SEARCH_TERM_MAX_LENGTH}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -169,12 +174,14 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                   }}
                   className="shrink-0 text-sm text-foreground/60 hover:text-foreground transition-colors"
                 >
-                  Clear
+                  <T>Clear</T>
                 </button>
               )}
               <DialogPrimitive.Close className="shrink-0 flex items-center justify-center rounded-full text-foreground/40 hover:text-foreground transition-colors">
                 <X className="size-4" />
-                <span className="sr-only">Close</span>
+                <span className="sr-only">
+                  <T>Close</T>
+                </span>
               </DialogPrimitive.Close>
             </form>
 
@@ -207,7 +214,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                     {products.length > 0 && (
                       <div>
                         <div className="px-4 pt-3 pb-1.5 text-xs font-medium text-foreground/50 uppercase tracking-wider">
-                          {hasQuery ? t("searchProducts") : t("recentlyViewed")}
+                          {hasQuery ? <T>Products</T> : <T>Recently viewed</T>}
                         </div>
                         {products.map((product, i) => (
                           <ProductResult
@@ -222,7 +229,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
 
                     {hasQuery && visibleItems === 0 && (
                       <div className="px-4 py-6 text-center text-sm text-foreground/50">
-                        {`No results for "${query}"`}
+                        {gt('No results for "{query}"', { query })}
                       </div>
                     )}
 
@@ -235,7 +242,7 @@ function SearchDialogContent({ onClose, open }: { onClose: () => void; open: boo
                           }
                           className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium h-9 px-5 hover:bg-primary/90 transition-colors"
                         >
-                          View All
+                          <T>View All</T>
                         </button>
                       </div>
                     )}
@@ -287,6 +294,8 @@ function ProductResult({
   active: boolean;
   onNavigate: (href: string) => void;
 }) {
+  const ct = useCatalogText();
+  const title = ct(product.title);
   return (
     <button
       type="button"
@@ -299,7 +308,7 @@ function ProductResult({
       {product.featuredImage ? (
         <Image
           src={product.featuredImage.url}
-          alt={product.featuredImage.altText}
+          alt={ct(product.featuredImage.altText)}
           width={56}
           height={56}
           sizes="100vw"
@@ -309,7 +318,7 @@ function ProductResult({
         <div className="size-14 bg-muted shrink-0" />
       )}
       <div className="flex-1 min-w-0">
-        <div className="text-sm text-foreground truncate">{product.title}</div>
+        <div className="text-sm text-foreground truncate">{title}</div>
         <Price
           amount={product.price.amount}
           currencyCode={product.price.currencyCode}

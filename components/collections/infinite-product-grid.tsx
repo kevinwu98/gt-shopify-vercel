@@ -1,6 +1,7 @@
 "use client";
 
 import { useCollection } from "@shopify/hydrogen/react";
+import { useGT } from "gt-next";
 import { LoaderCircleIcon } from "lucide-react";
 import { type ReactNode, useEffect, useEffectEvent, useRef, useState } from "react";
 
@@ -25,6 +26,7 @@ export function InfiniteProductGrid({
   source,
 }: InfiniteProductGridProps) {
   // The store, not a server snapshot, is the single source of truth for filters and sort mid-scroll.
+  const gt = useGT();
   const search = useCollection(getBrowseSearch);
   const isPending = useCollection((state) => state.status === "loading");
   const [additionalProducts, setAdditionalProducts] = useState<ProductCardType[]>([]);
@@ -83,8 +85,8 @@ export function InfiniteProductGrid({
           <ProductCard
             key={product.id}
             product={product}
-            outOfStockText="Out of Stock"
-            quickShopText="Choose"
+            outOfStockText={gt("Out of Stock")}
+            quickShopText={gt("Choose")}
           />
         ))}
       </div>

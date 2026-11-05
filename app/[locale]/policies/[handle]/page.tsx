@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { RichTextPage, RichTextPageSkeleton } from "@/components/content/rich-text-page";
+import { getCatalogText } from "@/lib/catalog/server";
 import { getShopPolicies, getShopPolicy } from "@/lib/policies/server";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 import { PLACEHOLDER_HANDLE } from "@/lib/static-params";
@@ -28,10 +29,12 @@ export async function generateMetadata({
   });
   if (!policy) notFound();
   const pathname = `/policies/${policy.handle}`;
+  const ct = await getCatalogText();
+  const title = ct(policy.title);
   return {
-    alternates: buildAlternates({ pathname }),
-    openGraph: buildOpenGraph({ title: policy.title, type: "website", url: pathname }),
-    title: policy.title,
+    alternates: await buildAlternates({ pathname }),
+    openGraph: await buildOpenGraph({ title, type: "website", url: pathname }),
+    title,
   };
 }
 
@@ -52,5 +55,7 @@ async function PolicyPageContent({
     handle,
   });
   if (!policy) notFound();
-  return <RichTextPage body={policy.body} title={policy.title} />;
+  // Policy bodies are legal text, so they stay in the merchant's language; only the title is translated.
+  const ct = await getCatalogText();
+  return <RichTextPage body={policy.body} title={ct(policy.title)} />;
 }

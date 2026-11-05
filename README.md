@@ -1,20 +1,38 @@
-# GT Supply — Vercel Shop + gt-next
+# Great Things — Vercel Shop + General Translation
 
-This repository is the [Vercel Shop](https://github.com/vercel/shop) Next.js template localized with [`gt-next`](https://generaltranslation.com/docs/next). It is the Next.js companion to the Hydrogen React Router storefront in [kevinwu98/gt-shopify](https://github.com/kevinwu98/gt-shopify) and uses the same Shopify store. Upstream changes merge in from `vercel/shop`.
+A multilingual Shopify storefront: the [Vercel Shop](https://github.com/vercel/shop) Next.js template (`@shopify/hydrogen` 2026.10, Next.js 16 Cache Components) localized end to end with [General Translation](https://generaltranslation.com). It is the Next.js companion to the Hydrogen React Router storefront in [kevinwu98/gt-shopify](https://github.com/kevinwu98/gt-shopify) and sells from the same Shopify store. Upstream template changes merge in from `vercel/shop`.
 
-- **Locales:** `en` (default, unprefixed), `fr` at `/fr/...`, and `ja` at `/ja/...`, configured in `gt.config.json`. Every storefront page lives under `app/[locale]/` and is partially prerendered once per locale.
-- **Routing:** `proxy.ts` rewrites unprefixed requests to the default locale after Hydrogen's route handlers run. `/en/...` returns 404, so each page has one canonical URL. This matches the routing proposed in Hydrogen's `defineShopifyI18n` ([Shopify/hydrogen#4009](https://github.com/Shopify/hydrogen/pull/4009)).
-- **Copy:** UI strings live in `dictionary.json`, and the French and Japanese translations in `dictionaries/` were generated with GT. Components read them with `getTranslations()` on the server and `useTranslations()` on the client. `getLocale.ts` reads the `[locale]` root param, so translations stay cache-friendly under Cache Components.
-- **Links:** `components/ui/link.tsx` localizes internal hrefs with `useLocalizeHref()`, so navigation stays in the selected language.
-- **Commerce:** Shopify catalog data, prices, and currency stay on the store's configured market (US/EN). Changing the copy language does not change the cart country.
+## What's translated
+
+- **Interface copy** with [`gt-next`](https://generaltranslation.com/docs/react/nextjs): copy stays inline in each component. JSX uses `<T>` with `<Var>`, `<Num>`, `<Currency>`, `<DateTime>` and `<Plural>`; attributes, metadata and props use `getGT()` on the server and `useGT()` on the client; module-level labels use `msg()`.
+- **Shopify catalog copy**: product titles, descriptions, options, image alt text, collection titles, page titles and bodies, filter labels and policy titles. `pnpm catalog:export` writes the store's English text to `catalog/en.json`; `pnpm translate` translates it with the interface copy. `lib/catalog` looks translations up by their English text, so anything edited in Shopify after the last export shows its live English until the next export.
+- **Prices** keep Shopify's amount and currency and format for the shopper's language (`$40.00`, `40,00 $US`).
+- **SEO**: localized `<html lang>`, canonical URLs, `hreflang` alternates on every page and in the sitemap, and localized Open Graph and Schema.org data.
+
+Policy bodies (legal text) and the Markdown/`llms.txt` agent surface stay in English. Checkout is hosted by Shopify and follows the store's published languages.
+
+## How it works
+
+- **Locales**: `en` (default, unprefixed), `fr` at `/fr`, `ja` at `/ja`, set in `gt.config.json`. Every storefront route lives under `app/[locale]/` and is prerendered per locale.
+- **Routing**: `proxy.ts` rewrites unprefixed requests to the default locale after Hydrogen's Shopify route handlers run; `/en/...` is not a URL, so each page has one canonical address. This matches the routing proposed for Hydrogen's `defineShopifyI18n` ([Shopify/hydrogen#4009](https://github.com/Shopify/hydrogen/pull/4009)).
+- **Cache Components**: `getLocale.ts` reads the `[locale]` root param and `loadTranslations.ts` imports the generated files in `public/_gt/`, so translated pages stay static. See [Using Cache Components](https://generaltranslation.com/docs/react/nextjs/cache-components).
+- **Links**: `components/ui/link.tsx` localizes internal hrefs with `useLocalizeHref()`; the language switcher in the nav keeps the current page.
+- **Commerce** stays on the store's market (US, USD). Changing the language never changes the cart's country.
+
+## Run it
 
 ```sh
-cp .env.example .env.local   # Shopify domain, Storefront token, shop ID
+cp .env.example .env.local   # Shopify store domain, Storefront token, shop ID
 pnpm install                 # pnpm 12; installs Node 26 per devEngines
 pnpm build && pnpm start
 ```
 
-Only the main shopping path is translated: home, nav, search, product buy buttons, and the cart. Other template copy (account pages, filters, gift cards, the shop agent), hreflang alternates, sitemap locales, and localized Shopify catalog content are not yet localized.
+Translations are committed, so building needs no General Translation key. To refresh them after changing copy or the catalog, put `GT_PROJECT_ID` and `GT_API_KEY` in `.env.gt` and run:
+
+```sh
+pnpm catalog:export
+pnpm translate
+```
 
 ---
 

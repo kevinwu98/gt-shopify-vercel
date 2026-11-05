@@ -1,5 +1,6 @@
 "use client";
 
+import { useMessages } from "gt-next";
 import { Loader2 } from "lucide-react";
 import { type FormEvent, useState, useTransition } from "react";
 
@@ -29,6 +30,7 @@ export function ProfileForm({
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const m = useMessages();
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -83,7 +85,7 @@ export function ProfileForm({
 
       {error ? (
         <p role="alert" className="text-sm text-destructive">
-          {error}
+          {m(error)}
         </p>
       ) : null}
 

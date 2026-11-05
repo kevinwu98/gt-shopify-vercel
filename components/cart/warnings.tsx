@@ -1,6 +1,7 @@
 "use client";
 
 import type { CartErrorGroup } from "@shopify/hydrogen";
+import { T, useGT } from "gt-next";
 import { AlertTriangle, X } from "lucide-react";
 import { useState } from "react";
 
@@ -31,6 +32,7 @@ export function CartWarnings({ lineId }: CartWarningsProps) {
 }
 
 function CartWarningMessages({ group }: { group: CartErrorGroup }) {
+  const gt = useGT();
   const [dismissed, setDismissed] = useState(false);
   if (dismissed) return null;
   const messages = [...group.userErrors, ...group.warnings];
@@ -43,7 +45,11 @@ function CartWarningMessages({ group }: { group: CartErrorGroup }) {
         <AlertTriangle className="size-4 shrink-0" aria-hidden="true" />
         <div className="grid flex-1 gap-1">
           <p className="font-medium">
-            {group.userErrors.length ? "We couldn't update your cart" : "Your cart was updated"}
+            {group.userErrors.length ? (
+              <T>We couldn&apos;t update your cart</T>
+            ) : (
+              <T>Your cart was updated</T>
+            )}
           </p>
           <ul className="grid gap-0.5 text-amber-800 dark:text-amber-200/90">
             {messages.map((message, index) => (
@@ -54,7 +60,7 @@ function CartWarningMessages({ group }: { group: CartErrorGroup }) {
         <button
           type="button"
           onClick={() => setDismissed(true)}
-          aria-label="Dismiss"
+          aria-label={gt("Dismiss")}
           className="inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-md hover:bg-amber-100 dark:hover:bg-amber-900/40"
         >
           <X className="size-4" aria-hidden="true" />

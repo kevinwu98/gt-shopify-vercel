@@ -1,7 +1,9 @@
+import { Num, T } from "gt-next";
 import Image from "next/image";
 
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import { Link } from "@/components/ui/link";
+import { getCatalogText } from "@/lib/catalog/server";
 import type { ProductVariantComponent, ProductVariantReference } from "@/lib/product/types";
 
 interface BundleListItem {
@@ -55,7 +57,8 @@ interface BundleProductListProps {
   title: string;
 }
 
-function BundleProductList({ items, title }: BundleProductListProps) {
+async function BundleProductList({ items, title }: BundleProductListProps) {
+  const ct = await getCatalogText();
   return (
     <div className="grid gap-2.5" data-slot="bundle-components">
       <h2 className="font-medium text-foreground/70 text-sm">{title}</h2>
@@ -69,7 +72,7 @@ function BundleProductList({ items, title }: BundleProductListProps) {
               {item.image ? (
                 <Image
                   src={item.image.url}
-                  alt={item.image.altText || item.title}
+                  alt={ct(item.image.altText) || ct(item.title)}
                   width={48}
                   height={48}
                   sizes="100vw"
@@ -78,9 +81,13 @@ function BundleProductList({ items, title }: BundleProductListProps) {
               ) : (
                 <ImagePlaceholder className="size-12 shrink-0 rounded-md" />
               )}
-              <span className="min-w-0 flex-1 truncate font-medium text-sm">{item.title}</span>
+              <span className="min-w-0 flex-1 truncate font-medium text-sm">{ct(item.title)}</span>
               {item.quantity && item.quantity > 1 ? (
-                <span className="text-foreground/50 text-sm">×{item.quantity}</span>
+                <span className="text-foreground/50 text-sm">
+                  <T>
+                    ×<Num>{item.quantity}</Num>
+                  </T>
+                </span>
               ) : null}
             </Link>
           </li>

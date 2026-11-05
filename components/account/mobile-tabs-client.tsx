@@ -4,6 +4,7 @@ import { cn } from "cn";
 import { usePathname } from "next/navigation";
 
 import { Link } from "@/components/ui/link";
+import { splitLocalePath } from "@/lib/i18n";
 
 interface AccountTab {
   href: string;
@@ -11,7 +12,8 @@ interface AccountTab {
 }
 
 export function MobileTabsClient({ tabs }: { tabs: AccountTab[] }) {
-  const pathname = usePathname();
+  // Links are unprefixed; the URL carries the locale prefix outside the default locale.
+  const { pathname } = splitLocalePath(usePathname());
 
   return (
     <div className="flex gap-1 border-b md:hidden">

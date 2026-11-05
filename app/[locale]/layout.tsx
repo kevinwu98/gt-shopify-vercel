@@ -1,6 +1,6 @@
 import { BotIdClient } from "botid/client";
-import { GTProvider } from "gt-next";
-import { getLocale } from "gt-next/server";
+import { GTProvider, T } from "gt-next";
+import { getGT, getLocale } from "gt-next/server";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -14,11 +14,13 @@ import { AnalyticsComponents } from "@/components/analytics";
 import { CartUI } from "@/components/cart/cart-ui";
 import { CartProviderWrapper } from "@/components/cart/context";
 import { CartStandardActionsScript } from "@/components/cart/standard-actions";
+import { CatalogProvider } from "@/components/catalog/catalog-provider";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { SiteSchema } from "@/components/schema/site-schema";
 import { botIdProtectedRoutes } from "@/lib/botid";
 import { seedCartData } from "@/lib/cart/server";
+import { getCatalogLabels } from "@/lib/catalog";
 import { shopConfig } from "@/lib/config";
 import { isSupportedLocale, locales } from "@/lib/i18n";
 
@@ -57,28 +59,30 @@ export default async function RootLayout({ children }: LayoutProps<"/[locale]">)
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-dvh flex-col font-sans antialiased`}
       >
         <GTProvider>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-background focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-foreground focus:outline-none"
-          >
-            Skip to content
-          </a>
-          <SiteSchema />
+          <CatalogProvider labels={getCatalogLabels(locale)}>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-background focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-foreground focus:outline-none"
+            >
+              <T>Skip to content</T>
+            </a>
+            <SiteSchema />
 
-          <CartProviderWrapper cartData={cartData}>
-            <Nav />
-            <main id="main-content" className="flex flex-1 flex-col min-w-0">
-              {children}
-            </main>
-            <Footer />
-            <CartUI />
-            <Suspense>
-              <ActionBar>{shopConfig.agent.isEnabled && <AgentButton />}</ActionBar>
-            </Suspense>
-            <Suspense>
-              <AnalyticsComponents />
-            </Suspense>
-          </CartProviderWrapper>
+            <CartProviderWrapper cartData={cartData}>
+              <Nav />
+              <main id="main-content" className="flex flex-1 flex-col min-w-0">
+                {children}
+              </main>
+              <Footer />
+              <CartUI />
+              <Suspense>
+                <ActionBar>{shopConfig.agent.isEnabled && <AgentButton />}</ActionBar>
+              </Suspense>
+              <Suspense>
+                <AnalyticsComponents />
+              </Suspense>
+            </CartProviderWrapper>
+          </CatalogProvider>
         </GTProvider>
       </body>
     </html>
@@ -86,8 +90,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[locale]">)
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {
+  const gt = await getGT();
   return {
-    description: `Shop premium products, curated collections, and latest offers from ${shopConfig.site.name}.`,
+    description: gt("Shop premium products, curated collections, and latest offers from {name}.", {
+      name: shopConfig.site.name,
+    }),
     generator: shopConfig.site.name,
     metadataBase: new URL(shopConfig.site.url),
     openGraph: {

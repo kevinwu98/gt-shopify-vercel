@@ -2,6 +2,7 @@
 
 import type { CartData } from "@shopify/hydrogen";
 import { cn } from "cn";
+import { T, useGT } from "gt-next";
 import { Loader2, X } from "lucide-react";
 import { useState } from "react";
 
@@ -14,6 +15,7 @@ interface DiscountFormProps {
 }
 
 export function DiscountForm({ cart }: DiscountFormProps) {
+  const gt = useGT();
   const { formProps, register } = useCartForm();
   const discountErrors = useCart((state) => state.errors.discountCodes);
   const pendingDiscountCodes = useCart((state) => state.pending.discountCodes);
@@ -36,7 +38,7 @@ export function DiscountForm({ cart }: DiscountFormProps) {
             const normalized = code.trim().toUpperCase();
             if (!normalized) {
               event.preventDefault();
-              setLocalError("Enter a valid discount code");
+              setLocalError(gt("Enter a valid discount code"));
               return;
             }
             if (cart.discountCodes.some((discount) => discount.code.toUpperCase() === normalized)) {
@@ -58,8 +60,8 @@ export function DiscountForm({ cart }: DiscountFormProps) {
             setCode(event.target.value);
             if (localError) setLocalError(null);
           }}
-          placeholder="Discount code"
-          aria-label="Discount code"
+          placeholder={gt("Discount code")}
+          aria-label={gt("Discount code")}
           aria-invalid={error ? true : undefined}
           disabled={isPending}
           autoComplete="off"
@@ -74,10 +76,12 @@ export function DiscountForm({ cart }: DiscountFormProps) {
           {isPending ? (
             <>
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-              <span className="sr-only">Apply</span>
+              <span className="sr-only">
+                <T>Apply</T>
+              </span>
             </>
           ) : (
-            "Apply"
+            <T>Apply</T>
           )}
         </Button>
       </form>
@@ -89,7 +93,7 @@ export function DiscountForm({ cart }: DiscountFormProps) {
       ) : null}
 
       {cart.discountCodes.length > 0 ? (
-        <ul className="flex flex-wrap gap-1.5" aria-label="Discount">
+        <ul className="flex flex-wrap gap-1.5" aria-label={gt("Discount")}>
           {cart.discountCodes.map((discount) => {
             const isCodePending = pendingDiscountCodes.has(discount.code);
             const isInvalid = !discount.applicable && !isCodePending;
@@ -112,12 +116,14 @@ export function DiscountForm({ cart }: DiscountFormProps) {
                   <input type="hidden" {...register("discountCode", { value: discount.code })} />
                   <span className={cn(isInvalid && "line-through")}>{discount.code}</span>
                   {isInvalid ? (
-                    <span className="text-xs uppercase tracking-wide">Not applicable</span>
+                    <span className="text-xs uppercase tracking-wide">
+                      <T>Not applicable</T>
+                    </span>
                   ) : null}
                   <button
                     {...register("discount-remove")}
                     type="submit"
-                    aria-label={`${"Remove discount"}: ${discount.code}`}
+                    aria-label={gt("Remove discount: {code}", { code: discount.code })}
                     disabled={isPending}
                     className={cn(
                       "ml-0.5 inline-flex size-4 items-center justify-center rounded-sm cursor-pointer disabled:cursor-not-allowed",

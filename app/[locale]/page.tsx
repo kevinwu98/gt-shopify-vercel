@@ -1,4 +1,5 @@
-import { getTranslations } from "gt-next/server";
+import { T } from "gt-next";
+import { getGT } from "gt-next/server";
 import type { Metadata } from "next";
 
 import { ProductsGrid } from "@/components/product/products-grid";
@@ -9,14 +10,14 @@ import { shopConfig } from "@/lib/config";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("home");
-  const title = t("metaTitle");
-  const description = t("metaDescription");
+  const gt = await getGT();
+  const title = gt("Home");
+  const description = gt("Explore featured products, curated collections, and seasonal campaigns.");
   return {
     title: `${title} | ${shopConfig.site.name}`,
     description,
-    alternates: buildAlternates({ pathname: "/" }),
-    openGraph: buildOpenGraph({
+    alternates: await buildAlternates({ pathname: "/" }),
+    openGraph: await buildOpenGraph({
       title,
       description,
       url: "/",
@@ -26,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const t = await getTranslations("home");
+  const gt = await getGT();
   return (
     <Page className="pt-0">
       <Sections>
@@ -34,15 +35,22 @@ export default async function HomePage() {
           <div className="col-start-1 row-start-1 hidden md:block md:aspect-4/1" />
           <div className="relative col-start-1 row-start-1 flex items-center justify-center px-5 py-10 lg:px-10">
             <div className="flex flex-col items-center text-center gap-2.5">
-              <h1 className="text-3xl md:text-5xl max-w-3xl text-foreground">{t("heading")}</h1>
-              <p className="text-sm md:text-base max-w-xl text-foreground">{t("subheading")}</p>
+              <h1 className="text-3xl md:text-5xl max-w-3xl text-foreground">
+                <T>A storefront localized with General Translation</T>
+              </h1>
+              <p className="text-sm md:text-base max-w-xl text-foreground">
+                <T>
+                  Shopify commerce on Hydrogen and Next.js, with interface copy translated by
+                  gt-next.
+                </T>
+              </p>
             </div>
           </div>
         </section>
 
         <Container>
           <ProductsGrid
-            title={t("products")}
+            title={gt("Products")}
             eagerCount={4}
             limit={8}
             collectionUrl="/collections/all"

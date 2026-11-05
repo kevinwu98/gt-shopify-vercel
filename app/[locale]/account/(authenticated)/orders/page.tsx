@@ -1,6 +1,8 @@
+import { T } from "gt-next";
+import { getLocale } from "gt-next/server";
 import { Suspense } from "react";
 
-import { formatOrderDate, OrderStatusBadge } from "@/components/account/order-display";
+import { OrderDate, OrderStatusBadge } from "@/components/account/order-display";
 import { AccountPageHeader } from "@/components/account/page-header";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
@@ -15,7 +17,7 @@ export default function OrdersPage({
 }) {
   return (
     <>
-      <AccountPageHeader title="Orders" description="View your order history" />
+      <AccountPageHeader title={<T>Orders</T>} description={<T>View your order history</T>} />
       <Suspense fallback={<OrdersSkeleton />}>
         <OrdersContent searchParams={searchParams} />
       </Suspense>
@@ -28,7 +30,7 @@ async function OrdersContent({
 }: {
   searchParams: Promise<{ after?: string; before?: string }>;
 }) {
-  const params = await searchParams;
+  const [params, locale] = await Promise.all([searchParams, getLocale()]);
   const { orders, pageInfo } = await fetchCustomerOrders({
     after: params.after,
     before: params.before,
@@ -36,7 +38,9 @@ async function OrdersContent({
   if (orders.length === 0) {
     return (
       <div className="rounded-lg border p-6 text-center">
-        <p className="text-sm text-muted-foreground">You have no orders yet.</p>
+        <T>
+          <p className="text-sm text-muted-foreground">You have no orders yet.</p>
+        </T>
       </div>
     );
   }
@@ -52,12 +56,14 @@ async function OrdersContent({
               <div className="grid gap-1">
                 <span className="font-medium">{order.name}</span>
                 <span className="text-xs text-muted-foreground">
-                  {formatOrderDate(order.processedAt)}
+                  <OrderDate iso={order.processedAt} />
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <OrderStatusBadge status={order.fulfillmentStatus} />
-                <span className="text-sm tabular-nums">{formatPrice(order.totalPrice)}</span>
+                <span className="text-sm tabular-nums">
+                  {formatPrice(order.totalPrice, locale)}
+                </span>
               </div>
             </Link>
           </li>
@@ -74,7 +80,7 @@ async function OrdersContent({
                 <Link href={`/account/orders?before=${encodeURIComponent(pageInfo.startCursor)}`} />
               }
             >
-              Newer
+              <T>Newer</T>
             </Button>
           ) : (
             <span />
@@ -87,7 +93,7 @@ async function OrdersContent({
                 <Link href={`/account/orders?after=${encodeURIComponent(pageInfo.endCursor)}`} />
               }
             >
-              Older
+              <T>Older</T>
             </Button>
           ) : (
             <span />

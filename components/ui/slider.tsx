@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "cn";
+import { useGT } from "gt-next";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import {
   type ComponentProps,
@@ -106,6 +107,7 @@ function SliderHeader({ className, ...props }: ComponentProps<"div">) {
 }
 
 function SliderNav({ className, ...props }: ComponentProps<"div">) {
+  const gt = useGT();
   const { canScrollLeft, canScrollRight, scroll } = useSlider();
   const hidden = !canScrollLeft && !canScrollRight;
   return (
@@ -115,7 +117,7 @@ function SliderNav({ className, ...props }: ComponentProps<"div">) {
       {...props}
     >
       <button
-        aria-label="Scroll left"
+        aria-label={gt("Scroll left")}
         className="cursor-pointer text-foreground transition-colors disabled:cursor-not-allowed disabled:text-foreground/30"
         disabled={!canScrollLeft}
         onClick={() => scroll("left")}
@@ -124,7 +126,7 @@ function SliderNav({ className, ...props }: ComponentProps<"div">) {
         <ChevronLeftIcon aria-hidden="true" className="size-5" />
       </button>
       <button
-        aria-label="Scroll right"
+        aria-label={gt("Scroll right")}
         className="cursor-pointer text-foreground transition-colors disabled:cursor-not-allowed disabled:text-foreground/30"
         disabled={!canScrollRight}
         onClick={() => scroll("right")}

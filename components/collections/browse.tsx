@@ -1,3 +1,5 @@
+import { T, Var } from "gt-next";
+import { getGT } from "gt-next/server";
 import { type ReactNode, Suspense } from "react";
 
 import { ProductCard } from "@/components/product-card/product-card";
@@ -66,19 +68,28 @@ async function StreamedResultsGrid({ results }: { results: Promise<BrowseResults
   return <BrowseResultsGrid results={await results} />;
 }
 
-function BrowseResultsGrid({ results }: BrowseResultsGridProps) {
+async function BrowseResultsGrid({ results }: BrowseResultsGridProps) {
   const { dataSearch, pageInfo, products, source } = results;
   if (products.length === 0) {
     const query = source.type === "search" ? source.query : undefined;
     return (
       <div className="py-10 text-center">
-        <h2 className="mb-2 text-2xl">No products found</h2>
+        <T>
+          <h2 className="mb-2 text-2xl">No products found</h2>
+        </T>
         <p className="text-muted-foreground">
-          {query ? `We couldn't find any products matching "${query}"` : "No products available"}
+          {query ? (
+            <T>
+              We couldn&apos;t find any products matching &quot;<Var>{query}</Var>&quot;
+            </T>
+          ) : (
+            <T>No products available</T>
+          )}
         </p>
       </div>
     );
   }
+  const gt = await getGT();
   return (
     <InfiniteProductGrid
       key={`${JSON.stringify(source)}?${dataSearch}`}
@@ -91,8 +102,8 @@ function BrowseResultsGrid({ results }: BrowseResultsGridProps) {
           key={product.id}
           loading={index < 5 ? "eager" : "lazy"}
           product={product}
-          outOfStockText="Out of Stock"
-          quickShopText="Choose"
+          outOfStockText={gt("Out of Stock")}
+          quickShopText={gt("Choose")}
         />
       ))}
     </InfiniteProductGrid>

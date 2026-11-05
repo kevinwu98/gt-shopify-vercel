@@ -1,4 +1,7 @@
+import { useLocale } from "gt-next";
+
 import { shopConfig } from "@/lib/config";
+import { localizePath } from "@/lib/i18n";
 import type { Image } from "@/lib/media/types";
 import type { Money } from "@/lib/money/types";
 
@@ -22,8 +25,10 @@ interface ProductSchemaProps {
   product: ProductSchemaData;
 }
 
+// Name and description arrive in the page's locale; prices, currency, and SKU stay Shopify's.
 export function ProductSchema({ product }: ProductSchemaProps) {
-  const url = `${shopConfig.site.url}/products/${product.handle}`;
+  const locale = useLocale();
+  const url = `${shopConfig.site.url}${localizePath(`/products/${product.handle}`, locale)}`;
   const availability = product.availableForSale
     ? "https://schema.org/InStock"
     : "https://schema.org/OutOfStock";

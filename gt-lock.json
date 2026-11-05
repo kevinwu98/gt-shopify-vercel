@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "branchId": "brc_aabpl81nwk6353248x4utn9f",
+  "entries": [
+    {
+      "fileId": "879f3a5f954ee8b75bf1e91f4ea9916b41c933e5beba7eb6362647a637c9c66d",
+      "versionId": "53e1978095fc2ddd2cb2019de2f305f8ed3f76cb8abff946f1dbc72e50d188b8",
+      "translations": {
+        "fr": {
+          "updatedAt": "2026-11-05T20:16:10.791Z",
+          "fileName": "public/_gt/fr.json",
+          "postProcessHash": "eb5679e3c9f0e8be2d1c34c3b9b76fe38f7fb0a0c3fa41843c196d193bde1876"
+        },
+        "ja": {
+          "updatedAt": "2026-11-05T20:16:10.792Z",
+          "fileName": "public/_gt/ja.json",
+          "postProcessHash": "a0e70cee08ad4ecaa3110e3ee5f66e1328f132a2fca7ab7dfebb9d8fc2b04a61"
+        }
+      },
+      "fileName": "__INTERNAL_GT_TEMPLATE_NAME__"
+    },
+    {
+      "fileId": "9b828956e0c7d1513684ce0e86952d816fe23ab08b7a7c72963435870eb3f6c3",
+      "versionId": "098f6edc5c98dddb5b33619b8f28e83ea74bb78b0ad2885e993960e275789757",
+      "translations": {
+        "fr": {
+          "updatedAt": "2026-11-05T20:14:51.912Z",
+          "fileName": "catalog/fr.json",
+          "postProcessHash": "d8d8582448591c90f7346d57f35e7cb61051c59f02879b49bb07aabcf0f1d8fd"
+        },
+        "ja": {
+          "updatedAt": "2026-11-05T20:14:51.913Z",
+          "fileName": "catalog/ja.json",
+          "postProcessHash": "1827d51c339d107714c84938259853b39b9a3907d193061218a97176eef47176"
+        }
+      },
+      "fileName": "catalog/en.json"
+    }
+  ]
+}

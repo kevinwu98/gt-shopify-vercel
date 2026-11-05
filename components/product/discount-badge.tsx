@@ -1,4 +1,5 @@
 import { cn } from "cn";
+import { Num, T } from "gt-next";
 import type { ComponentProps } from "react";
 
 interface DiscountBadgeProps extends ComponentProps<"span"> {
@@ -14,7 +15,9 @@ export function DiscountBadge({ percent, className, ...props }: DiscountBadgePro
       )}
       {...props}
     >
-      {percent}% OFF
+      <T>
+        <Num options={{ style: "percent" }}>{percent / 100}</Num> OFF
+      </T>
     </span>
   );
 }

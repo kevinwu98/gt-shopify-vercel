@@ -1,5 +1,6 @@
 "use client";
 
+import { T, useGT } from "gt-next";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 
@@ -15,20 +16,23 @@ import type { MenuItem } from "@/lib/menu/types";
 import { MenuLink } from "./menu-link";
 
 export function MobileMenu({ items }: { items: MenuItem[] }) {
+  const gt = useGT();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          <button type="button" className="md:hidden -ml-2 p-2" aria-label="Menu">
+          <button type="button" className="md:hidden -ml-2 p-2" aria-label={gt("Menu")}>
             <Menu className="size-5" />
           </button>
         }
       />
       <SheetContent side="left" className="gap-0">
         <div className="flex h-16 items-center px-5">
-          <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
+          <SheetTitle className="text-lg font-semibold">
+            <T>Menu</T>
+          </SheetTitle>
         </div>
         <nav className="min-h-0 flex-1 overflow-y-auto px-5 pb-5">
           <MobileMenuList items={items} onLinkClick={close} />
@@ -39,6 +43,7 @@ export function MobileMenu({ items }: { items: MenuItem[] }) {
 }
 
 function MobileMenuList({ items, onLinkClick }: { items: MenuItem[]; onLinkClick: () => void }) {
+  const gt = useGT();
   const hasAnyChildren = items.some((item) => item.items.length > 0);
 
   if (!hasAnyChildren) {
@@ -73,7 +78,7 @@ function MobileMenuList({ items, onLinkClick }: { items: MenuItem[]; onLinkClick
                   onClick={onLinkClick}
                   className="mt-3 block text-xs font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {`Show all ${item.title}`}
+                  {gt("Show all {title}", { title: item.title })}
                 </MenuLink>
               ) : null}
             </AccordionContent>

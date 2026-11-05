@@ -1,0 +1,383 @@
+{
+  "0040e2e7bdb6ff59": "Mettre la vidéo en pause",
+  "01b2289c36286f24": "Code ZIP / code postal",
+  "04cc4990860cc461": "Supprimer la réduction : {code}",
+  "06588313c80d1109": "Une boutique en ligne localisée avec General Translation",
+  "07285275d80f10b7": "Appartement, bureau, etc.",
+  "0a01a99686d65185": "Cette adresse sera définitivement supprimée de votre compte.",
+  "0adc0b7116c014ed": [
+    "Achat récurrent. ",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    }
+  ],
+  "0c4a40642a1b7e27": "Sélectionner {option} : {value}",
+  "0d97f9c66db79593": "Prénom",
+  "103bd920cfa5ab31": "Programmer pour plus tard",
+  "154703096b980771": "La ville est obligatoire",
+  "15b55bfa79ee4318": "Meilleures ventes",
+  "1701e0df0b33116a": "Ces options ne sont pas disponibles. Choisissez une autre option ou consultez la fiche produit.",
+  "1885e9b83c352abe": "Contenu du lot",
+  "1c161c630d28d225": "Adresses",
+  "1cc599c5f5874014": "Téléphone",
+  "1e7c7825aaae6c45": "Ajouter une adresse",
+  "20b5ef8cf3fc14ac": "Résultats de recherche pour « {query} »",
+  "22b3f5ae171ca7b2": "Redirection…",
+  "23cfcb5d624bcf8c": "Quantité : {item}",
+  "2538c2d97c9b5e23": "En cours",
+  "2676bddf7f18a859": "Effacer les informations du destinataire",
+  "2780a17154688eef": "Retirer l’article : {item}",
+  "288e34506ac05bf9": "Article du panier",
+  "2a7216b1e497c21d": "Menu",
+  "2c1d1b1a9847c6b4": "Prix : décroissant",
+  "2d8c0219a2bad80b": "Remboursé",
+  "2ea95ade2ae9e528": "Taxes",
+  "2ecf88ef9e8e4259": "Accueil",
+  "2f9a228d3f572114": "Passage en caisse",
+  "309039fdc1333c1b": "Nom : A-Z",
+  "317a22a85ee71dd5": "Taxes et frais de livraison calculés lors du passage en caisse.",
+  "32663001d9208374": "Par défaut",
+  "32bf87ea292fdcb3": "Impossible de supprimer l'adresse",
+  "34280bf5de579bea": "Impossible de mettre à jour l'adresse",
+  "34b440f7dd401997": "Plus anciennes",
+  "353b08f4363dbb2c": "En attente",
+  "3584241c20eb2b63": "Choisir les articles du lot",
+  "366689c231ebbde7": "Le pays est obligatoire",
+  "36bb4df54b878787": "Livraison",
+  "3860ac0ef9e31a89": "Page introuvable",
+  "3a54d5853431bbf7": "Acheter avec",
+  "3a6fcf75aeb90ead": "Non traitée",
+  "3b28878accf137fb": "Entreprise",
+  "3b6ced6faf8e3918": "Remis en stock",
+  "3c7c37939d799592": "Adresses",
+  "3e820a2c1e7d3fa3": "{title} — image {number}",
+  "3f79c258354ef384": "Produits",
+  "41ef1b68f9fc924e": "L’achat rapide n’est pas disponible pour ce produit.",
+  "424fc620cbc9d92e": {
+    "c": "Adresse de livraison",
+    "i": 1,
+    "t": "h2"
+  },
+  "430ae6c940f3addb": "Payé",
+  "43821aa7ab710301": "Expiré",
+  "43af18c4a9e11a01": "Sans objet",
+  "44bbcfd33b751bd6": "Adresse",
+  "47906e474cf404bb": "Le lien est peut-être incorrect ou la page a été supprimée.",
+  "480646ceb98c7163": "Fermer",
+  "4a208bfa4a365487": "Total estimé",
+  "4a261a06f80495c0": "Rédigez un message personnel (facultatif)",
+  "4b71561e661a9664": "Diminuer la quantité",
+  "4c2fb139351a9db3": "Faire défiler vers la gauche",
+  "4f113bb0bc732b3d": "Effacer",
+  "4f94e7beb32bcd47": {
+    "c": "Total",
+    "i": 1,
+    "t": "p"
+  },
+  "50d7c85f0bf14280": "Abonnement indisponible",
+  "51732f7b75ce7a42": "Sélectionner {option} : {value} (épuisé)",
+  "52d0aad8b2121b6d": "Profil",
+  "544b5660bbe73707": "Ville",
+  "546c8a8d654a676e": "Nous n’avons pas pu mettre à jour votre panier",
+  "56c367e1653ced8d": "Consulter votre historique de commandes",
+  "585c7f9fef80e384": "Aller au contenu",
+  "595027176ad6da7e": "Prix",
+  "5958b9394b6e8fb6": "Les plus pertinents",
+  "5bbf199afe39d5e1": "Fermer",
+  "5cdf03652d35d964": "Faire défiler vers la droite",
+  "5d2f210236aba787": "Date de livraison",
+  "610251eef711c3e1": "Appliquer le filtre de prix",
+  "619a8db474acd4fd": "Continuer mes achats",
+  "64e9647d8379767b": "Commandes",
+  "6514de25173300cc": "Achat récurrent. Les détails de l’abonnement sont indiqués lors du passage en caisse.",
+  "65a5e738596ee48f": "Profil mis à jour",
+  "65bfad738825b43d": {
+    "c": "Aucun article trouvé.",
+    "i": 1,
+    "t": "p"
+  },
+  "6604ea6cf201f051": "Fermer le panier",
+  "67508b5a9a7db096": "Profil",
+  "6b3e8bc1f3ded083": "Message",
+  "6b571e8616a566c8": "À",
+  "6bd2e5dc23598c80": "Votre panier a été modifié. Attendez la fin de sa mise à jour, puis relancez le passage en caisse.",
+  "6c973b8c581c6314": "Impossible de créer l'adresse",
+  "6ce98e721d029a92": "Aucun produit disponible",
+  "6df57099a35b36bb": "Rechercher des produits",
+  "6eb807cd1232e8a8": "Panier",
+  "6f69c0102f16d2f9": "Code pays",
+  "6f9647f746db650d": "Augmenter la quantité",
+  "70d24ec5dd0200b5": "Jusqu’à {price}",
+  "72e22b3fb68df01d": "Disponible en lots",
+  "7399c882feff6e5f": "Identifiant d'adresse invalide",
+  "74158bc2b7d8e387": {
+    "d": {
+      "b": {
+        "one": {
+          "c": [
+            {
+              "i": 3,
+              "k": "_gt_n_3",
+              "v": "n"
+            },
+            " article"
+          ],
+          "i": 2,
+          "t": "C2"
+        },
+        "other": {
+          "c": [
+            {
+              "i": 3,
+              "k": "_gt_n_3",
+              "v": "n"
+            },
+            " articles"
+          ],
+          "i": 2,
+          "t": "C2"
+        }
+      },
+      "t": "p"
+    },
+    "i": 1,
+    "t": "Plural"
+  },
+  "748e4ac9ec357623": "Date : de la plus ancienne à la plus récente",
+  "75330a36a3782eb8": "Découvrez tous les produits de {siteName} : comparez les prix et vérifiez leur disponibilité.",
+  "75353ce09ec3bfb8": "Menu",
+  "75afd1d28146a5ef": {
+    "c": "Filtres",
+    "i": 1,
+    "t": "span"
+  },
+  "762fcce45b65eea9": "Enregistrer",
+  "764dfb165791b02e": "Mise à jour…",
+  "76b886ea45a7ce48": "Code de l’état / de la province",
+  "77d03cd39c5a33f0": "Consultés récemment",
+  "77e0f0dfe1770b7a": "Modifier l’adresse",
+  "782299e6f438c144": "Réduction",
+  "78a1a02732fc74e8": "Se déconnecter",
+  "78f6b81e3bb195a3": {
+    "c": "Supprimer l’adresse ?",
+    "i": 1,
+    "t": "DialogTitle"
+  },
+  "7955f23091c292c0": "En attente de traitement",
+  "7ddd1bd41182e292": "Fermer l’achat rapide",
+  "7f7df9cad4264512": "Voir cette collection",
+  "800c4dcf86606b3e": "Tout voir",
+  "801ea4b81b38d021": "Options d’achat",
+  "80ca95dfa882744e": "Chargement des options sélectionnées…",
+  "818f874d6398e37d": "Collections",
+  "844d0b58acce190d": "Ajout…",
+  "8543ee341b108061": "Prix maximum",
+  "864a7a8499d13c5a": "Adresse invalide",
+  "88668ba3172d05ed": "Augmenter la quantité : {item}",
+  "89cf35d6f13c6f45": "Voir tous les détails",
+  "8a604f0426c44e14": "Diminuer la quantité : {item}",
+  "8a85b0db83264582": "Date : de la plus récente à la plus ancienne",
+  "8af6956a35d1e110": "Aller à l’image {number}",
+  "8c62f6026b5f56c9": "Chargement du panier…",
+  "8d2942c50bf0dbdf": "Découvrez {title} chez {siteName} : parcourez les produits, comparez les prix et vérifiez leur disponibilité.",
+  "8d77526b2975312f": "Nous n’avons pas pu charger les options d’achat. Réessayez ou consultez la fiche produit.",
+  "8ea31dd4350b42f6": "Échec de la connexion",
+  "9163a584054bc40a": "Le passage en caisse est indisponible. Actualisez votre panier et réessayez.",
+  "91a2a48f9487bfd0": {
+    "c": "Aucun produit trouvé",
+    "i": 1,
+    "t": "h2"
+  },
+  "92f61118e10ae0da": "Prix minimum",
+  "9646849f1219594f": "Parcourez les produits par collection.",
+  "99bafce234ba8976": [
+    {
+      "c": "Échec de la connexion",
+      "i": 1,
+      "t": "h1"
+    },
+    {
+      "c": "Votre connexion n’a pas abouti. Réessayez ou continuez vos achats sans compte.",
+      "i": 2,
+      "t": "p"
+    }
+  ],
+  "9a9f682bc48dfe8f": "Annulé",
+  "9abada43c0da0e6f": "Achat unique",
+  "9afc136a6566c560": "De",
+  "9b5261b7e5f90dbc": {
+    "c": "Compte",
+    "i": 1,
+    "t": "p"
+  },
+  "9c615220ed8a2ed8": "À partir de {price}",
+  "9dad6db998848e83": "Planifiée",
+  "9dba0ea0a1942f4a": "En suspens",
+  "9eafb46cb4c97c77": "Choisir",
+  "9eb2dbf6073def42": "Enregistrer",
+  "9eeb5ee589d08542": "Panier",
+  "9fa2a817f1e9b55b": "Nom",
+  "a08e07b36e7b9e98": "Définir comme adresse par défaut",
+  "a2acf8270d351160": "Un problème est survenu",
+  "a3bab21f3b16d724": "Nous n'avons pas pu lancer le passage en caisse. Veuillez réessayer.",
+  "a573ee5d6a55f488": [
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    ":",
+    " ",
+    {
+      "c": {
+        "i": 3,
+        "k": "_gt_value_3",
+        "v": "v"
+      },
+      "i": 2,
+      "t": "span"
+    }
+  ],
+  "a6059339cdffebd5": "Gérer vos adresses enregistrées",
+  "a64ba14bccd3412b": "Retourner à la page d’accueil",
+  "a653f2cf99a49360": "Votre panier est vide",
+  "a74538a7917c1c96": "Lire la vidéo",
+  "aafc6638dce9bf20": "Nom de votre ami (facultatif)",
+  "aba29e77e52bca46": "Supprimer",
+  "ac0d7ee8a9206a80": "Partiellement remboursé",
+  "af56040278401094": "Adresse e-mail du destinataire",
+  "af7eb4f9c7f0f575": "Filtres",
+  "afed0941d06361a4": "Découvrez nos produits phares, nos collections soigneusement sélectionnées et nos campagnes saisonnières.",
+  "b02c4aa716524e41": "Prix : croissant",
+  "b1081d87d2a8abad": "Abonnement",
+  "b1f8df94116746d5": "Nous n’avons pas pu charger ces options. Réessayez ou choisissez une autre option.",
+  "b2be70822d55f16a": "Ouverte",
+  "b35a609d07e5a1ee": "Saisissez un code de réduction valide",
+  "b50c41465e5408b3": "Adresse e-mail",
+  "b84165d70370ef55": "Passage en caisse",
+  "ba43678e111b3cfe": {
+    "c": "Trier",
+    "i": 1,
+    "t": "span"
+  },
+  "bde61a49d0afdb92": "Supprimer le filtre : {label}",
+  "be080c75e1018c16": "Partiellement traitée",
+  "be124f37ee408e24": "Nous n’avons pas pu mettre à jour votre panier. Veuillez réessayer.",
+  "be1da3273ffdb5bd": "Réessayer",
+  "be4f1315235c6581": "Total estimé",
+  "be83cbaf06e7d3d9": "Une boutique Shopify basée sur Hydrogen et Next.js, dont les textes d’interface sont traduits par gt-next.",
+  "be8426affd94485b": "Traitée",
+  "c0dc347278df9357": "Code de réduction",
+  "c2c4f29921b12f8e": "Vous aimerez aussi",
+  "c42b923cdbef30f4": "Mise à jour du panier…",
+  "c56c085549eeebd6": {
+    "c": "Vous n’avez pas encore d’adresse enregistrée.",
+    "i": 1,
+    "t": "p"
+  },
+  "c59411eb78a37c38": [
+    {
+      "i": 1,
+      "k": "_gt_n_1",
+      "v": "n"
+    },
+    " DE RÉDUCTION"
+  ],
+  "c70fa3b90b5e99ab": "p. ex. {example}",
+  "c742db531551ed5b": [
+    "×",
+    {
+      "i": 1,
+      "k": "_gt_n_1",
+      "v": "n"
+    }
+  ],
+  "c7f43954b20822d8": {
+    "c": "Aucune collection trouvée.",
+    "i": 1,
+    "t": "p"
+  },
+  "ca13edcb2af07b35": "Ajouter au panier",
+  "cb60456d096f5c36": "{option} : {value} (indisponible)",
+  "cb819a6e071c1080": "Chargement des options d’achat",
+  "cc24f149528ab35c": "Vérifiez les articles de votre panier avant le passage en caisse",
+  "cc439a1b220536c2": "Une erreur inattendue est survenue. Veuillez réessayer.",
+  "cc5895d1a8ea89f8": "Les informations de votre compte",
+  "cd6d04926767a15b": "Article du lot",
+  "ce08220505b48d11": [
+    "Nous n’avons trouvé aucun produit correspondant à « ",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    " »"
+  ],
+  "ce419b8d68e75f7a": "Produits",
+  "ced3462caa46f792": "{option} : {value} (épuisé)",
+  "cf3bc072a3b554bf": "Articles du panier",
+  "d05f56d2129e990b": "Recherche",
+  "d09121888850ce06": {
+    "c": "Collections",
+    "i": 1,
+    "t": "h5"
+  },
+  "d0c5bb6c42928b19": "Autorisé",
+  "d13b5bd4279a5cc3": "À associer avec",
+  "d15d4ce9981708e9": "Annuler",
+  "d34b2d265b1cfa63": "{title} en grand format",
+  "d66a6d1775ee4184": "Votre panier a été modifié. Veuillez relancer le passage en caisse.",
+  "d79509ce1b7f1823": "Quantité de l’article",
+  "d7e7ccd13d775370": "Voir le statut de la commande",
+  "d80f33194fb833a1": "Plus récentes",
+  "d92c9a6c5a2f0c68": "Tout afficher dans {title}",
+  "daf8daec701f0863": "Compte",
+  "dcfca470826e0546": "Panier, {count, plural, one {# article} other {# articles}}",
+  "ddb3355a8b5d810f": "Sous-total",
+  "dfd6c11276e37f00": "Découvrez les produits haut de gamme, les collections soigneusement sélectionnées et les dernières offres de {name}.",
+  "e321d312eb7386a8": "Appliquer",
+  "e4d2a41d27c49ad0": "Boutique",
+  "e564f8f4823c30bf": "Filtrer par {filter} : {value}",
+  "e68175f5552c588b": "Découvrez les produits de la collection.",
+  "e77d5a1dbd3856e2": "Nom du destinataire",
+  "e7f298e8a056e09a": "Aucun résultat pour « {query} »",
+  "eb1428cf6a3b0326": "Commandes",
+  "eb7d00c205c733dd": "Partiellement payé",
+  "ec21b232e0eacd4a": "Se connecter",
+  "edaebeea1915f9c1": "Compte",
+  "ee3e8bd8b7918aec": "Rechercher",
+  "eee76955c565040a": "Nom : Z-A",
+  "eeeebc6b87a0c8b2": "Contenu du lot",
+  "efabe3e18be04271": "Langue",
+  "efb36ef9ae7379b9": "Impossible de mettre à jour le profil",
+  "f38c2e9533661201": "Votre panier a été mis à jour",
+  "f55caade193b4094": [
+    "pour « ",
+    {
+      "i": 1,
+      "k": "_gt_value_1",
+      "v": "v"
+    },
+    " »"
+  ],
+  "f5683e647a65e15c": "{count, plural, one {# article} other {# articles}}",
+  "f5b66c481aa3e4df": "Modifier",
+  "f5f6fa5c1a9e8907": "Collection",
+  "f68aaa606691804d": "En rupture de stock",
+  "f809ee35e802325b": {
+    "c": "Vous n’avez pas encore passé de commande.",
+    "i": 1,
+    "t": "p"
+  },
+  "f82f62ffaf44ffd5": "Acheter avec Shop Pay",
+  "f8daa277452dff3e": "Trouver des produits correspondant à « {query} »",
+  "f956c17bf981aec8": "Rechercher des produits dans notre boutique",
+  "f967c7afde53066b": "Continuer mes achats",
+  "fa3e4289f346a850": "{label} : {title}",
+  "fc5ba4649f67329c": "L'adresse est obligatoire",
+  "fc79fc46bae1dd1e": "Profil invalide",
+  "fe36ad749fc3e2c8": "Ajout au panier…",
+  "ff6c7c70eabf9e8f": "En rupture de stock"
+}

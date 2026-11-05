@@ -1,3 +1,4 @@
+import { T } from "gt-next";
 import { UserRoundCheckIcon, UserRoundIcon } from "lucide-react";
 
 import { Link } from "@/components/ui/link";
@@ -13,7 +14,9 @@ export async function NavAccount() {
         className="flex items-center justify-center text-foreground hover:text-foreground/80 transition-colors"
       >
         <UserRoundIcon className="size-5" />
-        <span className="sr-only">Sign in</span>
+        <span className="sr-only">
+          <T>Sign in</T>
+        </span>
       </a>
     );
   }
@@ -23,7 +26,9 @@ export async function NavAccount() {
       className="flex items-center justify-center text-foreground hover:text-foreground/80 transition-colors"
     >
       <UserRoundCheckIcon className="size-5" />
-      <span className="sr-only">Account</span>
+      <span className="sr-only">
+        <T>Account</T>
+      </span>
     </Link>
   );
 }

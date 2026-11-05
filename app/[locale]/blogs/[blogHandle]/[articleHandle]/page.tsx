@@ -50,9 +50,9 @@ export async function generateMetadata({
       ]
     : ["/og-default.png"];
   return {
-    alternates: buildAlternates({ pathname }),
+    alternates: await buildAlternates({ pathname }),
     description: article.seo.description,
-    openGraph: buildOpenGraph({
+    openGraph: await buildOpenGraph({
       description: article.seo.description,
       images,
       title: article.seo.title,

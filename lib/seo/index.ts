@@ -1,6 +1,8 @@
+import { getLocale } from "gt-next/server";
 import type { Metadata } from "next";
 
 import { shopConfig } from "@/lib/config";
+import { localizePath, locales } from "@/lib/i18n";
 
 import type { SearchParamsInput } from "./types";
 
@@ -43,17 +45,26 @@ function buildCanonicalPath(pathname: string, searchParams?: SearchParamsInput):
   return query ? `${normalizedPath}?${query}` : normalizedPath;
 }
 
-export function buildAlternates({
+/** Canonical URL for the request's locale, plus hreflang alternates for every locale. */
+export async function buildAlternates({
   pathname,
   searchParams,
 }: {
   pathname: string;
   searchParams?: SearchParamsInput;
-}): Metadata["alternates"] {
-  return { canonical: buildCanonicalPath(pathname, searchParams) };
+}): Promise<Metadata["alternates"]> {
+  const canonicalPath = buildCanonicalPath(pathname, searchParams);
+  const locale = await getLocale();
+  return {
+    canonical: localizePath(canonicalPath, locale),
+    languages: {
+      ...Object.fromEntries(locales.map((code) => [code, localizePath(canonicalPath, code)])),
+      "x-default": canonicalPath,
+    },
+  };
 }
 
-export function buildOpenGraph({
+export async function buildOpenGraph({
   title,
   description,
   url,
@@ -73,13 +84,16 @@ export function buildOpenGraph({
         alt?: string;
       }
   >;
-}): Metadata["openGraph"] {
+}): Promise<Metadata["openGraph"]> {
+  const locale = await getLocale();
   // Omit type so product pages can emit og:type=product through raw meta tags.
   return {
     ...(type ? { type } : {}),
     title,
     description,
-    url,
+    url: localizePath(url, locale),
+    locale,
+    alternateLocale: locales.filter((code) => code !== locale),
     siteName: shopConfig.site.name,
     images,
   };

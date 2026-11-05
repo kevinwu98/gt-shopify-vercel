@@ -1,9 +1,11 @@
 "use client";
 
 import type { CartLine as HydrogenCartLine } from "@shopify/hydrogen";
+import { T, useGT, useLocale } from "gt-next";
 import { MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import Image from "next/image";
 
+import { useCatalogText } from "@/components/catalog/catalog-provider";
 import { ImagePlaceholder } from "@/components/ui/image-placeholder";
 import { Link } from "@/components/ui/link";
 import { useCart } from "@/lib/cart/client";
@@ -18,9 +20,10 @@ interface CartLineItemsProps {
 }
 
 export function CartLineItems({ lines }: CartLineItemsProps) {
+  const gt = useGT();
   const keys = getLineRowKeys(lines);
   return (
-    <ul className="grid gap-5" aria-label="Cart items">
+    <ul className="grid gap-5" aria-label={gt("Cart items")}>
       {lines.map((line, index) => (
         <CartLineItem key={keys[index]} item={line} />
       ))}
@@ -47,6 +50,9 @@ interface CartLineItemProps {
 }
 
 function CartLineItem({ item }: CartLineItemProps) {
+  const gt = useGT();
+  const ct = useCatalogText();
+  const locale = useLocale();
   const isPending = useCart((state) => state.pending.lines.has(item.id));
   const isCostPending = useCart((state) =>
     Boolean(state.pending.cost || state.revalidating || state.pending.lines.has(item.id)),
@@ -73,9 +79,9 @@ function CartLineItem({ item }: CartLineItemProps) {
   const compareAtUnitPrice = Number(cost.compareAtAmountPerQuantity?.amount ?? 0);
   const originalUnitPrice =
     finalUnitPrice < sellingUnitPrice ? sellingUnitPrice : compareAtUnitPrice;
-  const title = merchandise?.product.title || "Cart item";
+  const title = ct(merchandise?.product.title) || gt("Cart item");
   const variantLabel = merchandise?.selectedOptions?.length
-    ? merchandise.selectedOptions.map((option) => option.value).join(" / ")
+    ? merchandise.selectedOptions.map((option) => ct(option.value)).join(" / ")
     : "";
   const lineName = variantLabel ? `${title}, ${variantLabel}` : title;
   const href = merchandise?.product.handle ? `/products/${merchandise.product.handle}` : undefined;
@@ -83,7 +89,7 @@ function CartLineItem({ item }: CartLineItemProps) {
   const imageContent = image?.url ? (
     <Image
       src={image.url}
-      alt={image.altText || title}
+      alt={ct(image.altText ?? undefined) || title}
       fill
       className="object-cover"
       sizes="100vw"
@@ -91,7 +97,7 @@ function CartLineItem({ item }: CartLineItemProps) {
   ) : (
     <ImagePlaceholder className="size-full" />
   );
-  const price = (amount: number) => formatPrice({ amount: String(amount), currencyCode });
+  const price = (amount: number) => formatPrice({ amount: String(amount), currencyCode }, locale);
 
   return (
     <li className="flex gap-2.5" aria-busy={isPending || undefined} aria-label={title}>
@@ -118,13 +124,15 @@ function CartLineItem({ item }: CartLineItemProps) {
             {variantLabel ? <p className="text-xs text-muted-foreground">{variantLabel}</p> : null}
             {item.sellingPlanAllocation ? (
               <p className="text-xs text-muted-foreground">
-                {item.sellingPlanAllocation.sellingPlan.name || "Subscription"}
+                {ct(item.sellingPlanAllocation.sellingPlan.name) || gt("Subscription")}
               </p>
             ) : null}
           </div>
           {components.length ? (
             <div className="grid gap-1">
-              <p className="text-xs font-medium text-muted-foreground">Bundle Includes</p>
+              <p className="text-xs font-medium text-muted-foreground">
+                <T>Bundle Includes</T>
+              </p>
               <ul className="grid gap-0.5">
                 {components.map((component) => (
                   <li
@@ -132,7 +140,7 @@ function CartLineItem({ item }: CartLineItemProps) {
                     className="flex items-center gap-1.5 text-xs text-muted-foreground"
                   >
                     <span className="truncate">
-                      {component.merchandise?.product.title || "Bundle item"}
+                      {ct(component.merchandise?.product.title) || gt("Bundle item")}
                     </span>
                     {component.quantity > 1 ? <span>×{component.quantity}</span> : null}
                   </li>
@@ -149,14 +157,14 @@ function CartLineItem({ item }: CartLineItemProps) {
           {(register) => (
             <>
               <div
-                aria-label="Item quantity"
+                aria-label={gt("Item quantity")}
                 className="grid h-6 grid-cols-[1.75rem_1.5rem_1.75rem] rounded-full ring-1 ring-border ring-inset"
                 role="group"
               >
                 <button
                   {...register("decrease")}
                   type="submit"
-                  aria-label={`Decrease quantity: ${lineName}`}
+                  aria-label={gt("Decrease quantity: {item}", { item: lineName })}
                   className="flex h-6 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={isOptimistic || !canUpdateQuantity || quantity <= 1}
                 >
@@ -165,7 +173,7 @@ function CartLineItem({ item }: CartLineItemProps) {
                 <input
                   key={quantity}
                   {...register("quantity", { interactive: true, value: quantity })}
-                  aria-label={`Quantity: ${lineName}`}
+                  aria-label={gt("Quantity: {item}", { item: lineName })}
                   className="h-6 w-6 rounded-full bg-transparent text-center text-xs font-medium tabular-nums outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed"
                   disabled={isOptimistic || !canUpdateQuantity}
                   max={99}
@@ -174,7 +182,7 @@ function CartLineItem({ item }: CartLineItemProps) {
                 <button
                   {...register("increase")}
                   type="submit"
-                  aria-label={`Increase quantity: ${lineName}`}
+                  aria-label={gt("Increase quantity: {item}", { item: lineName })}
                   className="flex h-6 cursor-pointer items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={isOptimistic || !canUpdateQuantity || quantity >= 99}
                 >
@@ -186,7 +194,7 @@ function CartLineItem({ item }: CartLineItemProps) {
                 type="submit"
                 className="flex cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
                 disabled={isOptimistic || !canRemove}
-                aria-label={`Remove item: ${lineName}`}
+                aria-label={gt("Remove item: {item}", { item: lineName })}
               >
                 <Trash2Icon className="size-4" />
               </button>
@@ -200,7 +208,7 @@ function CartLineItem({ item }: CartLineItemProps) {
           className="font-medium text-foreground data-[pending=true]:text-muted-foreground"
           data-pending={isCostPending || !currencyCode}
         >
-          {isCostPending || !currencyCode ? "Updating…" : price(finalUnitPrice)}
+          {isCostPending || !currencyCode ? <T>Updating…</T> : price(finalUnitPrice)}
         </span>
         {!isCostPending && currencyCode && originalUnitPrice > finalUnitPrice ? (
           <span className="text-xs text-muted-foreground line-through">

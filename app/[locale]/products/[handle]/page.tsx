@@ -12,9 +12,10 @@ import { RelatedProductsSection } from "@/components/product/related-products-se
 import { Container } from "@/components/ui/container";
 import { Page } from "@/components/ui/page";
 import { Sections } from "@/components/ui/sections";
+import { getCatalogText } from "@/lib/catalog/server";
 import { shopConfig } from "@/lib/config";
 import { defaultSelectedOptions, parseSelectedOptions, toSelectedOptionList } from "@/lib/product";
-import { getProduct, getSearchIndexProducts } from "@/lib/product/server";
+import { getProduct, getProductCopy, getSearchIndexProducts } from "@/lib/product/server";
 import { type SelectedOptions } from "@/lib/product/types";
 import type { ProductVariant } from "@/lib/product/types";
 import { buildAlternates, buildOpenGraph } from "@/lib/seo";
@@ -26,32 +27,33 @@ async function buildProductMetadata(handle: string, canonicalPath: string): Prom
     handle,
   });
   if (!product) notFound();
+  const [{ seo }, ct] = await Promise.all([getProductCopy(product), getCatalogText()]);
   const images = product.featuredImage
     ? [
         {
           url: product.featuredImage.url,
           width: product.featuredImage.width,
           height: product.featuredImage.height,
-          alt: product.featuredImage.altText,
+          alt: ct(product.featuredImage.altText),
         },
       ]
     : ["/og-default.png"];
   return {
-    title: product.seo.title,
-    description: product.seo.description,
-    alternates: buildAlternates({
+    title: seo.title,
+    description: seo.description,
+    alternates: await buildAlternates({
       pathname: canonicalPath,
     }),
-    openGraph: buildOpenGraph({
-      title: product.seo.title,
-      description: product.seo.description,
+    openGraph: await buildOpenGraph({
+      title: seo.title,
+      description: seo.description,
       url: canonicalPath,
       images,
     }),
     twitter: {
       card: "summary_large_image",
-      title: product.seo.title,
-      description: product.seo.description,
+      title: seo.title,
+      description: seo.description,
       images,
     },
   };

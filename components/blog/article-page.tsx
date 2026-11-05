@@ -1,3 +1,4 @@
+import { DateTime } from "gt-next";
 import Image from "next/image";
 
 import { Container } from "@/components/ui/container";
@@ -7,7 +8,6 @@ import { Prose } from "@/components/ui/prose";
 import { Sections } from "@/components/ui/sections";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { BlogArticle } from "@/lib/blog/types";
-import { shopConfig } from "@/lib/config";
 
 export interface ArticlePageProps {
   article: BlogArticle;
@@ -36,9 +36,6 @@ export function ArticlePageSkeleton() {
 }
 
 export function ArticlePage({ article }: ArticlePageProps) {
-  const publishedAt = new Intl.DateTimeFormat(shopConfig.localization.locale, {
-    dateStyle: "long",
-  }).format(new Date(article.publishedAt));
   return (
     <Page>
       <Container className="max-w-4xl">
@@ -54,7 +51,9 @@ export function ArticlePage({ article }: ArticlePageProps) {
             <div className="flex flex-wrap justify-center gap-x-2 text-muted-foreground text-sm">
               {article.author && <span>{article.author}</span>}
               {article.author && <span aria-hidden>·</span>}
-              <time dateTime={article.publishedAt}>{publishedAt}</time>
+              <time dateTime={article.publishedAt}>
+                <DateTime options={{ dateStyle: "long" }}>{new Date(article.publishedAt)}</DateTime>
+              </time>
             </div>
           </header>
           {article.image && (

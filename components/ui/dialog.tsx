@@ -2,6 +2,7 @@
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cn } from "cn";
+import { T } from "gt-next";
 import { XIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -56,7 +57,9 @@ function DialogContent({
             className="ring-offset-background focus:ring-ring absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">
+              <T>Close</T>
+            </span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

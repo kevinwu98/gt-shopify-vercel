@@ -4,6 +4,7 @@ import { cn } from "cn";
 import { usePathname } from "next/navigation";
 
 import { Link } from "@/components/ui/link";
+import { splitLocalePath } from "@/lib/i18n";
 
 interface AccountSidebarLink {
   href: string;
@@ -11,7 +12,8 @@ interface AccountSidebarLink {
 }
 
 export function SidebarClient({ links }: { links: AccountSidebarLink[] }) {
-  const pathname = usePathname();
+  // Links are unprefixed; the URL carries the locale prefix outside the default locale.
+  const { pathname } = splitLocalePath(usePathname());
 
   return (
     <nav className="flex flex-col gap-1">

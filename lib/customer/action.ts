@@ -1,5 +1,6 @@
 "use server";
 
+import { msg } from "gt-next";
 import { refresh } from "next/cache";
 import { unstable_rethrow } from "next/navigation";
 import { z } from "zod";
@@ -76,10 +77,11 @@ function buildAddressInput(raw: z.infer<typeof ADDRESS_INPUT>): CustomerAddressI
   return input;
 }
 
+// Messages registered with msg() are resolved in the shopper's locale by the account forms.
 function validateAddress(input: CustomerAddressInput): string | null {
-  if (!input.address1) return "Address is required";
-  if (!input.city) return "City is required";
-  if (!input.countryCode) return "Country is required";
+  if (!input.address1) return msg("Address is required");
+  if (!input.city) return msg("City is required");
+  if (!input.countryCode) return msg("Country is required");
   return null;
 }
 
@@ -103,7 +105,7 @@ export async function createAddressAction(
   isDefault: boolean,
 ): Promise<AccountActionResult> {
   const parsed = CREATE_ADDRESS_INPUT.safeParse({ address, isDefault });
-  if (!parsed.success) return { success: false, error: "Invalid address" };
+  if (!parsed.success) return { success: false, error: msg("Invalid address") };
 
   const input = buildAddressInput(parsed.data.address);
   const validationError = validateAddress(input);
@@ -111,7 +113,7 @@ export async function createAddressAction(
 
   return runCustomerMutation(
     () => createCustomerAddress(input, parsed.data.isDefault),
-    "Failed to create address",
+    msg("Failed to create address"),
   );
 }
 
@@ -121,7 +123,7 @@ export async function updateAddressAction(
   isDefault: boolean,
 ): Promise<AccountActionResult> {
   const parsed = UPDATE_ADDRESS_INPUT.safeParse({ address, addressId, isDefault });
-  if (!parsed.success) return { success: false, error: "Invalid address" };
+  if (!parsed.success) return { success: false, error: msg("Invalid address") };
 
   const input = buildAddressInput(parsed.data.address);
   const validationError = validateAddress(input);
@@ -129,28 +131,31 @@ export async function updateAddressAction(
 
   return runCustomerMutation(
     () => updateCustomerAddress(parsed.data.addressId, input, parsed.data.isDefault),
-    "Failed to update address",
+    msg("Failed to update address"),
   );
 }
 
 export async function deleteAddressAction(addressId: string): Promise<AccountActionResult> {
   const parsed = ADDRESS_ID.safeParse(addressId);
-  if (!parsed.success) return { success: false, error: "Invalid address ID" };
+  if (!parsed.success) return { success: false, error: msg("Invalid address ID") };
 
-  return runCustomerMutation(() => deleteCustomerAddress(parsed.data), "Failed to delete address");
+  return runCustomerMutation(
+    () => deleteCustomerAddress(parsed.data),
+    msg("Failed to delete address"),
+  );
 }
 
 export async function updateProfileAction(
   profile: z.infer<typeof PROFILE_INPUT>,
 ): Promise<AccountActionResult> {
   const parsed = PROFILE_INPUT.safeParse(profile);
-  if (!parsed.success) return { success: false, error: "Invalid profile" };
+  if (!parsed.success) return { success: false, error: msg("Invalid profile") };
 
   const firstName = parsed.data.firstName.trim().slice(0, MAX_NAME_LENGTH);
   const lastName = parsed.data.lastName.trim().slice(0, MAX_NAME_LENGTH);
 
   return runCustomerMutation(
     () => updateCustomerProfile({ firstName, lastName }),
-    "Failed to update profile",
+    msg("Failed to update profile"),
   );
 }
