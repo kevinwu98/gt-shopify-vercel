@@ -7,6 +7,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-shop: #5A31F4;
+  --color-brand: #2f5ce0;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --text-xxs: 0.625rem;

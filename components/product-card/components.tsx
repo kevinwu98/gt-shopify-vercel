@@ -11,7 +11,10 @@ function ProductCard({ className, children, ...props }: ComponentProps<"article"
   return (
     <article
       data-slot="product-card"
-      className={cn("relative flex flex-col h-full overflow-hidden", className)}
+      className={cn(
+        "group relative flex flex-col h-full overflow-hidden p-2.5 transition-colors duration-150 hover:bg-brand hover:text-white",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -99,7 +102,10 @@ function ProductCardTitle({ className, children, ...props }: ComponentProps<"h3"
   return (
     <h3
       data-slot="product-card-title"
-      className={cn("text-sm font-medium text-foreground line-clamp-1", className)}
+      className={cn(
+        "text-sm font-medium text-foreground line-clamp-1 group-hover:text-white",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -130,15 +136,19 @@ function ProductCardPrice({
   return (
     <div data-slot="product-card-price" className={cn(className)}>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span className="inline-flex items-baseline gap-x-1 text-sm text-foreground">
-          <Price amount={amount} currencyCode={currencyCode} className="text-sm text-foreground" />
+        <span className="inline-flex items-baseline gap-x-1 text-sm text-foreground group-hover:text-white">
+          <Price
+            amount={amount}
+            currencyCode={currencyCode}
+            className="text-sm text-foreground group-hover:text-white"
+          />
           {isRange && (
             <>
               <span>–</span>
               <Price
                 amount={maxAmount}
                 currencyCode={currencyCode}
-                className="text-sm text-foreground"
+                className="text-sm text-foreground group-hover:text-white"
               />
             </>
           )}
@@ -148,7 +158,7 @@ function ProductCardPrice({
             <Price
               amount={compareAtAmount}
               currencyCode={compareAtCurrencyCode}
-              className="text-xs text-muted-foreground line-through"
+              className="text-xs text-muted-foreground line-through group-hover:text-white/80"
             />
             <DiscountBadge percent={discountPercent} />
           </>
@@ -162,7 +172,7 @@ function ProductCardSkeleton({ className }: { className?: string }) {
   return (
     <div
       data-slot="product-card-skeleton"
-      className={cn("flex flex-col overflow-hidden", className)}
+      className={cn("flex flex-col overflow-hidden p-2.5", className)}
     >
       <ImagePlaceholder className="aspect-square animate-pulse" />
       <div className="py-2.5 h-12 box-content grid gap-2">

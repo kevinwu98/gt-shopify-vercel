@@ -13,7 +13,7 @@ export function Price({ amount, currencyCode, className, ...props }: PriceProps)
   const locale = useLocale();
   return (
     <span
-      className={cn("font-mono text-xl text-foreground tabular-nums tracking-tight", className)}
+      className={cn("text-xl text-foreground tabular-nums tracking-tight", className)}
       {...props}
     >
       {formatPrice({ amount, currencyCode }, locale)}

@@ -35,10 +35,13 @@ export default async function HomePage() {
           <div className="col-start-1 row-start-1 hidden md:block md:aspect-4/1" />
           <div className="relative col-start-1 row-start-1 flex items-center justify-center px-5 py-10 lg:px-10">
             <div className="flex flex-col items-center text-center gap-2.5">
-              <h1 className="text-3xl md:text-5xl max-w-3xl text-foreground">
-                <T>A storefront localized with General Translation</T>
+              <h1 className="text-5xl md:text-7xl font-semibold text-foreground">
+                {shopConfig.site.name}
               </h1>
-              <p className="text-sm md:text-base max-w-xl text-foreground">
+              <p className="text-xl md:text-3xl text-foreground lg:whitespace-nowrap">
+                <T>A storefront localized with General Translation</T>
+              </p>
+              <p className="text-sm md:text-base text-muted-foreground lg:whitespace-nowrap">
                 <T>
                   Shopify commerce on Hydrogen and Next.js, with interface copy translated by
                   gt-next.
