@@ -1,14 +1,25 @@
 {
   "defaultLocale": "en",
-  "locales": ["fr", "ja", "ko", "id"],
-  "src": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "lib/**/*.{ts,tsx}"],
+  "locales": [
+    "fr",
+    "ja",
+    "ko",
+    "id"
+  ],
+  "src": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}"
+  ],
   "files": {
     "gt": {
       "output": "public/_gt/[locale].json"
     },
     "json": {
-      "include": ["catalog/[locale].json"]
+      "include": [
+        "catalog/[locale].json"
+      ]
     }
   },
-  "_versionId": "53e1978095fc2ddd2cb2019de2f305f8ed3f76cb8abff946f1dbc72e50d188b8"
+  "_versionId": "51f09c47dc1dea67b6a37462188b8a0039ca65989fedfdbaceefce35fba0b9bc"
 }

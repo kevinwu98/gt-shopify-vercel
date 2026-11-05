@@ -37,6 +37,9 @@ interface FilterSheetProps {
 }
 
 export function FilterSheet({ children, label, trigger }: FilterSheetProps) {
+  const facets = usePublishedFacets();
+  // Shopify returns no usable filters for some markets (Search & Discovery's price filter covers only the store currency).
+  if (facets && facets.filters.length === 0 && !facets.priceRange) return null;
   return (
     <Sheet>
       <SheetTrigger render={trigger} />
@@ -106,6 +109,13 @@ export function CollectionFilterSidebar({ filters, priceRange }: CollectionFilte
     }
     actions.setFilters(next);
   };
+  if (filters.length === 0 && !priceRange && activeBadges.length === 0 && !priceFilter) {
+    return (
+      <p className="text-sm text-muted-foreground">
+        <T>No filters are available for these products.</T>
+      </p>
+    );
+  }
   return (
     <div className="flex flex-col gap-5">
       {activeBadges.length > 0 || priceFilter ? (
