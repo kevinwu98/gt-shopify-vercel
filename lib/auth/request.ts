@@ -9,6 +9,7 @@ import {
 
 import { shopConfig } from "@/lib/config";
 import type { CommerceLocale } from "@/lib/config/types";
+import { defaultLocale } from "@/lib/i18n";
 
 import type { SessionData } from "./types";
 
@@ -226,9 +227,15 @@ export function createCustomerSessionManager(request: Request): WritableCustomer
 export function createCustomerRequestContext(
   request: Request,
   i18n: CommerceLocale = shopConfig.localization,
+  locale: string = defaultLocale,
 ): ShopifyRequestContext {
   return createShopifyRequestContext({
-    i18n: { country: i18n.country, language: i18n.language },
+    i18n: {
+      country: i18n.country,
+      language: i18n.language,
+      // Hydrogen matches and redirects product URLs under this prefix.
+      pathPrefix: locale === defaultLocale ? "" : `/${locale}`,
+    },
     request,
   });
 }

@@ -42,7 +42,11 @@ export async function proxy(request: NextRequest): Promise<Response> {
   const pathname = request.nextUrl.pathname;
   const requestLocale = resolveRequestLocale(request);
   // Hydrogen's cart and search handlers run in the market of the shopper's language.
-  const requestContext = createCustomerRequestContext(request, getCommerceLocale(requestLocale));
+  const requestContext = createCustomerRequestContext(
+    request,
+    getCommerceLocale(requestLocale),
+    requestLocale,
+  );
   const isAuthPath = shopConfig.auth.isEnabled && AUTH_PATHS.has(pathname);
   const customerSession =
     isAuthPath || (shopConfig.auth.isEnabled && pathname === "/api/cart")
