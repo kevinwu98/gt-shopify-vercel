@@ -77,6 +77,12 @@ export async function getShopifySitemapPage(
   return result;
 }
 
+/** Open Graph locales use language_TERRITORY, such as fr_FR; "fr" becomes its likeliest territory. */
+function toOpenGraphLocale(locale: string): string {
+  const { language, region } = new Intl.Locale(locale).maximize();
+  return `${language}_${region}`;
+}
+
 /** Canonical URL for the request's locale, plus hreflang alternates for every locale. */
 export async function buildAlternates({
   pathname,
@@ -124,8 +130,8 @@ export async function buildOpenGraph({
     title,
     description,
     url: localizePath(url, locale),
-    locale,
-    alternateLocale: locales.filter((code) => code !== locale),
+    locale: toOpenGraphLocale(locale),
+    alternateLocale: locales.filter((code) => code !== locale).map(toOpenGraphLocale),
     siteName: shopConfig.site.name,
     images,
   };
