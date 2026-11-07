@@ -69,6 +69,34 @@
   --border: #c8c8c8;
   --input: #ececec;
   --ring: #5a5a5a;
+  color-scheme: light dark;
+}
+
+/* Dark theme follows the shopper's system setting. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --card: #111111;
+    --card-foreground: #ededed;
+    --popover: #161616;
+    --popover-foreground: #ededed;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --secondary: #262626;
+    --secondary-foreground: #ededed;
+    --muted: #1f1f1f;
+    --muted-foreground: #a1a1a1;
+    --accent: #232323;
+    --accent-foreground: #ededed;
+    --destructive: #e5484d;
+    --destructive-foreground: #ffffff;
+    --positive: #2bb673;
+    --positive-foreground: #ffffff;
+    --border: #3a3a3a;
+    --input: #1f1f1f;
+    --ring: #a1a1a1;
+  }
 }
 
 @layer components {

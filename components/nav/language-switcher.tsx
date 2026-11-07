@@ -34,7 +34,9 @@ export function LanguageSwitcher() {
       </label>
       <select
         id={id}
-        className="cursor-pointer bg-transparent text-sm text-muted-foreground hover:text-foreground"
+        // Chrome rings a focused <select> even after a mouse pick, and the ring vanishes when the
+        // new locale's page replaces it; brighten the text for focus instead.
+        className="cursor-pointer bg-transparent text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:text-foreground"
         value={locale}
         onChange={(event) => {
           const { pathname } = splitLocalePath(window.location.pathname);
